@@ -1,0 +1,3765 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gapone Admin - Cài đặt Người dùng & Thông báo</title>
+    <!-- Modern Premium Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Modern CSS Design System */
+        :root {
+            /* Light Theme Palette */
+            --primary-color: #f06a24;
+            --primary-hover: #d35515;
+            --primary-light: #fef6f0;
+            --primary-border: #fbd6c4;
+            
+            --bg-main: #ffffff;
+            --bg-sidebar: #faf8f6;
+            --bg-hover: #f3f4f6;
+            --bg-table-header: #ececec;
+            --bg-input: #ffffff;
+            --bg-card: #ffffff;
+            --bg-modal: rgba(0, 0, 0, 0.4);
+            
+            --text-main: #1f2937;
+            --text-muted: #6b7280;
+            --text-active-menu: #f06a24;
+            --text-link: #f06a24;
+            
+            --border-color: #e5e7eb;
+            --border-heavy: #d1d5db;
+            
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            
+            --font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            --sidebar-width: 260px;
+            --sidebar-collapsed-width: 70px;
+            --transition-speed: 0.3s;
+        }
+
+        /* Dark Theme Palette */
+        body.dark-theme {
+            --bg-main: #0f0f10;
+            --bg-sidebar: #171718;
+            --bg-hover: #262629;
+            --bg-table-header: #262629;
+            --bg-input: #1f1f23;
+            --bg-card: #1f1f23;
+            --bg-modal: rgba(0, 0, 0, 0.7);
+            
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
+            --text-active-menu: #fa7b39;
+            --text-link: #fa7b39;
+            
+            --border-color: #2d2d30;
+            --border-heavy: #4b5563;
+            
+            --primary-light: #2c1a12;
+            --primary-border: #4d2d1d;
+        }
+
+        /* Reset and Base Styles */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-family);
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+            transition: background-color var(--transition-speed), color var(--transition-speed);
+        }
+
+        a {
+            color: var(--text-link);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        a:hover {
+            text-decoration: underline;
+            color: var(--primary-hover);
+        }
+
+        /* App Layout Container */
+        .app-container {
+            display: flex;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Sidebar Styling */
+        .sidebar {
+            width: var(--sidebar-width);
+            background-color: var(--bg-sidebar);
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: width var(--transition-speed) cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            z-index: 10;
+        }
+
+        .sidebar-logo {
+            padding: 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background-color: var(--primary-light);
+            border: 1px solid var(--primary-border);
+            color: var(--primary-color);
+            font-weight: 700;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .logo-text {
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            color: var(--primary-color);
+            transition: opacity var(--transition-speed);
+            white-space: nowrap;
+        }
+
+        /* Navigation Menu */
+        .sidebar-menu {
+            flex: 1;
+            padding: 16px 0;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 24px;
+            color: var(--text-main);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 14px;
+            font-weight: 500;
+            user-select: none;
+        }
+
+        .menu-item-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex: 1;
+        }
+
+        .menu-item:hover {
+            background-color: var(--bg-hover);
+        }
+
+        .menu-icon {
+            width: 20px;
+            height: 20px;
+            color: var(--text-muted);
+            transition: color 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .menu-item:hover .menu-icon,
+        .menu-item.active .menu-icon {
+            color: var(--primary-color);
+        }
+
+        .menu-text {
+            white-space: nowrap;
+            transition: opacity var(--transition-speed);
+        }
+
+        /* Submenu Styling */
+        .submenu {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height var(--transition-speed) ease-out;
+            background-color: rgba(0, 0, 0, 0.01);
+            padding-left: 20px;
+        }
+
+        .submenu.expanded {
+            max-height: 300px;
+            transition: max-height var(--transition-speed) ease-in;
+        }
+
+        .submenu-item {
+            display: flex;
+            align-items: center;
+            padding: 10px 24px 10px 36px;
+            font-size: 13px;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-weight: 500;
+            border-radius: 6px;
+            margin: 2px 12px;
+        }
+
+        .submenu-item:hover {
+            background-color: var(--bg-hover);
+            color: var(--text-main);
+        }
+
+        .submenu-item.active {
+            background-color: var(--primary-light);
+            color: var(--text-active-menu);
+            font-weight: 600;
+        }
+
+        .chevron {
+            width: 14px;
+            height: 14px;
+            transition: transform var(--transition-speed);
+            color: var(--text-muted);
+        }
+
+        .menu-item.expanded .chevron {
+            transform: rotate(180deg);
+        }
+
+        /* User Profile Area */
+        .sidebar-profile {
+            padding: 16px 20px;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            background-color: rgba(0, 0, 0, 0.02);
+        }
+
+        .profile-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            overflow: hidden;
+        }
+
+        .profile-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: var(--border-heavy);
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 15px;
+            flex-shrink: 0;
+            text-transform: uppercase;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .profile-details {
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            transition: opacity var(--transition-speed);
+        }
+
+        .profile-name {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-main);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .profile-email {
+            font-size: 11px;
+            color: var(--text-muted);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .profile-more {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 4px;
+            transition: background-color 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .profile-more:hover {
+            background-color: var(--bg-hover);
+            color: var(--text-main);
+        }
+
+        /* Collapsed Sidebar Styles */
+        .sidebar.collapsed {
+            width: var(--sidebar-collapsed-width);
+        }
+
+        .sidebar.collapsed .logo-text,
+        .sidebar.collapsed .menu-text,
+        .sidebar.collapsed .chevron,
+        .sidebar.collapsed .profile-details,
+        .sidebar.collapsed .profile-more,
+        .sidebar.collapsed .submenu {
+            opacity: 0;
+            pointer-events: none;
+            width: 0;
+            max-height: 0;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar.collapsed .menu-item {
+            justify-content: center;
+            padding: 12px 0;
+        }
+
+        .sidebar.collapsed .menu-item-link {
+            justify-content: center;
+        }
+
+        .sidebar.collapsed .sidebar-profile {
+            justify-content: center;
+            padding: 16px 0;
+        }
+
+        /* Profile Dropdown Popup (SRS 4.1) */
+        .profile-popup {
+            position: absolute;
+            bottom: 65px;
+            left: 10px;
+            right: 10px;
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            box-shadow: var(--shadow-lg);
+            z-index: 100;
+            padding: 6px 0;
+            display: none;
+            animation: slideUpPopup 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .sidebar.collapsed .profile-popup {
+            display: none !important;
+        }
+
+        @keyframes slideUpPopup {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .profile-popup-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 16px;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-main);
+            cursor: pointer;
+            transition: background-color 0.2s;
+            text-align: left;
+        }
+
+        .profile-popup-item:hover {
+            background-color: var(--bg-hover);
+        }
+
+        .profile-popup-item.text-danger {
+            color: #ef4444;
+        }
+
+        .profile-popup-item.text-danger:hover {
+            background-color: rgba(239, 68, 68, 0.05);
+        }
+
+        .profile-popup-item svg {
+            color: var(--text-muted);
+            transition: color 0.2s;
+            flex-shrink: 0;
+        }
+
+        .profile-popup-item:hover svg {
+            color: var(--text-main);
+        }
+
+        .profile-popup-item.text-danger:hover svg {
+            color: #ef4444;
+        }
+
+        /* Main Content Container */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+            background-color: var(--bg-main);
+        }
+
+        /* Navbar Header */
+        .navbar {
+            height: 60px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 24px;
+            flex-shrink: 0;
+        }
+
+        .navbar-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .sidebar-toggle {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 6px;
+            border-radius: 6px;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .sidebar-toggle:hover {
+            background-color: var(--bg-hover);
+            color: var(--text-main);
+        }
+
+        /* Breadcrumbs styling */
+        .breadcrumbs {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .breadcrumb-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .breadcrumb-separator {
+            color: var(--text-muted);
+            opacity: 0.6;
+        }
+
+        .breadcrumb-active {
+            color: var(--text-main);
+            font-weight: 600;
+        }
+
+        .navbar-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        /* Dropdown selector styles */
+        .lang-selector {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background-color: var(--bg-input);
+            font-size: 13px;
+            color: var(--text-main);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .lang-selector:hover {
+            border-color: var(--border-heavy);
+        }
+
+        /* Theme Toggle & Bell Buttons */
+        .theme-toggle {
+            background: none;
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            padding: 6px;
+            border-radius: 8px;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            background-color: var(--bg-input);
+            height: 34px;
+            width: 34px;
+        }
+
+        .theme-toggle:hover {
+            background-color: var(--bg-hover);
+            border-color: var(--border-heavy);
+        }
+
+        /* Bell Notification Styles (SRS In-App Bell) */
+        .bell-badge {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            background-color: #ef4444;
+            color: white;
+            font-size: 10px;
+            font-weight: 700;
+            min-width: 16px;
+            height: 16px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 4px;
+            border: 1.5px solid var(--bg-main);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .bell-dnd-indicator {
+            position: absolute;
+            bottom: -3px;
+            right: -3px;
+            background-color: #f59e0b;
+            color: white;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid var(--bg-main);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .bell-dropdown {
+            position: absolute;
+            top: 45px;
+            right: -170px;
+            width: 360px;
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            box-shadow: var(--shadow-lg);
+            z-index: 100;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            animation: slideDown 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @media (max-width: 768px) {
+            .bell-dropdown {
+                right: -60px;
+                width: 320px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .bell-dropdown {
+                right: -40px;
+                width: 290px;
+            }
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .bell-dropdown-header {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .bell-dropdown-header h4 {
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .btn-text {
+            background: none;
+            border: none;
+            color: var(--primary-color);
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            outline: none;
+        }
+        .btn-text:hover {
+            color: var(--primary-hover);
+            text-decoration: underline;
+        }
+
+        .bell-dropdown-list {
+            max-height: 320px;
+            overflow-y: auto;
+            transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .bell-dropdown-list.expanded {
+            max-height: 480px;
+        }
+
+        .bell-dropdown-footer {
+            padding: 10px;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+            font-size: 12px;
+            font-weight: 600;
+            background-color: rgba(0, 0, 0, 0.01);
+        }
+
+        /* Notification Item Styling */
+        .notif-item {
+            display: flex;
+            gap: 12px;
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: background-color 0.2s;
+            text-align: left;
+        }
+
+        .notif-item:hover {
+            background-color: var(--bg-hover);
+        }
+
+        .notif-item.unread {
+            background-color: var(--primary-light);
+        }
+
+        .notif-icon-wrapper {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .notif-icon-message { background-color: rgba(34, 197, 94, 0.15); color: #22c55e; }
+        .notif-icon-assignment { background-color: rgba(59, 130, 246, 0.15); color: #3b82f6; }
+        .notif-icon-mention { background-color: rgba(168, 85, 247, 0.15); color: #a855f7; }
+        .notif-icon-sla { background-color: rgba(239, 68, 68, 0.15); color: #ef4444; }
+        .notif-icon-system { background-color: rgba(245, 158, 11, 0.15); color: #f59e0b; }
+        .notif-icon-module { background-color: rgba(107, 114, 128, 0.15); color: #6b7280; }
+
+        .notif-details {
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .notif-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-main);
+            margin-bottom: 2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .notif-item.unread .notif-title {
+            color: var(--text-main);
+            font-weight: 700;
+        }
+
+        .notif-body {
+            font-size: 12px;
+            color: var(--text-muted);
+            line-height: 1.4;
+            margin-bottom: 4px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .notif-time {
+            font-size: 10px;
+            color: var(--text-muted);
+        }
+
+        /* Content Scrollable Body */
+        .content-body {
+            flex: 1;
+            padding: 24px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* Panel Views for SPA routing */
+        .view-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            flex: 1;
+        }
+
+        /* Tab Navigation Container */
+        .tabs-wrapper {
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            margin-bottom: 8px;
+        }
+
+        .tab-item {
+            padding: 12px 24px;
+            font-size: 15px;
+            font-weight: 500;
+            color: var(--text-muted);
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s;
+            user-select: none;
+        }
+
+        .tab-item:hover {
+            color: var(--text-main);
+        }
+
+        .tab-item.active {
+            color: var(--primary-color);
+            border-bottom-color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        /* Search Section */
+        .search-container {
+            position: relative;
+            max-width: 420px;
+            width: 100%;
+        }
+
+        .search-input {
+            width: 100%;
+            height: 40px;
+            padding: 10px 40px 10px 16px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background-color: var(--bg-input);
+            color: var(--text-main);
+            font-family: var(--font-family);
+            font-size: 14px;
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        .search-input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(240, 106, 36, 0.15);
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            pointer-events: none;
+            width: 16px;
+            height: 16px;
+        }
+
+        /* Table Card Layout */
+        .table-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            box-shadow: var(--shadow-sm);
+            overflow: hidden;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-height: 350px;
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+            flex: 1;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 13px;
+        }
+
+        th {
+            background-color: var(--bg-table-header);
+            color: var(--text-main);
+            font-weight: 600;
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border-color);
+            user-select: none;
+            position: relative;
+            white-space: nowrap;
+        }
+
+        /* simulated resize handle */
+        .resize-handle {
+            position: absolute;
+            right: 0;
+            top: 25%;
+            bottom: 25%;
+            width: 4px;
+            cursor: col-resize;
+            border-right: 1px solid var(--border-color);
+            opacity: 0.7;
+        }
+
+        td {
+            padding: 14px 16px;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-main);
+            white-space: nowrap;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr {
+            transition: background-color 0.15s;
+        }
+
+        tr:hover {
+            background-color: var(--bg-hover);
+        }
+
+        .col-stt { width: 60px; font-weight: 500; color: var(--text-muted); }
+        .col-name { font-weight: 600; }
+        .col-username { font-family: monospace; font-size: 12px; color: var(--text-muted); }
+        .col-role { font-weight: 500; }
+        .col-actions { width: 80px; text-align: center; }
+
+        /* Action Buttons */
+        .btn-action {
+            background: none;
+            border: 1px solid rgba(24, 144, 255, 0.15);
+            color: #1890ff;
+            cursor: pointer;
+            padding: 6px;
+            border-radius: 6px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            background-color: rgba(24, 144, 255, 0.05);
+        }
+
+        .btn-action:hover {
+            background-color: #1890ff;
+            color: #ffffff;
+            border-color: #1890ff;
+            box-shadow: 0 2px 4px rgba(24, 144, 255, 0.2);
+            transform: translateY(-1px);
+        }
+
+        /* Table empty state styling */
+        .empty-state {
+            display: none;
+            text-align: center;
+            padding: 48px;
+            color: var(--text-muted);
+        }
+
+        .empty-state svg {
+            width: 48px;
+            height: 48px;
+            margin-bottom: 12px;
+            opacity: 0.5;
+        }
+
+        /* Pagination & Footer section */
+        .footer-section {
+            padding: 16px 24px;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            border-top: 1px solid var(--border-color);
+            background-color: var(--bg-card);
+            flex-shrink: 0;
+        }
+
+        .pagination-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .page-size-selector {
+            padding: 6px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background-color: var(--bg-input);
+            font-size: 13px;
+            color: var(--text-main);
+            outline: none;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .page-size-selector:hover {
+            border-color: var(--border-heavy);
+        }
+
+        /* Switch toggle sliders */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 44px;
+            height: 24px;
+            flex-shrink: 0;
+        }
+
+        .switch input { 
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--border-heavy);
+            transition: .3s;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .3s;
+        }
+
+        input:checked + .slider {
+            background-color: var(--primary-color);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(20px);
+        }
+
+        .slider.round {
+            border-radius: 24px;
+        }
+
+        .slider.round:before {
+            border-radius: 50%;
+        }
+
+        /* Matrix Table Settings Styling */
+        .matrix-table-wrapper {
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            margin-top: 10px;
+        }
+
+        .matrix-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .matrix-table th {
+            background-color: var(--bg-table-header);
+            color: var(--text-main);
+            font-weight: 600;
+            padding: 12px 16px;
+            border: 1px solid var(--border-color);
+        }
+
+        .matrix-table td {
+            padding: 14px 16px;
+            border: 1px solid var(--border-color);
+            background-color: var(--bg-card);
+            text-align: center;
+        }
+
+        .matrix-table td:first-child {
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .pref-checkbox {
+            accent-color: var(--primary-color);
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+        }
+
+        /* Settings Card Layout */
+        .settings-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 20px;
+            transition: background-color var(--transition-speed);
+        }
+
+        .global-toggle-card {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: var(--primary-light);
+            border-color: var(--primary-border);
+        }
+
+        .toggle-card-info h3 {
+            font-size: 15px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .toggle-card-info p {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .settings-header {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .settings-header h2 {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .settings-subtitle {
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        .dnd-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .dnd-info strong {
+            font-size: 14px;
+            display: block;
+            margin-bottom: 2px;
+        }
+
+        .dnd-info p {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .dnd-options {
+            margin-top: 12px;
+            border-top: 1px dashed var(--border-color);
+            padding-top: 12px;
+        }
+
+        .dnd-radio-group {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-top: 8px;
+        }
+
+        .radio-label {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            cursor: pointer;
+            color: var(--text-main);
+        }
+
+        /* Day Selector for DND Schedule */
+        .day-checkbox-group {
+            display: flex;
+            gap: 8px;
+            margin-top: 6px;
+        }
+
+        .day-checkbox {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: 1px solid var(--border-color);
+            background-color: var(--bg-input);
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            user-select: none;
+            transition: all 0.2s;
+        }
+
+        .day-checkbox.active {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            color: white;
+            box-shadow: var(--shadow-sm);
+        }
+
+        /* Modal Popup System */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--bg-modal);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.25s ease;
+        }
+
+        .modal-overlay.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: var(--shadow-lg);
+            overflow: hidden;
+            transform: scale(0.95);
+            transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .modal-overlay.open .modal-card {
+            transform: scale(1);
+        }
+
+        .modal-header {
+            padding: 18px 24px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .modal-title {
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 4px;
+            border-radius: 50%;
+            transition: all 0.2s;
+        }
+
+        .modal-close:hover {
+            background-color: var(--bg-hover);
+            color: var(--text-main);
+        }
+
+        .modal-body {
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            text-align: left;
+        }
+
+        .form-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .form-control {
+            width: 100%;
+            height: 38px;
+            padding: 8px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            background-color: var(--bg-input);
+            color: var(--text-main);
+            font-family: var(--font-family);
+            font-size: 13px;
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+        }
+
+        .form-control:disabled {
+            background-color: var(--bg-hover);
+            color: var(--text-muted);
+            cursor: not-allowed;
+        }
+
+        .modal-footer {
+            padding: 16px 24px;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            outline: none;
+        }
+
+        .btn-secondary {
+            background-color: var(--bg-hover);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--border-color);
+        }
+
+        .btn-gray {
+            background-color: #a3a3a3;
+            border: 1px solid #a3a3a3;
+            color: #ffffff;
+        }
+
+        .btn-gray:hover {
+            background-color: #8e8e8e;
+            border-color: #8e8e8e;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+            color: #ffffff;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-hover);
+        }
+
+        /* Dynamic Toasts Stack (SRS Toast queue) */
+        .toast-stack-container {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 200;
+            pointer-events: none;
+        }
+
+        .toast-card-item {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 12px 16px;
+            width: 330px;
+            box-shadow: var(--shadow-lg);
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+            animation: toastSlideIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: opacity 0.3s, transform 0.3s;
+            position: relative;
+            overflow: hidden;
+            border-left: 4px solid var(--primary-color);
+            pointer-events: auto;
+            text-align: left;
+        }
+
+        @keyframes toastSlideIn {
+            from { transform: translateX(120%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .toast-card-item.slide-out {
+            transform: translateX(120%);
+            opacity: 0;
+        }
+
+        .toast-card-close {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--text-muted);
+            padding: 2px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+        .toast-card-close:hover {
+            background-color: var(--bg-hover);
+            color: var(--text-main);
+        }
+
+        .toast-card-details {
+            flex: 1;
+            padding-right: 16px;
+        }
+
+        .toast-card-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 2px;
+        }
+
+        .toast-card-body {
+            font-size: 12px;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+
+        /* Micro-interactions & animations */
+        @keyframes flashSuccess {
+            0% { background-color: var(--bg-hover); }
+            50% { background-color: rgba(76, 175, 80, 0.15); }
+            100% { background-color: transparent; }
+        }
+
+        .updated-row {
+            animation: flashSuccess 1.5s ease-out;
+        }
+
+        /* Prototype Test Panel (Controller) */
+        .dev-panel-trigger {
+            position: fixed;
+            bottom: 24px;
+            left: 24px;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--shadow-lg);
+            z-index: 150;
+            transition: all 0.2s;
+        }
+        
+        .dev-panel-trigger:hover {
+            transform: scale(1.08) rotate(15deg);
+            background-color: var(--primary-hover);
+        }
+
+        .dev-panel {
+            position: fixed;
+            bottom: 84px;
+            left: 24px;
+            width: 320px;
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            box-shadow: var(--shadow-lg);
+            z-index: 150;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            animation: slideUpDev 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+            border-top: 4px solid var(--primary-color);
+        }
+
+        @keyframes slideUpDev {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .dev-panel-header {
+            padding: 12px 14px;
+            background-color: var(--bg-hover);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 700;
+            font-size: 13px;
+        }
+
+        .dev-panel-tabs {
+            display: flex;
+            border-bottom: 1px solid var(--border-color);
+            background-color: rgba(0,0,0,0.02);
+        }
+
+        .dev-tab-btn {
+            flex: 1;
+            background: none;
+            border: none;
+            padding: 10px;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+            color: var(--text-muted);
+            border-bottom: 2px solid transparent;
+            outline: none;
+            text-align: center;
+        }
+
+        .dev-tab-btn.active {
+            color: var(--primary-color);
+            border-bottom-color: var(--primary-color);
+        }
+
+        .dev-panel-body {
+            padding: 14px;
+            max-height: 380px;
+            overflow-y: auto;
+        }
+
+        .dev-state-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .badge-status {
+            display: inline-block;
+            padding: 2px 6px;
+            border-radius: 10px;
+            font-size: 10px;
+            font-weight: 700;
+            margin-left: 4px;
+        }
+        .badge-status.online { background-color: rgba(34, 197, 94, 0.15); color: #22c55e; }
+        .badge-status.offline { background-color: rgba(107, 114, 128, 0.15); color: #6b7280; }
+        .badge-status.connected { background-color: rgba(34, 197, 94, 0.15); color: #22c55e; }
+        .badge-status.disconnected { background-color: rgba(239, 68, 68, 0.15); color: #ef4444; }
+
+        /* Custom simple toast notification (for settings update etc) */
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background-color: #333333;
+            color: #ffffff;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            z-index: 210;
+            box-shadow: var(--shadow-lg);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            pointer-events: none;
+        }
+
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .toast-success {
+            background-color: #2e7d32;
+        }
+
+        /* Mobile Optimization */
+        @media (max-width: 768px) {
+            .sidebar {
+                position: absolute;
+                height: 100%;
+                left: -260px;
+            }
+            .sidebar.active {
+                left: 0;
+            }
+            .sidebar-toggle {
+                display: flex;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- LOGIN SCREEN -->
+    <div id="login-screen" style="display: flex; align-items: center; justify-content: center; width: 100vw; height: 100vh; background-color: var(--bg-main); transition: background-color var(--transition-speed); z-index: 1000; position: fixed; top: 0; left: 0;">
+        <div style="width: 100%; max-width: 400px; padding: 40px; background-color: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px; box-shadow: var(--shadow-lg); text-align: center;">
+            <div style="display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 24px;">
+                <div class="logo-icon" style="width: 40px; height: 40px; font-size: 22px; display: flex; align-items: center; justify-content: center; border-radius: 50%; background-color: var(--primary-light); border: 1px solid var(--primary-border); color: var(--primary-color); font-weight: 700;">G</div>
+                <span style="font-size: 24px; font-weight: 700; color: var(--primary-color);">GAPONE</span>
+            </div>
+            <h2 style="font-size: 20px; font-weight: 700; margin-bottom: 8px; color: var(--text-main);">Đăng nhập hệ thống</h2>
+            <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 24px;">Gapone Conversation Admin Portal</p>
+            
+            <div class="form-group" style="margin-bottom: 16px;">
+                <label class="form-label" style="text-align: left; display: block;">Tên đăng nhập</label>
+                <input type="text" id="login-username" class="form-control" value="phuongntt" placeholder="Nhập tên đăng nhập">
+            </div>
+            <div class="form-group" style="margin-bottom: 24px;">
+                <label class="form-label" style="text-align: left; display: block;">Mật khẩu</label>
+                <input type="password" id="login-password" class="form-control" value="••••••••" placeholder="Nhập mật khẩu">
+            </div>
+            
+            <button class="btn btn-primary" onclick="handleLogin()" style="width: 100%; height: 40px; font-size: 14px;">Đăng nhập</button>
+        </div>
+    </div>
+
+    <div class="app-container" id="app-container" style="display: none;">
+        
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar" id="sidebar">
+            <div>
+                <!-- Brand Logo -->
+                <div class="sidebar-logo">
+                    <div class="logo-icon">G</div>
+                    <span class="logo-text">GAPONE</span>
+                </div>
+                
+                <!-- Menu Items -->
+                <nav class="sidebar-menu">
+                    <div class="menu-item" onclick="selectMenu(this)">
+                        <div class="menu-item-link">
+                            <span class="menu-icon">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1"></rect><rect x="14" y="3" width="7" height="5" rx="1"></rect><rect x="14" y="12" width="7" height="9" rx="1"></rect><rect x="3" y="16" width="7" height="5" rx="1"></rect></svg>
+                            </span>
+                            <span class="menu-text">Bảng điều khiển</span>
+                        </div>
+                    </div>
+                    
+                    <div class="menu-item" onclick="selectMenu(this)">
+                        <div class="menu-item-link">
+                            <span class="menu-icon">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                            </span>
+                            <span class="menu-text">Hội thoại</span>
+                        </div>
+                    </div>
+
+                    <div class="menu-item" onclick="selectMenu(this)">
+                        <div class="menu-item-link">
+                            <span class="menu-icon">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"></path><circle cx="12" cy="12" r="4"></circle></svg>
+                            </span>
+                            <span class="menu-text">Tự động hóa</span>
+                        </div>
+                    </div>
+
+                    <!-- Config menu item - Expanded -->
+                    <div>
+                        <div class="menu-item expanded active" onclick="toggleSubmenu(this)">
+                            <div class="menu-item-link">
+                                <span class="menu-icon" style="color: var(--primary-color);">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                                </span>
+                                <span class="menu-text" style="color: var(--primary-color);">Cài đặt</span>
+                            </div>
+                            <svg class="chevron" viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                        </div>
+                        
+                        <div class="submenu expanded" id="settings-submenu">
+                            <div id="sub-menu-users" class="submenu-item active" onclick="navigateSubmenu('users')">Người dùng</div>
+                            <div class="submenu-item" onclick="selectSubmenu(this)">Kênh</div>
+                            <div class="submenu-item" onclick="selectSubmenu(this)">Kho kiến thức</div>
+                            <div class="submenu-item" onclick="selectSubmenu(this)">AI</div>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+
+            <!-- Profile Info Footer -->
+            <div class="sidebar-profile" onclick="toggleProfilePopup(event)" style="cursor: pointer; position: relative;">
+                <div class="profile-info">
+                    <div class="profile-avatar">P</div>
+                    <div class="profile-details">
+                        <span class="profile-name">phuongntt</span>
+                        <span class="profile-email">phuongntt@gapit.com.vn</span>
+                    </div>
+                </div>
+                <button class="profile-more" title="Tùy chọn tài khoản" style="background: none; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg>
+                </button>
+                
+                <!-- Profile Dropdown Popup (SRS 4.1 & User Request - No avatar card) -->
+                <div class="profile-popup" id="profile-popup">
+                    <div class="profile-popup-item" onclick="handleAccountSettingsClick(event)">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                        <span>Cài đặt tài khoản</span>
+                    </div>
+                    <div class="profile-popup-item text-danger" onclick="handleLogoutClick(event)">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                        <span>Đăng xuất</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            
+            <!-- Navbar Header -->
+            <header class="navbar">
+                <div class="navbar-left">
+                    <button class="sidebar-toggle" id="sidebar-toggle-btn" onclick="toggleSidebar()" title="Đóng/Mở Sidebar">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="9" y1="3" x2="9" y2="21"></line></svg>
+                    </button>
+                    
+                    <!-- Breadcrumbs -->
+                    <div class="breadcrumbs">
+                        <span class="breadcrumb-item">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                        </span>
+                        <span class="breadcrumb-separator">></span>
+                        <span class="breadcrumb-item" id="breadcrumb-parent-view">Cài đặt</span>
+                        <span class="breadcrumb-separator">></span>
+                        <span class="breadcrumb-item breadcrumb-active" id="breadcrumb-current-view">Người dùng</span>
+                    </div>
+                </div>
+
+                <!-- Right Side Controls -->
+                <div class="navbar-right">
+                    
+                    <!-- In-app Bell Notification (SRS 3.1) -->
+                    <div style="position: relative;">
+                        <button class="theme-toggle" id="bell-btn" onclick="toggleBellDropdown(event)" title="Thông báo" style="position: relative;">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                                <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                            </svg>
+                            <span class="bell-badge" id="bell-unread-count" style="display: none;">0</span>
+                            <!-- DND moon indicator overlay (SRS AC9) -->
+                            <span class="bell-dnd-indicator" id="bell-dnd-indicator" style="display: none;" title="Chế độ Không làm phiền (DND) đang Bật">
+                                <svg width="7" height="7" viewBox="0 0 24 24" fill="currentColor"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                            </span>
+                        </button>
+                        
+                        <!-- Bell dropdown popup -->
+                        <div class="bell-dropdown" id="bell-dropdown" style="display: none;">
+                            <div class="bell-dropdown-header">
+                                <h4>Thông báo</h4>
+                                <button class="btn-text" onclick="markAllNotificationsAsRead(event)">Đánh dấu tất cả đã đọc</button>
+                            </div>
+                            <div class="bell-dropdown-list" id="bell-notifications-list">
+                                <!-- Dynamic notifications -->
+                            </div>
+                            <div class="bell-dropdown-footer" id="bell-dropdown-footer">
+                                <a href="#" onclick="showAllNotifications(event); return false;">Xem tất cả thông báo</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="lang-selector" onclick="showToast('Đổi quốc gia/ngôn ngữ')">
+                        <span>Việt Nam</span>
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </div>
+                    
+                    <button class="theme-toggle" onclick="toggleTheme()" title="Chuyển chế độ sáng/tối">
+                        <svg id="theme-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.07" x2="5.64" y2="17.64"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                        </svg>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Scrollable Content Body -->
+            <div class="content-body">
+                
+                <!-- VIEW 1: USER MANAGEMENT (Original View) -->
+                <div id="view-users" class="view-panel">
+                    <!-- Sub Navigation Tabs -->
+                    <div class="tabs-wrapper">
+                        <div class="tab-item active" onclick="switchTab(this)">Người dùng</div>
+                        <div class="tab-item" onclick="switchTab(this)">Nhóm người dùng</div>
+                        <div class="tab-item" onclick="switchTab(this)">Nhóm phân quyền</div>
+                    </div>
+
+                    <!-- Filters & Search -->
+                    <div class="search-container">
+                        <input type="text" id="search-input" class="search-input" placeholder="Nhập họ và tên, tên đăng nhập, email..." oninput="filterTable()">
+                        <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                    </div>
+
+                    <!-- Table Card Container -->
+                    <div class="table-card">
+                        <div class="table-responsive">
+                            <table id="users-table">
+                                <thead>
+                                    <tr>
+                                        <th class="col-stt">STT <div class="resize-handle"></div></th>
+                                        <th>Họ và tên <div class="resize-handle"></div></th>
+                                        <th>Tên đăng nhập <div class="resize-handle"></div></th>
+                                        <th>Email <div class="resize-handle"></div></th>
+                                        <th>Phân quyền <div class="resize-handle"></div></th>
+                                        <th class="col-actions">Thao tác</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="table-body">
+                                    <!-- Row 1 -->
+                                    <tr data-id="1">
+                                        <td class="col-stt">1</td>
+                                        <td class="col-name">Hà Ngọc Khánh</td>
+                                        <td class="col-username">khanhhn_gapone</td>
+                                        <td><a href="mailto:khanhhn@gapit.com.vn">khanhhn@gapit.com.vn</a></td>
+                                        <td class="col-role">Administrator</td>
+                                        <td class="col-actions">
+                                            <button class="btn-action" onclick="openEditModal(1)" title="Sửa thông tin">
+                                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 1 1 3 3L12 15l-4 1 1-4z"></path></svg>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <!-- Row 2 -->
+                                    <tr data-id="2">
+                                        <td class="col-stt">2</td>
+                                        <td class="col-name">Nguyễn Thị Duyên</td>
+                                        <td class="col-username">duyennt</td>
+                                        <td><a href="mailto:duyen50th1@gmail.com">duyen50th1@gmail.com</a></td>
+                                        <td class="col-role">Administrator</td>
+                                        <td class="col-actions">
+                                            <button class="btn-action" onclick="openEditModal(2)" title="Sửa thông tin">
+                                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 1 1 3 3L12 15l-4 1 1-4z"></path></svg>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <!-- Row 3 -->
+                                    <tr data-id="3">
+                                        <td class="col-stt">3</td>
+                                        <td class="col-name">LT Mai</td>
+                                        <td class="col-username">maimit5</td>
+                                        <td><a href="mailto:maimit5@gmail.com">maimit5@gmail.com</a></td>
+                                        <td class="col-role">Nhóm 4</td>
+                                        <td class="col-actions">
+                                            <button class="btn-action" onclick="openEditModal(3)" title="Sửa thông tin">
+                                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 1 1 3 3L12 15l-4 1 1-4z"></path></svg>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <!-- Row 4 -->
+                                    <tr data-id="4">
+                                        <td class="col-stt">4</td>
+                                        <td class="col-name">mai mai</td>
+                                        <td class="col-username">maimit4</td>
+                                        <td><a href="mailto:maimit4@gmail.com">maimit4@gmail.com</a></td>
+                                        <td class="col-role">Thiết lập AI - Nhóm Sửa</td>
+                                        <td class="col-actions">
+                                            <button class="btn-action" onclick="openEditModal(4)" title="Sửa thông tin">
+                                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 1 1 3 3L12 15l-4 1 1-4z"></path></svg>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <!-- Row 5 -->
+                                    <tr data-id="5">
+                                        <td class="col-stt">5</td>
+                                        <td class="col-name">Dỗ Thị Thu Uyên</td>
+                                        <td class="col-username">uyendtt</td>
+                                        <td><a href="mailto:douyen@gmail.com">douyen@gmail.com</a></td>
+                                        <td class="col-role">nhóm x2</td>
+                                        <td class="col-actions">
+                                            <button class="btn-action" onclick="openEditModal(5)" title="Sửa thông tin">
+                                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 1 1 3 3L12 15l-4 1 1-4z"></path></svg>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <!-- Row 6 -->
+                                    <tr data-id="6">
+                                        <td class="col-stt">6</td>
+                                        <td class="col-name">bùi hung</td>
+                                        <td class="col-username">hungbm</td>
+                                        <td><a href="mailto:hungbm@gapit.com.vn">hungbm@gapit.com.vn</a></td>
+                                        <td class="col-role">Administrator</td>
+                                        <td class="col-actions">
+                                            <button class="btn-action" onclick="openEditModal(6)" title="Sửa thông tin">
+                                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 1 1 3 3L12 15l-4 1 1-4z"></path></svg>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <!-- Row 7 -->
+                                    <tr data-id="7">
+                                        <td class="col-stt">7</td>
+                                        <td class="col-name">Nguyen Phuong</td>
+                                        <td class="col-username">phuongntt</td>
+                                        <td><a href="mailto:phuongntt@gapit.com.vn">phuongntt@gapit.com.vn</a></td>
+                                        <td class="col-role">Administrator</td>
+                                        <td class="col-actions">
+                                            <button class="btn-action" onclick="openEditModal(7)" title="Sửa thông tin">
+                                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 1 1 3 3L12 15l-4 1 1-4z"></path></svg>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <!-- Row 8 -->
+                                    <tr data-id="8">
+                                        <td class="col-stt">8</td>
+                                        <td class="col-name">gapone_sp gapone_sp</td>
+                                        <td class="col-username">gapone_sp</td>
+                                        <td><a href="mailto:gapone_sp@gapit.com.vn">gapone_sp@gapit.com.vn</a></td>
+                                        <td class="col-role">Administrator</td>
+                                        <td class="col-actions">
+                                            <button class="btn-action" onclick="openEditModal(8)" title="Sửa thông tin">
+                                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 1 1 3 3L12 15l-4 1 1-4z"></path></svg>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            
+                            <!-- Empty table state -->
+                            <div class="empty-state" id="empty-state">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                <p>Không tìm thấy người dùng nào phù hợp</p>
+                            </div>
+                        </div>
+
+                        <!-- Pagination Footer -->
+                        <footer class="footer-section">
+                            <div class="pagination-container">
+                                <select class="page-size-selector" onchange="showToast('Đổi số dòng hiển thị: ' + this.value)">
+                                    <option value="10">10</option>
+                                    <option value="25" selected>25</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                </select>
+                            </div>
+                        </footer>
+                    </div>
+                </div>
+
+                <!-- VIEW 2: NOTIFICATION SETTINGS (SRS 3.4 & 4.2) -->
+                <div id="view-notification-settings" class="view-panel" style="display: none;">
+                    
+                    <div class="settings-header">
+                        <h2>Cài đặt thông báo</h2>
+                        <p class="settings-subtitle">Thiết lập cách nhận thông báo per-user cho tài khoản của bạn (In-app, Email)</p>
+                    </div>
+
+
+
+                    <!-- Event-based Settings Grid (SRS 3.4 & 2.2) -->
+                    <div class="settings-card">
+                        <h3 style="font-size: 15px; font-weight: 700; margin-bottom: 4px;">Cài đặt theo loại sự kiện</h3>
+                        <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px;">Tùy chỉnh nhận thông báo tương ứng cho từng loại sự kiện kích hoạt</p>
+                        
+                        <div class="matrix-table-wrapper">
+                            <table class="matrix-table">
+                                <thead>
+                                    <tr>
+                                        <th>Loại sự kiện</th>
+                                        <th style="width: 150px; text-align: center;">Trong ứng dụng (In-app)</th>
+                                        <th style="width: 150px; text-align: center;">Thông báo nổi (Toast)</th>
+                                        <th style="width: 150px; text-align: center;">Email thông báo</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="matrix-tbody">
+                                    <tr>
+                                        <td>Tin nhắn mới (New Message)</td>
+                                        <td><input type="checkbox" id="chk-msg-inapp" checked class="pref-checkbox"></td>
+                                        <td><input type="checkbox" id="chk-msg-toast" checked class="pref-checkbox"></td>
+                                        <td><input type="checkbox" id="chk-msg-email" class="pref-checkbox"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Phân công hội thoại (Assignment)</td>
+                                        <td><input type="checkbox" id="chk-assign-inapp" checked class="pref-checkbox"></td>
+                                        <td><input type="checkbox" id="chk-assign-toast" checked class="pref-checkbox"></td>
+                                        <td><input type="checkbox" id="chk-assign-email" class="pref-checkbox"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Nhắc tới - Mention (@mention)</td>
+                                        <td><input type="checkbox" id="chk-mention-inapp" checked class="pref-checkbox"></td>
+                                        <td><input type="checkbox" id="chk-mention-toast" checked class="pref-checkbox"></td>
+                                        <td><input type="checkbox" id="chk-mention-email" class="pref-checkbox"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Cảnh báo SLA / hệ thống (SLA/System Alert)</td>
+                                        <td><input type="checkbox" id="chk-sla-inapp" checked class="pref-checkbox"></td>
+                                        <td><input type="checkbox" id="chk-sla-toast" checked class="pref-checkbox"></td>
+                                        <td><input type="checkbox" id="chk-sla-email" class="pref-checkbox"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Thay đổi Module / Cấu hình (Module Change)</td>
+                                        <td><input type="checkbox" id="chk-module-inapp" checked class="pref-checkbox"></td>
+                                        <td><input type="checkbox" id="chk-module-toast" checked class="pref-checkbox"></td>
+                                        <td><input type="checkbox" id="chk-module-email" class="pref-checkbox"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Do Not Disturb (DND) Card (SRS 3.5 & 4.3) -->
+                    <div class="settings-card">
+                        <h3 style="font-size: 15px; font-weight: 700; margin-bottom: 4px;">Chế độ Không làm phiền (Do Not Disturb - DND)</h3>
+                        <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px;">Tạm dừng nhận Toast popup và Email. Thông báo vẫn được lưu lặng lẽ ở Bell icon.</p>
+                        
+                        <div style="display: flex; flex-direction: column; gap: 16px;">
+                            <!-- Quick DND -->
+                            <div class="dnd-row">
+                                <div class="dnd-info">
+                                    <strong>Bật DND nhanh (Quick DND)</strong>
+                                    <p>Tạm ngừng nhận thông báo ngay lập tức trong khoảng thời gian xác định</p>
+                                </div>
+                                <label class="switch">
+                                    <input type="checkbox" id="pref-dnd-quick" onchange="handleQuickDNDToggle()">
+                                    <span class="slider round"></span>
+                                </label>
+                            </div>
+                            
+                            <!-- Quick DND duration selectors -->
+                            <div class="dnd-options" id="dnd-quick-options" style="display: none;">
+                                <span class="form-label" style="font-size: 12px; margin-bottom: 6px; display: block;">Thời gian tạm dừng thông báo:</span>
+                                <div id="dnd-custom-inputs" style="display: flex; margin-top: 12px; gap: 12px; align-items: center; flex-wrap: wrap;">
+                                    <div class="form-group" style="width: 80px;">
+                                        <label class="form-label" style="font-size: 11px;">Ngày</label>
+                                        <input type="number" id="dnd-custom-days" class="form-control" style="height: 32px;" min="0" max="7" value="0" oninput="validateCustomDND()">
+                                    </div>
+                                    <div class="form-group" style="width: 80px;">
+                                        <label class="form-label" style="font-size: 11px;">Giờ</label>
+                                        <input type="number" id="dnd-custom-hours" class="form-control" style="height: 32px;" min="0" max="24" value="0" oninput="validateCustomDND()">
+                                    </div>
+                                    <div class="form-group" style="width: 80px;">
+                                        <label class="form-label" style="font-size: 11px;">Phút</label>
+                                        <input type="number" id="dnd-custom-minutes" class="form-control" style="height: 32px;" min="0" max="59" value="0" oninput="validateCustomDND()">
+                                    </div>
+                                    <span id="dnd-custom-error" style="color: #ef4444; font-size: 11px; margin-top: 18px; display: none;"></span>
+                                </div>
+                                <span id="quick-dnd-until-preview" style="font-size: 11px; font-weight: 600; color: var(--primary-color); display: block; margin-top: 8px;"></span>
+                            </div>
+
+                            <hr style="border: 0; border-top: 1px solid var(--border-color);">
+
+                            <!-- Scheduled DND -->
+                            <div class="dnd-row">
+                                <div class="dnd-info">
+                                    <strong>Bật DND theo lịch trình (Scheduled DND)</strong>
+                                    <p>Tự động bật chế độ Không làm phiền vào các khung giờ cố định trong ngày</p>
+                                </div>
+                                <label class="switch">
+                                    <input type="checkbox" id="pref-dnd-scheduled" onchange="handleScheduledDNDToggle()">
+                                    <span class="slider round"></span>
+                                </label>
+                            </div>
+
+                            <!-- Scheduled DND Pickers -->
+                            <div id="dnd-schedule-picker-container" style="display: none; padding-top: 15px;">
+                                <div style="display: grid; grid-template-columns: 140px 140px 140px; gap: 12px 24px; align-items: center; max-width: 480px; margin-top: 10px;">
+                                    <div style="font-weight: 700; font-size: 13px; color: var(--text-main);">Ngày áp dụng</div>
+                                    <div style="font-weight: 700; font-size: 13px; color: var(--text-main); text-align: left; padding-left: 10px;">Giờ bắt đầu</div>
+                                    <div style="font-weight: 700; font-size: 13px; color: var(--text-main); text-align: left; padding-left: 10px;">Giờ kết thúc</div>
+                                    
+                                    <!-- Row 1: Monday -->
+                                    <div style="display: flex; align-items: center; gap: 8px;">
+                                        <input type="checkbox" id="dnd-day-enable-1" class="pref-checkbox" checked onchange="toggleScheduleRow(1)">
+                                        <label for="dnd-day-enable-1" style="font-size: 13px; font-weight: 500; cursor: pointer; color: var(--text-main);">Thứ 2:</label>
+                                    </div>
+                                    <div>
+                                        <input type="time" id="pref-dnd-start-1" class="form-control" value="22:00" style="height: 32px; padding: 4px 8px; font-size: 13px;" onchange="saveScheduleFields()">
+                                    </div>
+                                    <div>
+                                        <input type="time" id="pref-dnd-end-1" class="form-control" value="08:00" style="height: 32px; padding: 4px 8px; font-size: 13px;" onchange="saveScheduleFields()">
+                                    </div>
+                                    
+                                    <!-- Row 2: Tuesday -->
+                                    <div style="display: flex; align-items: center; gap: 8px;">
+                                        <input type="checkbox" id="dnd-day-enable-2" class="pref-checkbox" checked onchange="toggleScheduleRow(2)">
+                                        <label for="dnd-day-enable-2" style="font-size: 13px; font-weight: 500; cursor: pointer; color: var(--text-main);">Thứ 3:</label>
+                                    </div>
+                                    <div>
+                                        <input type="time" id="pref-dnd-start-2" class="form-control" value="22:00" style="height: 32px; padding: 4px 8px; font-size: 13px;" onchange="saveScheduleFields()">
+                                    </div>
+                                    <div>
+                                        <input type="time" id="pref-dnd-end-2" class="form-control" value="08:00" style="height: 32px; padding: 4px 8px; font-size: 13px;" onchange="saveScheduleFields()">
+                                    </div>
+                                    
+                                    <!-- Row 3: Wednesday -->
+                                    <div style="display: flex; align-items: center; gap: 8px;">
+                                        <input type="checkbox" id="dnd-day-enable-3" class="pref-checkbox" checked onchange="toggleScheduleRow(3)">
+                                        <label for="dnd-day-enable-3" style="font-size: 13px; font-weight: 500; cursor: pointer; color: var(--text-main);">Thứ 4:</label>
+                                    </div>
+                                    <div>
+                                        <input type="time" id="pref-dnd-start-3" class="form-control" value="22:00" style="height: 32px; padding: 4px 8px; font-size: 13px;" onchange="saveScheduleFields()">
+                                    </div>
+                                    <div>
+                                        <input type="time" id="pref-dnd-end-3" class="form-control" value="08:00" style="height: 32px; padding: 4px 8px; font-size: 13px;" onchange="saveScheduleFields()">
+                                    </div>
+                                    
+                                    <!-- Row 4: Thursday -->
+                                    <div style="display: flex; align-items: center; gap: 8px;">
+                                        <input type="checkbox" id="dnd-day-enable-4" class="pref-checkbox" checked onchange="toggleScheduleRow(4)">
+                                        <label for="dnd-day-enable-4" style="font-size: 13px; font-weight: 500; cursor: pointer; color: var(--text-main);">Thứ 5:</label>
+                                    </div>
+                                    <div>
+                                        <input type="time" id="pref-dnd-start-4" class="form-control" value="22:00" style="height: 32px; padding: 4px 8px; font-size: 13px;" onchange="saveScheduleFields()">
+                                    </div>
+                                    <div>
+                                        <input type="time" id="pref-dnd-end-4" class="form-control" value="08:00" style="height: 32px; padding: 4px 8px; font-size: 13px;" onchange="saveScheduleFields()">
+                                    </div>
+                                    
+                                    <!-- Row 5: Friday -->
+                                    <div style="display: flex; align-items: center; gap: 8px;">
+                                        <input type="checkbox" id="dnd-day-enable-5" class="pref-checkbox" checked onchange="toggleScheduleRow(5)">
+                                        <label for="dnd-day-enable-5" style="font-size: 13px; font-weight: 500; cursor: pointer; color: var(--text-main);">Thứ 6:</label>
+                                    </div>
+                                    <div>
+                                        <input type="time" id="pref-dnd-start-5" class="form-control" value="22:00" style="height: 32px; padding: 4px 8px; font-size: 13px;" onchange="saveScheduleFields()">
+                                    </div>
+                                    <div>
+                                        <input type="time" id="pref-dnd-end-5" class="form-control" value="08:00" style="height: 32px; padding: 4px 8px; font-size: 13px;" onchange="saveScheduleFields()">
+                                    </div>
+                                    
+                                    <!-- Row 6: Saturday -->
+                                    <div style="display: flex; align-items: center; gap: 8px;">
+                                        <input type="checkbox" id="dnd-day-enable-6" class="pref-checkbox" onchange="toggleScheduleRow(6)">
+                                        <label for="dnd-day-enable-6" style="font-size: 13px; font-weight: 500; cursor: pointer; color: var(--text-main);">Thứ 7:</label>
+                                    </div>
+                                    <div>
+                                        <input type="time" id="pref-dnd-start-6" class="form-control" value="22:00" style="height: 32px; padding: 4px 8px; font-size: 13px;" disabled onchange="saveScheduleFields()">
+                                    </div>
+                                    <div>
+                                        <input type="time" id="pref-dnd-end-6" class="form-control" value="08:00" style="height: 32px; padding: 4px 8px; font-size: 13px;" disabled onchange="saveScheduleFields()">
+                                    </div>
+                                    
+                                    <!-- Row 7: Sunday -->
+                                    <div style="display: flex; align-items: center; gap: 8px;">
+                                        <input type="checkbox" id="dnd-day-enable-7" class="pref-checkbox" onchange="toggleScheduleRow(7)">
+                                        <label for="dnd-day-enable-7" style="font-size: 13px; font-weight: 500; cursor: pointer; color: var(--text-main);">Chủ nhật:</label>
+                                    </div>
+                                    <div>
+                                        <input type="time" id="pref-dnd-start-7" class="form-control" value="22:00" style="height: 32px; padding: 4px 8px; font-size: 13px;" disabled onchange="saveScheduleFields()">
+                                    </div>
+                                    <div>
+                                        <input type="time" id="pref-dnd-end-7" class="form-control" value="08:00" style="height: 32px; padding: 4px 8px; font-size: 13px;" disabled onchange="saveScheduleFields()">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Email Digest Card (SRS 3.3) -->
+                    <div class="settings-card">
+                        <h3 style="font-size: 15px; font-weight: 700; margin-bottom: 4px;">Email tổng hợp định kỳ (Email Digest)</h3>
+                        <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px;">Nhận duy nhất một email tổng hợp các thông báo bị nhỡ hàng ngày thay vì nhận email riêng cho từng sự kiện.</p>
+                        <div class="dnd-row">
+                            <div class="dnd-info">
+                                <strong>Bật Email Digest</strong>
+                                <p>Hệ thống tự động tắt Email thông báo tức thời khi tính năng này kích hoạt (SRS 3.3)</p>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" id="pref-digest-enabled" onchange="handleDigestToggle()">
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                        
+                        <div class="form-group" id="digest-time-container" style="display: none; margin-top: 16px; max-width: 220px;">
+                            <label class="form-label">Thời gian gửi email hàng ngày</label>
+                            <input type="time" id="pref-digest-time" class="form-control" value="08:00" onchange="saveDigestFields()">
+                        </div>
+                    </div>
+
+                    <!-- Actions Buttons -->
+                    <div style="display: flex; justify-content: flex-end; gap: 12px; margin-bottom: 24px;">
+                        <button class="btn btn-gray" onclick="resetNotificationSettings()">Hủy</button>
+                        <button class="btn btn-primary" onclick="saveNotificationSettings()">Lưu</button>
+                    </div>
+
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- Edit User Modal -->
+    <div class="modal-overlay" id="edit-modal">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3 class="modal-title">Cập nhật thông tin người dùng</h3>
+                <button class="modal-close" onclick="closeEditModal()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="edit-user-id">
+                
+                <div class="form-group">
+                    <label class="form-label" for="edit-name">Họ và tên</label>
+                    <input type="text" id="edit-name" class="form-control">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="edit-username">Tên đăng nhập</label>
+                    <input type="text" id="edit-username" class="form-control" disabled>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="edit-email">Email</label>
+                    <input type="email" id="edit-email" class="form-control">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="edit-role">Phân quyền</label>
+                    <input type="text" id="edit-role" class="form-control">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeEditModal()">Hủy bỏ</button>
+                <button class="btn btn-primary" onclick="saveUserChanges()">Lưu thay đổi</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dynamic Toasts Stack (SRS Toast Queue 3.2) -->
+    <div class="toast-stack-container" id="toast-stack"></div>
+
+    <!-- Toast Notification (Settings success etc) -->
+    <div class="toast toast-success" id="toast-notify">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+        <span id="toast-message">Cập nhật thành công!</span>
+    </div>
+
+    <!-- MOCK EMAIL CLIENT MODAL (To verify AC7, AC15, AC16 when user triggers events offline) -->
+    <div class="modal-overlay" id="email-client-modal">
+        <div class="modal-card" style="max-width: 800px; height: 550px; display: flex; flex-direction: column;">
+            <div class="modal-header" style="background-color: #f1f3f4; color: #202124; border-bottom: 1px solid #ddd;">
+                <h3 class="modal-title" style="display: flex; align-items: center; gap: 8px; color: #202124;">
+                    <svg width="20" height="20" fill="#db4437" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+                    Hộp Thư Email Cá Nhân (Giả Lập Nhận Email Offline)
+                </h3>
+                <button class="modal-close" onclick="closeMockEmailClient()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+            </div>
+            
+            <div style="display: flex; flex: 1; overflow: hidden; background-color: #ffffff;">
+                <!-- Email Sidebar List -->
+                <div style="width: 260px; border-right: 1px solid var(--border-color); overflow-y: auto; background-color: #f8fafc;" id="email-list-pane">
+                    <!-- Email List items -->
+                </div>
+                
+                <!-- Email Body Pane -->
+                <div style="flex: 1; overflow-y: auto; padding: 24px; background-color: #ffffff; color: #333333;" id="email-content-pane">
+                    <div style="text-align: center; color: #94a3b8; margin-top: 120px;">
+                        <svg width="48" height="48" fill="#cbd5e1" viewBox="0 0 24 24" style="margin-bottom:12px;"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+                        <p>Chọn một email bên trái để xem nội dung chi tiết</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="dev-panel" id="dev-panel" style="display: none;">
+        <div class="dev-panel-header">
+            <span>Bảng Mô Phỏng Prototype (SRS Test)</span>
+            <button onclick="toggleDevPanel(event)" style="background:none; border:none; color:inherit; cursor:pointer; display:flex;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+        </div>
+        
+        <div class="dev-panel-tabs">
+            <button id="btn-dev-tab-events" class="dev-tab-btn active" onclick="switchDevTab('events')">Gửi Event</button>
+            <button id="btn-dev-tab-state" class="dev-tab-btn" onclick="switchDevTab('state')">Trạng Thái & Offline</button>
+        </div>
+        
+        <div class="dev-panel-body">
+            <!-- Tab 1: Kích hoạt sự kiện -->
+            <div id="dev-tab-events">
+                <div class="form-group" style="margin-bottom: 10px;">
+                    <label class="form-label" style="font-size: 11px;">Loại Sự Kiện (SRS 2.2)</label>
+                    <select id="evt-select" class="form-control" style="font-size: 12px; height: 32px;" onchange="handleEventSelectChange()">
+                        <option value="NEW_MESSAGE">EVT-01: Tin nhắn mới (New Message)</option>
+                        <option value="ASSIGNMENT">EVT-02: Phân công hội thoại (Assignment)</option>
+                        <option value="MENTION">EVT-03: Nhắc tới - Mention (@mention)</option>
+                        <option value="SLA_ALERT">EVT-04: Cảnh báo SLA (SLA Alert)</option>
+                        <option value="SYSTEM_ALERT">EVT-05: Cảnh báo hệ thống (System Alert)</option>
+                        <option value="MODULE_CHANGE">EVT-06: Thay đổi cấu hình (Module Event)</option>
+                    </select>
+                </div>
+                
+                <div class="form-group" style="margin-bottom: 10px;">
+                    <label class="form-label" style="font-size: 11px;">Tiêu đề thông báo</label>
+                    <input type="text" id="evt-title" class="form-control" style="font-size: 12px; height: 32px;" value="Tin nhắn mới từ khách hàng">
+                </div>
+
+                <div class="form-group" style="margin-bottom: 12px;">
+                    <label class="form-label" style="font-size: 11px;">Nội dung chi tiết</label>
+                    <textarea id="evt-body" class="form-control" style="font-size: 12px; height: 50px; resize: none;">Khách hàng Nguyễn Thị Lan gửi tin nhắn: "Tư vấn giúp tôi cách thiết lập kênh Zalo OA với ạ."</textarea>
+                </div>
+                
+                <button class="btn btn-primary" style="width: 100%; font-size: 12px; padding: 6px 12px;" onclick="triggerPrototypeEvent()">Gửi Sự Kiện (Trigger Event)</button>
+            </div>
+            
+            <!-- Tab 2: Trạng thái & Giả lập Offline -->
+            <div id="dev-tab-state" style="display: none;">
+                <div class="dev-state-row">
+                    <div class="dnd-info">
+                        <strong>Trạng thái hoạt động</strong>
+                        <span id="user-status-badge" class="badge-status online">Online</span>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox" id="test-user-status" checked onchange="toggleUserOnlineState()">
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+                
+                <div class="dev-state-row">
+                    <div class="dnd-info">
+                        <strong>Kết nối WebSocket (SRS 3.1)</strong>
+                        <span id="ws-status-badge" class="badge-status connected">Kết nối</span>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox" id="test-ws-status" checked onchange="toggleWebSocketState()">
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+
+                <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 12px 0;">
+
+                <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 8px;">Kiểm thử hành vi Offline (AC7, AC15, AC16):</p>
+                <div style="display: flex; flex-direction: column; gap: 8px;">
+                    <button class="btn btn-secondary" style="font-size: 11px; padding: 6px 12px;" onclick="simulateOfflineBatching()">1. Giả lập 15 phút Offline & Gửi 3 sự kiện</button>
+                    <button class="btn btn-secondary" style="font-size: 11px; padding: 6px 12px; display: flex; align-items: center; justify-content: center; gap: 6px;" onclick="openMockEmailClient()">
+                        <svg width="12" height="12" fill="currentColor" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+                        2. Hộp thư Email giả lập
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Interactivity -->
+    <script>
+        // GLOBAL PROTOTYPE STATE
+        const prototypeState = {
+            hasLoadedAll: false,
+            // User settings (Notification Preferences - SRS VIII Table 3)
+            preferences: {
+                globalEnabled: true,
+                ringtone: 'default',
+                events: {
+                    NEW_MESSAGE: { inapp: true, toast: true, email: false },
+                    ASSIGNMENT: { inapp: true, toast: true, email: false },
+                    MENTION: { inapp: true, toast: true, email: false },
+                    SLA_ALERT: { inapp: true, toast: true, email: false },
+                    MODULE_CHANGE: { inapp: true, toast: true, email: false }
+                },
+                dnd: {
+                    enabled: false,
+                    until: null,
+                    scheduledEnabled: false,
+                    schedule: {
+                        1: { enabled: true, start: '22:00', end: '08:00' },
+                        2: { enabled: true, start: '22:00', end: '08:00' },
+                        3: { enabled: true, start: '22:00', end: '08:00' },
+                        4: { enabled: true, start: '22:00', end: '08:00' },
+                        5: { enabled: true, start: '22:00', end: '08:00' },
+                        6: { enabled: false, start: '22:00', end: '08:00' },
+                        7: { enabled: false, start: '22:00', end: '08:00' }
+                    }
+                },
+                emailDigest: {
+                    enabled: false,
+                    time: '08:00'
+                }
+            },
+            // Runtime connectivity
+            isOnline: true,
+            isWebSocketConnected: true,
+            
+            // Notification memory (SRS VIII Table 1)
+            notifications: [
+                {
+                    id: 'n1',
+                    eventType: 'ASSIGNMENT',
+                    module: 'Hội thoại',
+                    title: 'Hội thoại mới được phân công',
+                    body: 'Hội thoại với KH Nguyễn Thị Lan đã được tự động gán cho bạn.',
+                    isRead: false,
+                    createdAt: new Date(Date.now() - 1000 * 60 * 10), // 10 mins ago
+                },
+                {
+                    id: 'n2',
+                    eventType: 'MENTION',
+                    module: 'Ghi chú',
+                    title: 'Bạn được nhắc tới trong hội thoại',
+                    body: 'Trần Văn Hùng đã nhắc tới bạn: "@phuongntt kiểm tra trường hợp này giúp em với."',
+                    isRead: false,
+                    createdAt: new Date(Date.now() - 1000 * 60 * 30), // 30 mins ago
+                },
+                {
+                    id: 'n3',
+                    eventType: 'SLA_ALERT',
+                    module: 'Hội thoại',
+                    title: 'Cảnh báo vi phạm SLA',
+                    body: 'Hội thoại #8472 sắp quá hạn 15 phút chưa phản hồi.',
+                    isRead: true,
+                    createdAt: new Date(Date.now() - 1000 * 60 * 120), // 2 hours ago
+                }
+            ],
+            
+            // Mock Email database (offline simulation)
+            emails: [
+                {
+                    id: 'e1',
+                    sender: 'no-reply@gapone.co',
+                    subject: '[Gapone] Bạn có 1 thông báo mới khi offline',
+                    date: new Date(Date.now() - 1000 * 60 * 120),
+                    body: `
+                        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden; color: #1e293b;">
+                            <div style="background-color: #f06a24; padding: 20px; text-align: center; color: white;">
+                                <h2 style="margin: 0; font-size: 20px;">GAPONE CONVERSATION</h2>
+                            </div>
+                            <div style="padding: 24px; line-height: 1.6;">
+                                <h3 style="margin-top: 0; color: #f06a24;">Chào phuongntt,</h3>
+                                <p>Hệ thống ghi nhận bạn đã offline và có sự kiện mới trong 15 phút qua:</p>
+                                
+                                <div style="background-color: #f8fafc; border-left: 4px solid #f06a24; padding: 12px 16px; margin: 16px 0; border-radius: 0 4px 4px 0;">
+                                    <strong style="font-size: 14px; color: #0f172a;">[Tin nhắn] Tin nhắn mới từ khách hàng</strong>
+                                    <p style="margin: 4px 0 0 0; font-size: 13px; color: #64748b;">Khách hàng Hà Ngọc Khánh: "Hỗ trợ tôi cài đặt kênh Zalo OA với."</p>
+                                    <span style="font-size: 11px; color: #94a3b8; display: block; margin-top: 4px;">Thời gian: Vừa xong</span>
+                                </div>
+
+                                <p>Vui lòng đăng nhập lại hệ thống để xử lý công việc tránh vi phạm SLA.</p>
+                                
+                                <div style="text-align: center; margin: 24px 0 12px 0;">
+                                    <a href="#" onclick="clickEmailLink(); return false;" style="background-color: #f06a24; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: bold; display: inline-block;">Xem chi tiết cuộc hội thoại</a>
+                                </div>
+                            </div>
+                            <div style="background-color: #f1f5f9; padding: 16px; text-align: center; font-size: 11px; color: #94a3b8; border-top: 1px solid #e2e8f0;">
+                                Email này được gửi tự động từ hệ thống Gapone Conversation. Vui lòng không trả lời trực tiếp email này.
+                            </div>
+                        </div>
+                    `
+                }
+            ],
+            
+            // Queue for active toasts limit
+            toastQueue: []
+        };
+
+        // DOM elements
+        const sidebar = document.getElementById('sidebar');
+        const themeIcon = document.getElementById('theme-icon');
+        const searchInput = document.getElementById('search-input');
+        const tableBody = document.getElementById('table-body');
+        const emptyState = document.getElementById('empty-state');
+        const editModal = document.getElementById('edit-modal');
+        const toast = document.getElementById('toast-notify');
+        const toastMsg = document.getElementById('toast-message');
+
+        // Modal fields
+        const inputId = document.getElementById('edit-user-id');
+        const inputName = document.getElementById('edit-name');
+        const inputUsername = document.getElementById('edit-username');
+        const inputEmail = document.getElementById('edit-email');
+        const inputRole = document.getElementById('edit-role');
+
+        // View panels
+        const viewUsers = document.getElementById('view-users');
+        const viewNotifSettings = document.getElementById('view-notification-settings');
+        const breadcrumbCurrentView = document.getElementById('breadcrumb-current-view');
+
+        // Event triggering details preset
+        const eventPresets = {
+            NEW_MESSAGE: {
+                title: "Tin nhắn mới từ khách hàng",
+                body: "Khách hàng Nguyễn Thị Lan gửi tin nhắn: 'Tư vấn giúp tôi cách thiết lập kênh Zalo OA với ạ.'"
+            },
+            ASSIGNMENT: {
+                title: "Phân công hội thoại mới",
+                body: "Hội thoại với khách hàng Bùi Tiến Dũng đã được phân công cho bạn."
+            },
+            MENTION: {
+                title: "Bạn được nhắc tới trong ghi chú",
+                body: "Nguyễn Minh Hùng đã tag bạn: '@phuongntt xem lại báo giá này giúp anh.'"
+            },
+            SLA_ALERT: {
+                title: "Cảnh báo vi phạm cam kết SLA",
+                body: "Hội thoại với KH Hoàng Văn Thắng sắp quá hạn 15 phút chưa phản hồi phản hồi đầu."
+            },
+            SYSTEM_ALERT: {
+                title: "Hệ thống bảo trì kết nối",
+                body: "Đường truyền kết nối Zalo OA đang gặp gián đoạn tạm thời. Hệ thống đang tự động kết nối lại."
+            },
+            MODULE_CHANGE: {
+                title: "Cập nhật cấu hình quy trình",
+                body: "Quy trình phân công hội thoại tự động (Routing Rule) đã được cập nhật bởi Admin."
+            }
+        };
+
+        // Initialize App
+        window.addEventListener('DOMContentLoaded', () => {
+            renderNotifications();
+            loadNotificationPreferencesUI();
+            
+            // Event listener to close dropdowns when clicking outside
+            window.addEventListener('click', (e) => {
+                const bellBtn = document.getElementById('bell-btn');
+                const bellDropdown = document.getElementById('bell-dropdown');
+                if (bellDropdown && bellDropdown.style.display === 'flex' && !bellBtn.contains(e.target) && !bellDropdown.contains(e.target)) {
+                    bellDropdown.style.display = 'none';
+                }
+
+                const profilePopup = document.getElementById('profile-popup');
+                const profileCard = document.querySelector('.sidebar-profile');
+                if (profilePopup && profilePopup.style.display === 'block' && !profileCard.contains(e.target) && !profilePopup.contains(e.target)) {
+                    profilePopup.style.display = 'none';
+                }
+            });
+        });
+
+        // PROFILE POPUP & LOGIN/LOGOUT ACTIONS
+        function handleLogin() {
+            showToast('Đang kết nối hệ thống...');
+            setTimeout(() => {
+                document.getElementById('login-screen').style.display = 'none';
+                document.getElementById('app-container').style.display = 'flex';
+                showToast('Đăng nhập thành công!');
+            }, 800);
+        }
+
+        function toggleProfilePopup(event) {
+            event.stopPropagation();
+            if (sidebar.classList.contains('collapsed')) {
+                sidebar.classList.remove('collapsed');
+                return;
+            }
+            const popup = document.getElementById('profile-popup');
+            const isHidden = !popup.style.display || popup.style.display === 'none';
+            popup.style.display = isHidden ? 'block' : 'none';
+        }
+
+        function handleAccountSettingsClick(event) {
+            event.stopPropagation();
+            document.getElementById('profile-popup').style.display = 'none';
+            navigateSubmenu('notif-settings');
+            showToast('Mở Cài đặt tài khoản');
+        }
+
+        function handleLogoutClick(event) {
+            event.stopPropagation();
+            document.getElementById('profile-popup').style.display = 'none';
+            document.getElementById('app-container').style.display = 'none';
+            document.getElementById('login-screen').style.display = 'flex';
+            showToast('Đã đăng xuất khỏi hệ thống');
+        }
+
+        // 1. NAVIGATION ROUTING
+        function navigateSubmenu(viewName) {
+            document.querySelectorAll('.submenu-item').forEach(item => item.classList.remove('active'));
+            const parentBreadcrumb = document.getElementById('breadcrumb-parent-view');
+            
+            if (viewName === 'users') {
+                document.getElementById('sub-menu-users').classList.add('active');
+                viewUsers.style.display = 'flex';
+                viewNotifSettings.style.display = 'none';
+                if (parentBreadcrumb) parentBreadcrumb.innerText = 'Cài đặt';
+                breadcrumbCurrentView.innerText = 'Người dùng';
+            } else if (viewName === 'notif-settings') {
+                const notifSubMenu = document.getElementById('sub-menu-notif-settings');
+                if (notifSubMenu) notifSubMenu.classList.add('active');
+                viewUsers.style.display = 'none';
+                viewNotifSettings.style.display = 'flex';
+                if (parentBreadcrumb) parentBreadcrumb.innerText = 'Người dùng';
+                breadcrumbCurrentView.innerText = 'Cài đặt tài khoản';
+            }
+            
+            // Close sidebar on mobile
+            if (window.innerWidth <= 768) {
+                sidebar.classList.remove('active');
+            }
+        }
+
+        function selectSubmenu(element) {
+            document.querySelectorAll('.submenu-item').forEach(item => item.classList.remove('active'));
+            element.classList.add('active');
+            const parentBreadcrumb = document.getElementById('breadcrumb-parent-view');
+            if (parentBreadcrumb) parentBreadcrumb.innerText = 'Cài đặt';
+            breadcrumbCurrentView.innerText = element.innerText;
+            showToast(`Chuyển đến mục: ${element.innerText}`);
+        }
+
+        // 2. SIDEBAR toggle
+        function toggleSidebar() {
+            sidebar.classList.toggle('collapsed');
+            
+            // Auto close submenus if collapsed
+            const submenu = document.getElementById('settings-submenu');
+            const parentMenu = document.querySelector('.menu-item.active');
+            
+            if (sidebar.classList.contains('collapsed')) {
+                submenu.classList.remove('expanded');
+                if (parentMenu) parentMenu.classList.remove('expanded');
+            } else {
+                submenu.classList.add('expanded');
+                if (parentMenu) parentMenu.classList.add('expanded');
+            }
+        }
+
+        function toggleSubmenu(element) {
+            if (sidebar.classList.contains('collapsed')) {
+                sidebar.classList.remove('collapsed');
+            }
+            element.classList.toggle('expanded');
+            const submenu = document.getElementById('settings-submenu');
+            submenu.classList.toggle('expanded');
+        }
+
+        function selectMenu(element) {
+            document.querySelectorAll('.menu-item').forEach(item => {
+                item.classList.remove('active');
+                item.style.color = '';
+                const icon = item.querySelector('.menu-icon');
+                if (icon) icon.style.color = '';
+            });
+            document.querySelectorAll('.submenu-item').forEach(item => item.classList.remove('active'));
+            
+            element.classList.add('active');
+            showToast(`Mở: ${element.innerText.trim()}`);
+        }
+
+        function switchTab(element) {
+            document.querySelectorAll('.tab-item').forEach(tab => tab.classList.remove('active'));
+            element.classList.add('active');
+            showToast(`Xem danh sách: ${element.innerText}`);
+        }
+
+        // 3. THEME TOGGLE
+        function toggleTheme() {
+            document.body.classList.toggle('dark-theme');
+            const isDark = document.body.classList.contains('dark-theme');
+            
+            if (isDark) {
+                themeIcon.innerHTML = `
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                `;
+                showToast('Đã chuyển sang Chế độ Tối');
+            } else {
+                themeIcon.innerHTML = `
+                    <circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.07" x2="5.64" y2="17.64"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                `;
+                showToast('Đã chuyển sang Chế độ Sáng');
+            }
+        }
+
+        // 4. USER TABLE SEARCH FILTERING
+        function filterTable() {
+            const query = searchInput.value.toLowerCase().trim();
+            const rows = tableBody.getElementsByTagName('tr');
+            let matchCount = 0;
+
+            for (let i = 0; i < rows.length; i++) {
+                const name = rows[i].querySelector('.col-name').innerText.toLowerCase();
+                const username = rows[i].querySelector('.col-username').innerText.toLowerCase();
+                const email = rows[i].getElementsByTagName('td')[3].innerText.toLowerCase();
+
+                if (name.includes(query) || username.includes(query) || email.includes(query)) {
+                    rows[i].style.display = '';
+                    matchCount++;
+                } else {
+                    rows[i].style.display = 'none';
+                }
+            }
+
+            if (matchCount === 0) {
+                emptyState.style.display = 'block';
+            } else {
+                emptyState.style.display = 'none';
+            }
+        }
+
+        // 5. USER EDIT MODAL
+        function openEditModal(userId) {
+            const row = document.querySelector(`tr[data-id="${userId}"]`);
+            if (!row) return;
+
+            const name = row.querySelector('.col-name').innerText;
+            const username = row.querySelector('.col-username').innerText;
+            const email = row.getElementsByTagName('td')[3].querySelector('a').innerText;
+            const role = row.querySelector('.col-role').innerText;
+
+            inputId.value = userId;
+            inputName.value = name;
+            inputUsername.value = username;
+            inputEmail.value = email;
+            inputRole.value = role;
+
+            editModal.classList.add('open');
+        }
+
+        function closeEditModal() {
+            editModal.classList.remove('open');
+        }
+
+        function saveUserChanges() {
+            const id = inputId.value;
+            const name = inputName.value.trim();
+            const email = inputEmail.value.trim();
+            const role = inputRole.value.trim();
+
+            if (!name || !email || !role) {
+                alert('Vui lòng điền đầy đủ thông tin!');
+                return;
+            }
+
+            const row = document.querySelector(`tr[data-id="${id}"]`);
+            if (row) {
+                row.querySelector('.col-name').innerText = name;
+                
+                const emailCell = row.getElementsByTagName('td')[3];
+                emailCell.innerHTML = `<a href="mailto:${email}">${email}</a>`;
+                
+                row.querySelector('.col-role').innerText = role;
+
+                row.classList.add('updated-row');
+                setTimeout(() => {
+                    row.classList.remove('updated-row');
+                }, 1500);
+
+                closeEditModal();
+                showToast(`Đã lưu thay đổi cho "${name}"`);
+            }
+        }
+
+        // 6. IN-APP BELL DROPDOWN LOGIC (SRS 3.1)
+        function toggleBellDropdown(e) {
+            e.stopPropagation();
+            const dropdown = document.getElementById('bell-dropdown');
+            if (dropdown.style.display === 'none') {
+                dropdown.style.display = 'flex';
+                renderNotifications();
+            } else {
+                dropdown.style.display = 'none';
+            }
+        }
+
+        const olderNotifications = [
+            {
+                id: 'old_1',
+                eventType: 'NEW_MESSAGE',
+                module: 'Hội thoại',
+                title: 'Tin nhắn mới từ khách hàng',
+                body: 'KH Phạm Văn Nam: "Tôi cần hỗ trợ sửa lỗi đăng nhập tài khoản phụ."',
+                isRead: true,
+                createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 1) // 1 day ago
+            },
+            {
+                id: 'old_2',
+                eventType: 'ASSIGNMENT',
+                module: 'Hội thoại',
+                title: 'Hội thoại mới được phân công',
+                body: 'Hội thoại với KH Nguyễn Văn Bính đã được tự động gán cho bạn.',
+                isRead: true,
+                createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 2) // 2 days ago
+            },
+            {
+                id: 'old_3',
+                eventType: 'MENTION',
+                module: 'Ghi chú',
+                title: 'Bạn được nhắc tới trong hội thoại',
+                body: 'Hà Ngọc Khánh đã nhắc tới bạn: "@phuongntt kiểm tra hội thoại này nhé."',
+                isRead: true,
+                createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 3) // 3 days ago
+            },
+            {
+                id: 'old_4',
+                eventType: 'SLA_ALERT',
+                module: 'Hội thoại',
+                title: 'Cảnh báo vi phạm SLA',
+                body: 'Hội thoại #8300 đã quá 30 phút chưa phản hồi khách hàng.',
+                isRead: true,
+                createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 5) // 5 days ago
+            },
+            {
+                id: 'old_5',
+                eventType: 'SYSTEM_ALERT',
+                module: 'Hệ thống',
+                title: 'Bảo trì định kỳ hệ thống',
+                body: 'Hoàn tất nâng cấp hệ thống máy chủ và tối ưu hóa cơ sở dữ liệu.',
+                isRead: true,
+                createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 7) // 7 days ago
+            },
+            {
+                id: 'old_6',
+                eventType: 'MODULE_CHANGE',
+                module: 'Cấu hình',
+                title: 'Cập nhật cấu hình quy trình',
+                body: 'Thay đổi quy tắc phân công hội thoại tự động cho nhóm Chăm sóc khách hàng.',
+                isRead: true,
+                createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 10) // 10 days ago
+            },
+            {
+                id: 'old_7',
+                eventType: 'NEW_MESSAGE',
+                module: 'Hội thoại',
+                title: 'Tin nhắn mới từ khách hàng',
+                body: 'KH Lê Thị Hồng: "Gửi cho tôi báo giá chi tiết dịch vụ AI Starter."',
+                isRead: true,
+                createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 12) // 12 days ago
+            },
+            {
+                id: 'old_8',
+                eventType: 'ASSIGNMENT',
+                module: 'Hội thoại',
+                title: 'Hội thoại mới được phân công',
+                body: 'Hội thoại với KH Trần Thu Hà đã được tự động gán cho bạn.',
+                isRead: true,
+                createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 15) // 15 days ago
+            },
+            {
+                id: 'old_9',
+                eventType: 'MENTION',
+                module: 'Ghi chú',
+                title: 'Bạn được nhắc tới trong hội thoại',
+                body: 'Nguyễn Thị Duyên đã nhắc tới bạn: "@phuongntt duyệt giúp yêu cầu này."',
+                isRead: true,
+                createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 20) // 20 days ago
+            },
+            {
+                id: 'old_10',
+                eventType: 'SLA_ALERT',
+                module: 'Hội thoại',
+                title: 'Cảnh báo vi phạm SLA',
+                body: 'Hội thoại #8120 quá hạn phản hồi của Agent.',
+                isRead: true,
+                createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 25) // 25 days ago
+            },
+            {
+                id: 'old_11',
+                eventType: 'SYSTEM_ALERT',
+                module: 'Hệ thống',
+                title: 'Đồng bộ dữ liệu hoàn tất',
+                body: 'Đồng bộ dữ liệu khách hàng từ kênh Zalo OA về CRM thành công.',
+                isRead: true,
+                createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 30) // 30 days ago
+            }
+        ];
+
+        function showAllNotifications(event) {
+            if (event) event.stopPropagation();
+            
+            if (!prototypeState.hasLoadedAll) {
+                prototypeState.notifications = prototypeState.notifications.concat(olderNotifications);
+                prototypeState.hasLoadedAll = true;
+            }
+            
+            const listContainer = document.getElementById('bell-notifications-list');
+            listContainer.classList.add('expanded');
+            
+            renderNotifications();
+            
+            const footer = document.getElementById('bell-dropdown-footer');
+            if (footer) {
+                footer.innerHTML = '<span style="color: var(--text-muted); font-size: 11px; font-weight: 500;">Hiển thị thông báo trong 30 ngày gần nhất</span>';
+            }
+            
+            showToast('Đã tải các thông báo cũ trong vòng 30 ngày');
+        }
+
+        function renderNotifications() {
+            const listContainer = document.getElementById('bell-notifications-list');
+            const badge = document.getElementById('bell-unread-count');
+            
+            let unreadCount = 0;
+            listContainer.innerHTML = '';
+            
+            // Sort: newest first
+            const sortedNotifs = [...prototypeState.notifications].sort((a, b) => b.createdAt - a.createdAt);
+            
+            if (sortedNotifs.length === 0) {
+                listContainer.innerHTML = `
+                    <div style="padding: 32px; text-align: center; color: var(--text-muted);">
+                        <p>Không có thông báo mới</p>
+                    </div>
+                `;
+                badge.style.display = 'none';
+                return;
+            }
+            
+            sortedNotifs.forEach(n => {
+                if (!n.isRead) unreadCount++;
+                
+                const item = document.createElement('div');
+                item.className = `notif-item ${n.isRead ? '' : 'unread'}`;
+                item.onclick = () => handleNotificationClick(n.id);
+                
+                let iconClass = 'notif-icon-message';
+                let iconSvg = '';
+                
+                // SVG mappings for event types (SRS 2.2)
+                switch(n.eventType) {
+                    case 'NEW_MESSAGE':
+                        iconClass = 'notif-icon-message';
+                        iconSvg = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>`;
+                        break;
+                    case 'ASSIGNMENT':
+                        iconClass = 'notif-icon-assignment';
+                        iconSvg = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="20" y1="8" x2="20" y2="14"></line><line x1="23" y1="11" x2="17" y2="11"></line></svg>`;
+                        break;
+                    case 'MENTION':
+                        iconClass = 'notif-icon-mention';
+                        iconSvg = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"></circle><path d="M16 8v5a3 3 0 0 0 6 0v-1a10 10 0 1 0-3.92 7.94"></path></svg>`;
+                        break;
+                    case 'SLA_ALERT':
+                        iconClass = 'notif-icon-sla';
+                        iconSvg = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>`;
+                        break;
+                    case 'SYSTEM_ALERT':
+                        iconClass = 'notif-icon-system';
+                        iconSvg = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>`;
+                        break;
+                    case 'MODULE_CHANGE':
+                        iconClass = 'notif-icon-module';
+                        iconSvg = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>`;
+                        break;
+                }
+                
+                const timeString = formatTimeRelative(n.createdAt);
+                
+                item.innerHTML = `
+                    <div class="notif-icon-wrapper ${iconClass}">
+                        ${iconSvg}
+                    </div>
+                    <div class="notif-details">
+                        <div class="notif-title">[${n.module}] ${n.title}</div>
+                        <div class="notif-body">${n.body}</div>
+                        <div class="notif-time">${timeString}</div>
+                    </div>
+                `;
+                
+                listContainer.appendChild(item);
+            });
+            
+            // Update badge (SRS AC11: badge shows "99+" if >99)
+            if (unreadCount > 0) {
+                badge.style.display = 'flex';
+                badge.innerText = unreadCount > 99 ? '99+' : unreadCount;
+            } else {
+                badge.style.display = 'none';
+            }
+        }
+
+        function formatTimeRelative(dateObj) {
+            const hh = String(dateObj.getHours()).padStart(2, '0');
+            const min = String(dateObj.getMinutes()).padStart(2, '0');
+            const dd = String(dateObj.getDate()).padStart(2, '0');
+            const mm = String(dateObj.getMonth() + 1).padStart(2, '0');
+            const yyyy = dateObj.getFullYear();
+            return `${hh}:${min}, ${dd}/${mm}/${yyyy}`;
+        }
+
+        function handleNotificationClick(id) {
+            const notif = prototypeState.notifications.find(n => n.id === id);
+            if (notif) {
+                notif.isRead = true;
+                showToast(`Điều hướng đến: [${notif.module}] - ${notif.title}`);
+                renderNotifications();
+                document.getElementById('bell-dropdown').style.display = 'none';
+            }
+        }
+
+        function markAllNotificationsAsRead(event) {
+            if (event) event.stopPropagation();
+            prototypeState.notifications.forEach(n => n.isRead = true);
+            renderNotifications();
+            showToast('Đã đánh dấu tất cả thông báo là đã đọc');
+        }
+
+        // 7. TOAST NOTIFICATION STACK MANAGER (SRS 3.2)
+        function showNotificationToast(notif) {
+            // Check if Toast is blocked globally or by DND (SRS AC10, AC18)
+            if (!prototypeState.preferences.globalEnabled) return;
+            if (prototypeState.preferences.dnd.enabled) return;
+            
+            // Check if event type has Toast enabled (SRS 3.4 Matrix)
+            const pref = prototypeState.preferences.events[notif.eventType];
+            if (pref && !pref.toast) return;
+            
+            const container = document.getElementById('toast-stack');
+            
+            // Create Toast Card
+            const toastCard = document.createElement('div');
+            toastCard.className = 'toast-card-item';
+            
+            let borderStyle = 'border-left-color: var(--primary-color);';
+            let iconSvg = '';
+            
+            switch(notif.eventType) {
+                case 'NEW_MESSAGE':
+                    borderStyle = 'border-left-color: #22c55e;';
+                    iconSvg = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>`;
+                    break;
+                case 'ASSIGNMENT':
+                    borderStyle = 'border-left-color: #3b82f6;';
+                    iconSvg = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2"><circle cx="8.5" cy="7" r="4"></circle><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path></svg>`;
+                    break;
+                case 'MENTION':
+                    borderStyle = 'border-left-color: #a855f7;';
+                    iconSvg = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2"><circle cx="12" cy="12" r="4"></circle><path d="M16 8v5a3 3 0 0 0 6 0v-1a10 10 0 1 0-3.92 7.94"></path></svg>`;
+                    break;
+                case 'SLA_ALERT':
+                    borderStyle = 'border-left-color: #ef4444;';
+                    iconSvg = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>`;
+                    break;
+                case 'SYSTEM_ALERT':
+                    borderStyle = 'border-left-color: #f59e0b;';
+                    iconSvg = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path></svg>`;
+                    break;
+                case 'MODULE_CHANGE':
+                    borderStyle = 'border-left-color: #6b7280;';
+                    iconSvg = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6b7280" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82H19.4z"></path></svg>`;
+                    break;
+            }
+            
+            toastCard.style = borderStyle;
+            
+            toastCard.innerHTML = `
+                <div style="flex-shrink:0;">${iconSvg}</div>
+                <div class="toast-card-details">
+                    <div class="toast-card-title">[${notif.module}] ${notif.title}</div>
+                    <div class="toast-card-body">${notif.body}</div>
+                </div>
+                <button class="toast-card-close" onclick="closeToastItem(this.parentNode)">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+            `;
+            
+            // Click on Toast navigates (AC4)
+            toastCard.addEventListener('click', (e) => {
+                if (e.target.closest('.toast-card-close')) return;
+                handleNotificationClick(notif.id);
+                closeToastItem(toastCard);
+            });
+            
+            // Queue rule: Max 3 concurrent toasts (SRS AC14)
+            const activeToasts = container.getElementsByClassName('toast-card-item');
+            if (activeToasts.length >= 3) {
+                // Remove oldest
+                closeToastItem(activeToasts[0]);
+            }
+            
+            container.appendChild(toastCard);
+            
+            // Play mock audio sound if default
+            if (prototypeState.preferences.ringtone === 'default') {
+                // audio cue simulated
+            }
+            
+            // Auto hide after 5 seconds (SRS AC3)
+            setTimeout(() => {
+                if (toastCard.parentNode) {
+                    closeToastItem(toastCard);
+                }
+            }, 5000);
+        }
+
+        function closeToastItem(toastElement) {
+            toastElement.classList.add('slide-out');
+            setTimeout(() => {
+                if (toastElement.parentNode) {
+                    toastElement.parentNode.removeChild(toastElement);
+                }
+            }, 3000);
+        }
+
+        // 8. NOTIFICATION PREFERENCES MANAGEMENT (SRS 3.4 & 4.3)
+        function loadNotificationPreferencesUI() {
+            const prefs = prototypeState.preferences;
+            
+            // Global enabled (Removed UI toggle)
+            
+            // Event table matrix
+            document.getElementById('chk-msg-inapp').checked = prefs.events.NEW_MESSAGE.inapp;
+            document.getElementById('chk-msg-toast').checked = prefs.events.NEW_MESSAGE.toast;
+            document.getElementById('chk-msg-email').checked = prefs.events.NEW_MESSAGE.email;
+            
+            document.getElementById('chk-assign-inapp').checked = prefs.events.ASSIGNMENT.inapp;
+            document.getElementById('chk-assign-toast').checked = prefs.events.ASSIGNMENT.toast;
+            document.getElementById('chk-assign-email').checked = prefs.events.ASSIGNMENT.email;
+            
+            document.getElementById('chk-mention-inapp').checked = prefs.events.MENTION.inapp;
+            document.getElementById('chk-mention-toast').checked = prefs.events.MENTION.toast;
+            document.getElementById('chk-mention-email').checked = prefs.events.MENTION.email;
+            
+            document.getElementById('chk-sla-inapp').checked = prefs.events.SLA_ALERT.inapp;
+            document.getElementById('chk-sla-toast').checked = prefs.events.SLA_ALERT.toast;
+            document.getElementById('chk-sla-email').checked = prefs.events.SLA_ALERT.email;
+            
+            document.getElementById('chk-module-inapp').checked = prefs.events.MODULE_CHANGE.inapp;
+            document.getElementById('chk-module-toast').checked = prefs.events.MODULE_CHANGE.toast;
+            document.getElementById('chk-module-email').checked = prefs.events.MODULE_CHANGE.email;
+            
+            // DND preferences
+            document.getElementById('pref-dnd-quick').checked = prefs.dnd.enabled;
+            document.getElementById('dnd-quick-options').style.display = prefs.dnd.enabled ? 'block' : 'none';
+            if (document.getElementById('dnd-custom-days')) {
+                document.getElementById('dnd-custom-days').value = 0;
+                document.getElementById('dnd-custom-hours').value = 0;
+                document.getElementById('dnd-custom-minutes').value = 0;
+            }
+            
+            document.getElementById('pref-dnd-scheduled').checked = prefs.dnd.scheduledEnabled;
+            document.getElementById('dnd-schedule-picker-container').style.display = prefs.dnd.scheduledEnabled ? 'block' : 'none';
+            
+            // Load 7 days schedule
+            const schedule = prefs.dnd.schedule || {
+                1: { enabled: true, start: '22:00', end: '08:00' },
+                2: { enabled: true, start: '22:00', end: '08:00' },
+                3: { enabled: true, start: '22:00', end: '08:00' },
+                4: { enabled: true, start: '22:00', end: '08:00' },
+                5: { enabled: true, start: '22:00', end: '08:00' },
+                6: { enabled: false, start: '22:00', end: '08:00' },
+                7: { enabled: false, start: '22:00', end: '08:00' }
+            };
+            
+            for (let i = 1; i <= 7; i++) {
+                const dayData = schedule[i];
+                const enableChk = document.getElementById(`dnd-day-enable-${i}`);
+                if (enableChk) {
+                    enableChk.checked = dayData.enabled;
+                    const startInput = document.getElementById(`pref-dnd-start-${i}`);
+                    const endInput = document.getElementById(`pref-dnd-end-${i}`);
+                    
+                    startInput.value = dayData.start;
+                    endInput.value = dayData.end;
+                    
+                    startInput.disabled = !dayData.enabled;
+                    endInput.disabled = !dayData.enabled;
+                }
+            }
+            
+            // Email Digest settings
+            document.getElementById('pref-digest-enabled').checked = prefs.emailDigest.enabled;
+            document.getElementById('digest-time-container').style.display = prefs.emailDigest.enabled ? 'block' : 'none';
+            document.getElementById('pref-digest-time').value = prefs.emailDigest.time;
+            
+            // Handle global enabled status locks on sub-checkboxes
+            applyPreferencesDisabledStates();
+            updateDNDIndicatorUI();
+        }
+
+        function applyPreferencesDisabledStates() {
+            const globalEnabled = true;
+            
+            // Disable all sub checkboxes if global is disabled
+            document.querySelectorAll('.pref-checkbox').forEach(chk => {
+                chk.disabled = !globalEnabled;
+            });
+            
+            document.getElementById('pref-dnd-quick').disabled = !globalEnabled;
+            document.getElementById('pref-dnd-scheduled').disabled = !globalEnabled;
+            document.getElementById('pref-digest-enabled').disabled = !globalEnabled;
+        }
+
+        function handleQuickDNDToggle() {
+            const chk = document.getElementById('pref-dnd-quick');
+            const panel = document.getElementById('dnd-quick-options');
+            
+            prototypeState.preferences.dnd.enabled = chk.checked;
+            panel.style.display = chk.checked ? 'block' : 'none';
+            
+            if (chk.checked) {
+                // Disable scheduled DND to avoid conflicts
+                document.getElementById('pref-dnd-scheduled').checked = false;
+                document.getElementById('dnd-schedule-picker-container').style.display = 'none';
+                prototypeState.preferences.dnd.scheduledEnabled = false;
+                updateQuickDNDDuration();
+                showToast('Chế độ DND nhanh đã BẬT (Toast/Email chặn hoàn toàn - AC10)');
+            } else {
+                prototypeState.preferences.dnd.until = null;
+                showToast('Chế độ DND đã TẮT');
+            }
+            
+            updateDNDIndicatorUI();
+        }
+
+        function validateCustomDND() {
+            const daysInput = document.getElementById('dnd-custom-days');
+            const hoursInput = document.getElementById('dnd-custom-hours');
+            const minutesInput = document.getElementById('dnd-custom-minutes');
+            const errorSpan = document.getElementById('dnd-custom-error');
+            
+            let days = parseInt(daysInput.value) || 0;
+            let hours = parseInt(hoursInput.value) || 0;
+            let minutes = parseInt(minutesInput.value) || 0;
+            
+            // Constrain negatives
+            if (days < 0) { days = 0; daysInput.value = 0; }
+            if (hours < 0) { hours = 0; hoursInput.value = 0; }
+            if (minutes < 0) { minutes = 0; minutesInput.value = 0; }
+            
+            // Constrain field max values
+            if (hours > 24) {
+                hours = 24;
+                hoursInput.value = 24;
+            }
+            if (minutes > 59) {
+                minutes = 59;
+                minutesInput.value = 59;
+            }
+            if (days > 7) {
+                days = 7;
+                daysInput.value = 7;
+            }
+            
+            // Constrain total time <= 7 days (10080 minutes)
+            const totalMins = (days * 24 * 60) + (hours * 60) + minutes;
+            const maxMins = 7 * 24 * 60; // 10080
+            
+            if (totalMins > maxMins) {
+                errorSpan.innerText = 'Tổng thời gian không quá 7 ngày!';
+                errorSpan.style.display = 'block';
+                
+                // Adjust to max allowable
+                if (days >= 7) {
+                    daysInput.value = 7;
+                    hoursInput.value = 0;
+                    minutesInput.value = 0;
+                } else {
+                    const allowedMinsForTime = maxMins - (days * 24 * 60);
+                    let allowedHours = Math.floor(allowedMinsForTime / 60);
+                    
+                    if (hours > allowedHours) {
+                        hoursInput.value = allowedHours;
+                        minutesInput.value = 0;
+                    } else {
+                        minutesInput.value = allowedMinsForTime - (hours * 60);
+                    }
+                }
+            } else {
+                errorSpan.style.display = 'none';
+            }
+            
+            updateQuickDNDDuration();
+        }
+
+        function updateQuickDNDDuration() {
+            const days = parseInt(document.getElementById('dnd-custom-days').value) || 0;
+            const hours = parseInt(document.getElementById('dnd-custom-hours').value) || 0;
+            const minutes = parseInt(document.getElementById('dnd-custom-minutes').value) || 0;
+            
+            const totalMs = ((days * 24 * 60) + (hours * 60) + minutes) * 60 * 1000;
+            const untilTime = new Date(Date.now() + totalMs);
+            
+            prototypeState.preferences.dnd.until = untilTime;
+            
+            const preview = document.getElementById('quick-dnd-until-preview');
+            const hh = String(untilTime.getHours()).padStart(2, '0');
+            const min = String(untilTime.getMinutes()).padStart(2, '0');
+            const dd = String(untilTime.getDate()).padStart(2, '0');
+            const mm = String(untilTime.getMonth() + 1).padStart(2, '0');
+            
+            preview.innerText = `Chặn thông báo đến: ${hh}:${min} ngày ${dd}/${mm}`;
+        }
+
+        function handleScheduledDNDToggle() {
+            const chk = document.getElementById('pref-dnd-scheduled');
+            const panel = document.getElementById('dnd-schedule-picker-container');
+            
+            prototypeState.preferences.dnd.scheduledEnabled = chk.checked;
+            panel.style.display = chk.checked ? 'block' : 'none';
+            
+            if (chk.checked) {
+                // Disable quick DND to avoid conflicts
+                document.getElementById('pref-dnd-quick').checked = false;
+                document.getElementById('dnd-quick-options').style.display = 'none';
+                prototypeState.preferences.dnd.enabled = false;
+                prototypeState.preferences.dnd.until = null;
+                showToast('Đã bật DND theo lịch trình (Scheduled DND - SRS 3.5)');
+            } else {
+                showToast('Đã tắt DND theo lịch trình');
+            }
+            
+            updateDNDIndicatorUI();
+        }
+
+        function toggleScheduleRow(dayIndex) {
+            const isChecked = document.getElementById(`dnd-day-enable-${dayIndex}`).checked;
+            const startInput = document.getElementById(`pref-dnd-start-${dayIndex}`);
+            const endInput = document.getElementById(`pref-dnd-end-${dayIndex}`);
+            
+            startInput.disabled = !isChecked;
+            endInput.disabled = !isChecked;
+            
+            saveScheduleFields();
+        }
+
+        function saveScheduleFields() {
+            if (!prototypeState.preferences.dnd.schedule) {
+                prototypeState.preferences.dnd.schedule = {};
+            }
+            for (let i = 1; i <= 7; i++) {
+                const isEnabled = document.getElementById(`dnd-day-enable-${i}`).checked;
+                const startVal = document.getElementById(`pref-dnd-start-${i}`).value;
+                const endVal = document.getElementById(`pref-dnd-end-${i}`).value;
+                
+                prototypeState.preferences.dnd.schedule[i] = {
+                    enabled: isEnabled,
+                    start: startVal,
+                    end: endVal
+                };
+            }
+        }
+
+        function handleDigestToggle() {
+            const chk = document.getElementById('pref-digest-enabled');
+            const panel = document.getElementById('digest-time-container');
+            
+            prototypeState.preferences.emailDigest.enabled = chk.checked;
+            panel.style.display = chk.checked ? 'block' : 'none';
+            
+            if (chk.checked) {
+                // Auto check: Email digest blocks immediate email notifications (SRS AC16)
+                // We show alert & disable email config checkboxes
+                showToast('Bật Email Digest: Tự động khóa các kênh Email thông báo tức thời (AC16)');
+            } else {
+                showToast('Tắt Email Digest');
+            }
+        }
+
+        function saveDigestFields() {
+            prototypeState.preferences.emailDigest.time = document.getElementById('pref-digest-time').value;
+        }
+
+        function saveNotificationSettings() {
+            const prefs = prototypeState.preferences;
+            
+            // Save Event Routing table state
+            prefs.events.NEW_MESSAGE.inapp = document.getElementById('chk-msg-inapp').checked;
+            prefs.events.NEW_MESSAGE.toast = document.getElementById('chk-msg-toast').checked;
+            prefs.events.NEW_MESSAGE.email = document.getElementById('chk-msg-email').checked;
+            
+            prefs.events.ASSIGNMENT.inapp = document.getElementById('chk-assign-inapp').checked;
+            prefs.events.ASSIGNMENT.toast = document.getElementById('chk-assign-toast').checked;
+            prefs.events.ASSIGNMENT.email = document.getElementById('chk-assign-email').checked;
+            
+            prefs.events.MENTION.inapp = document.getElementById('chk-mention-inapp').checked;
+            prefs.events.MENTION.toast = document.getElementById('chk-mention-toast').checked;
+            prefs.events.MENTION.email = document.getElementById('chk-mention-email').checked;
+            
+            prefs.events.SLA_ALERT.inapp = document.getElementById('chk-sla-inapp').checked;
+            prefs.events.SLA_ALERT.toast = document.getElementById('chk-sla-toast').checked;
+            prefs.events.SLA_ALERT.email = document.getElementById('chk-sla-email').checked;
+            
+            prefs.events.MODULE_CHANGE.inapp = document.getElementById('chk-module-inapp').checked;
+            prefs.events.MODULE_CHANGE.toast = document.getElementById('chk-module-toast').checked;
+            prefs.events.MODULE_CHANGE.email = document.getElementById('chk-module-email').checked;
+            
+            showToast('Lưu cấu hình thông báo thành công (SRS AC6)');
+            navigateSubmenu('users');
+            updateDNDIndicatorUI();
+        }
+
+        function resetNotificationSettings() {
+            loadNotificationPreferencesUI();
+            showToast('Đã hủy bỏ các thay đổi cài đặt');
+            navigateSubmenu('users');
+        }
+
+        // DND Moon indicator overlay on Bell icon (SRS AC9)
+        function updateDNDIndicatorUI() {
+            const moonIndicator = document.getElementById('bell-dnd-indicator');
+            const isDND = prototypeState.preferences.dnd.enabled || prototypeState.preferences.dnd.scheduledEnabled;
+            
+            if (isDND) {
+                moonIndicator.style.display = 'flex';
+                let tooltip = 'Chế độ Không làm phiền (DND) đang hoạt động.';
+                if (prototypeState.preferences.dnd.enabled && prototypeState.preferences.dnd.until) {
+                    const until = prototypeState.preferences.dnd.until;
+                    tooltip += ` Kết thúc lúc ${String(until.getHours()).padStart(2, '0')}:${String(until.getMinutes()).padStart(2, '0')}`;
+                }
+                moonIndicator.title = tooltip;
+            } else {
+                moonIndicator.style.display = 'none';
+            }
+        }
+
+        // 9. PROTOTYPE EVENT GENERATION ENGINE (SRS TEST WIDGET)
+        function toggleDevPanel(e) {
+            if (e) e.stopPropagation();
+            const panel = document.getElementById('dev-panel');
+            panel.style.display = panel.style.display === 'none' ? 'flex' : 'none';
+        }
+
+        function switchDevTab(tabName) {
+            document.querySelectorAll('.dev-tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(`btn-dev-tab-${tabName}`).classList.add('active');
+            
+            if (tabName === 'events') {
+                document.getElementById('dev-tab-events').style.display = 'block';
+                document.getElementById('dev-tab-state').style.display = 'none';
+            } else {
+                document.getElementById('dev-tab-events').style.display = 'none';
+                document.getElementById('dev-tab-state').style.display = 'block';
+            }
+        }
+
+        function handleEventSelectChange() {
+            const select = document.getElementById('evt-select');
+            const preset = eventPresets[select.value];
+            if (preset) {
+                document.getElementById('evt-title').value = preset.title;
+                document.getElementById('evt-body').value = preset.body;
+            }
+        }
+
+        function triggerPrototypeEvent() {
+            const select = document.getElementById('evt-select');
+            const title = document.getElementById('evt-title').value.trim();
+            const body = document.getElementById('evt-body').value.trim();
+            
+            if (!title) {
+                alert('Vui lòng nhập tiêu đề!');
+                return;
+            }
+            
+            const eventType = select.value;
+            
+            // Map Event to Module
+            let module = 'Hệ thống';
+            if (eventType === 'NEW_MESSAGE' || eventType === 'ASSIGNMENT' || eventType === 'SLA_ALERT') {
+                module = 'Hội thoại';
+            } else if (eventType === 'MENTION') {
+                module = 'Ghi chú';
+            } else if (eventType === 'MODULE_CHANGE') {
+                module = 'Cấu hình';
+            }
+            
+            const newNotif = {
+                id: 'gen_' + Date.now(),
+                eventType: eventType,
+                module: module,
+                title: title,
+                body: body,
+                isRead: false,
+                createdAt: new Date()
+            };
+            
+            const pref = prototypeState.preferences.events[eventType];
+
+            // 1. Process WebSocket check (SRS 3.1 & AC12)
+            if (!prototypeState.isWebSocketConnected) {
+                // If websocket is dead, save in backend, client does not receive now
+                if (pref && pref.inapp) {
+                    prototypeState.notifications.push(newNotif);
+                }
+                showToast('WebSocket mất kết nối. Sự kiện đã ghi nhận ở Backend nhưng chưa đẩy xuống Client (AC12)');
+                return;
+            }
+            
+            // 2. Process User Offline state check (SRS 3.3 Email Alert)
+            if (!prototypeState.isOnline) {
+                // Add to Bell list silently anyway
+                if (pref && pref.inapp) {
+                    prototypeState.notifications.push(newNotif);
+                    renderNotifications();
+                }
+                
+                // If email notifications is enabled for event type & no email digest active, simulate individual email
+                const emailPref = pref ? pref.email : false;
+                const digestPref = prototypeState.preferences.emailDigest.enabled;
+                const globalEnabled = prototypeState.preferences.globalEnabled;
+                
+                if (globalEnabled && emailPref && !digestPref && !prototypeState.preferences.dnd.enabled) {
+                    sendMockOfflineEmail([newNotif], false);
+                } else if (globalEnabled && !prototypeState.preferences.dnd.enabled) {
+                    showToast('Đã lưu thông báo mới lặng lẽ vào Bell. Đang tích lũy email offline (15 phút)...');
+                    // Accumulate for batching/digest
+                } else {
+                    showToast('Đã lưu thông báo lặng lẽ vào Bell (DND đang Bật - AC10)');
+                }
+                return;
+            }
+            
+            // 3. User is Online & Connected
+            if (pref && pref.inapp) {
+                prototypeState.notifications.push(newNotif);
+                renderNotifications();
+            }
+            
+            // Trigger Toast Card
+            showNotificationToast(newNotif);
+        }
+
+        // 10. USER CONNECTIVITY STATES SIMULATION
+        function toggleUserOnlineState() {
+            const chk = document.getElementById('test-user-status');
+            const badge = document.getElementById('user-status-badge');
+            
+            prototypeState.isOnline = chk.checked;
+            
+            if (prototypeState.isOnline) {
+                badge.className = 'badge-status online';
+                badge.innerText = 'Online';
+                showToast('Người dùng đã ONLINE trở lại');
+            } else {
+                badge.className = 'badge-status offline';
+                badge.innerText = 'Offline';
+                showToast('Người dùng đã OFFLINE (Quá 15p sẽ tự chuyển thông báo sang Email - AC7)');
+            }
+        }
+
+        function toggleWebSocketState() {
+            const chk = document.getElementById('test-ws-status');
+            const badge = document.getElementById('ws-status-badge');
+            
+            prototypeState.isWebSocketConnected = chk.checked;
+            
+            if (prototypeState.isWebSocketConnected) {
+                badge.className = 'badge-status connected';
+                badge.innerText = 'Kết nối';
+                
+                // Reconnect recovery check (SRS AC12)
+                // Find notifications created while websocket was disconnected that have not been read
+                showToast('Đã khôi phục WebSocket. Đang kéo lại các thông báo bỏ lỡ... (AC12)');
+                setTimeout(() => {
+                    renderNotifications();
+                }, 1000);
+            } else {
+                badge.className = 'badge-status disconnected';
+                badge.innerText = 'Đứt kết nối';
+                showToast('Mất kết nối WebSocket. Bảng thông báo sẽ không cập nhật realtime (AC12)');
+            }
+        }
+
+        // 11. OFFLINE BATCHING & DIGEST SIMULATOR (SRS AC15, AC16)
+        function simulateOfflineBatching() {
+            // Force user offline
+            prototypeState.isOnline = false;
+            document.getElementById('test-user-status').checked = false;
+            
+            const badge = document.getElementById('user-status-badge');
+            badge.className = 'badge-status offline';
+            badge.innerText = 'Offline';
+            
+            showToast('Giả lập: User OFFLINE thành công. Bắt đầu đẩy 3 sự kiện liên tiếp...');
+            
+            setTimeout(() => {
+                // Generate 3 events within 15 minutes of offline
+                const now = new Date();
+                const notif1 = {
+                    id: 'off_1',
+                    eventType: 'NEW_MESSAGE',
+                    module: 'Hội thoại',
+                    title: 'Tin nhắn mới từ Nguyễn Thị Hoa',
+                    body: 'KH Hoa: "Tôi muốn đặt mua gói dịch vụ AI Starter ngay."',
+                    isRead: false,
+                    createdAt: now
+                };
+                
+                const notif2 = {
+                    id: 'off_2',
+                    eventType: 'MENTION',
+                    module: 'Ghi chú',
+                    title: 'Được tag trong Hội thoại #9901',
+                    body: 'Trần Quốc Anh đã nhắc tới bạn: "@phuongntt giải quyết giúp em ca SLA khẩn này."',
+                    isRead: false,
+                    createdAt: now
+                };
+
+                const notif3 = {
+                    id: 'off_3',
+                    eventType: 'SLA_ALERT',
+                    module: 'Hội thoại',
+                    title: 'Hội thoại vi phạm SLA',
+                    body: 'Hội thoại #8423 sắp quá hạn phản hồi của Agent.',
+                    isRead: false,
+                    createdAt: now
+                };
+
+                prototypeState.notifications.push(notif1, notif2, notif3);
+                renderNotifications();
+                
+                // Simulate Grouped Email Receipt (AC15)
+                sendMockOfflineEmail([notif1, notif2, notif3], true);
+            }, 800);
+        }
+
+        function sendMockOfflineEmail(notifs, isGrouped) {
+            let emailBody = '';
+            let subject = '';
+            
+            if (isGrouped) {
+                subject = `[Gapone] Bạn có ${notifs.length} thông báo mới khi offline (Gộp email - AC15)`;
+                
+                let eventsHtml = '';
+                notifs.forEach(n => {
+                    eventsHtml += `
+                        <div style="background-color: #f8fafc; border-left: 4px solid #f06a24; padding: 12px 16px; margin-bottom: 12px; border-radius: 0 4px 4px 0; text-align: left;">
+                            <strong style="font-size: 13px; color: #0f172a;">[${n.module}] ${n.title}</strong>
+                            <p style="margin: 4px 0 0 0; font-size: 12px; color: #64748b;">${n.body}</p>
+                            <span style="font-size: 10px; color: #94a3b8; display: block; margin-top: 4px;">Thời gian: Vừa xong</span>
+                        </div>
+                    `;
+                });
+                
+                emailBody = `
+                    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden; color: #1e293b; text-align: center;">
+                        <div style="background-color: #f06a24; padding: 20px; text-align: center; color: white;">
+                            <h2 style="margin: 0; font-size: 20px;">GAPONE CONVERSATION</h2>
+                        </div>
+                        <div style="padding: 24px; line-height: 1.6;">
+                            <h3 style="margin-top: 0; color: #f06a24; text-align: left;">Chào phuongntt,</h3>
+                            <p style="text-align: left;">Hệ thống ghi nhận bạn đang offline và đã gộp các sự kiện phát sinh trong 15 phút qua để gửi thông báo (SRS AC15):</p>
+                            
+                            ${eventsHtml}
+
+                            <p style="text-align: left; margin-top: 16px;">Vui lòng đăng nhập lại hệ thống để kiểm tra và phản hồi.</p>
+                            
+                            <div style="text-align: center; margin: 24px 0 12px 0;">
+                                <a href="#" onclick="clickEmailLink(); return false;" style="background-color: #f06a24; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: bold; display: inline-block;">Đăng nhập & Xem hội thoại</a>
+                            </div>
+                        </div>
+                        <div style="background-color: #f1f5f9; padding: 16px; text-align: center; font-size: 11px; color: #94a3b8; border-top: 1px solid #e2e8f0;">
+                            Email này được gửi tự động từ hệ thống Gapone Conversation. Vui lòng không phản hồi email này.
+                        </div>
+                    </div>
+                `;
+            } else {
+                const n = notifs[0];
+                subject = `[Gapone] Bạn có 1 thông báo mới: ${n.title}`;
+                emailBody = `
+                    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden; color: #1e293b; text-align: center;">
+                        <div style="background-color: #f06a24; padding: 20px; text-align: center; color: white;">
+                            <h2 style="margin: 0; font-size: 20px;">GAPONE CONVERSATION</h2>
+                        </div>
+                        <div style="padding: 24px; line-height: 1.6;">
+                            <h3 style="margin-top: 0; color: #f06a24; text-align: left;">Chào phuongntt,</h3>
+                            <p style="text-align: left;">Hệ thống ghi nhận bạn đã offline và phát sinh sự kiện mới được gán cho bạn (SRS AC7):</p>
+                            
+                            <div style="background-color: #f8fafc; border-left: 4px solid #f06a24; padding: 12px 16px; margin: 16px 0; border-radius: 0 4px 4px 0; text-align: left;">
+                                <strong style="font-size: 13px; color: #0f172a;">[${n.module}] ${n.title}</strong>
+                                <p style="margin: 4px 0 0 0; font-size: 12px; color: #64748b;">${n.body}</p>
+                                <span style="font-size: 10px; color: #94a3b8; display: block; margin-top: 4px;">Thời gian: Vừa xong</span>
+                            </div>
+
+                            <p style="text-align: left;">Đăng nhập để giải quyết tránh vi phạm cam kết SLA.</p>
+                            
+                            <div style="text-align: center; margin: 24px 0 12px 0;">
+                                <a href="#" onclick="clickEmailLink(); return false;" style="background-color: #f06a24; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: bold; display: inline-block;">Xem chi tiết sự kiện</a>
+                            </div>
+                        </div>
+                        <div style="background-color: #f1f5f9; padding: 16px; text-align: center; font-size: 11px; color: #94a3b8; border-top: 1px solid #e2e8f0;">
+                            Email này được gửi tự động từ hệ thống Gapone.
+                        </div>
+                    </div>
+                `;
+            }
+            
+            // Push mock email to state
+            const newEmail = {
+                id: 'email_' + Date.now(),
+                sender: 'no-reply@gapone.co',
+                subject: subject,
+                date: new Date(),
+                body: emailBody
+            };
+            
+            prototypeState.emails.push(newEmail);
+            
+            // Play alert sound/toast in email client preview
+            showToast('Hộp thư email của bạn đã nhận được thông báo mới!');
+        }
+
+        // Mock Email client dialog interface
+        function openMockEmailClient() {
+            const modal = document.getElementById('email-client-modal');
+            modal.classList.add('open');
+            renderEmails();
+        }
+
+        function closeMockEmailClient() {
+            const modal = document.getElementById('email-client-modal');
+            modal.classList.remove('open');
+        }
+
+        function renderEmails() {
+            const listPane = document.getElementById('email-list-pane');
+            listPane.innerHTML = '';
+            
+            // Sort: newest emails first
+            const sortedEmails = [...prototypeState.emails].sort((a,b) => b.date - a.date);
+            
+            if (sortedEmails.length === 0) {
+                listPane.innerHTML = '<div style="padding:20px; text-align:center; color:#999; font-size:12px;">Hộp thư trống</div>';
+                return;
+            }
+            
+            sortedEmails.forEach(e => {
+                const item = document.createElement('div');
+                item.style = 'padding: 12px 16px; border-bottom: 1px solid #e2e8f0; cursor: pointer; transition: background-color 0.2s;';
+                item.className = 'email-list-item';
+                item.onclick = () => readEmail(e.id, item);
+                
+                const timeString = `${String(e.date.getHours()).padStart(2, '0')}:${String(e.date.getMinutes()).padStart(2, '0')}`;
+                
+                item.innerHTML = `
+                    <div style="display:flex; justify-content:space-between; margin-bottom: 4px;">
+                        <span style="font-weight: 700; font-size: 12px; color: #202124;">Gapone System</span>
+                        <span style="font-size: 10px; color: #5f6368;">${timeString}</span>
+                    </div>
+                    <div style="font-weight: 600; font-size: 11px; color: #202124; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; margin-bottom: 2px;">
+                        ${e.subject}
+                    </div>
+                    <div style="font-size: 10px; color: #5f6368; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
+                        Nhận từ: no-reply@gapone.co
+                    </div>
+                `;
+                listPane.appendChild(item);
+            });
+        }
+
+        function readEmail(id, element) {
+            // Remove active style from all items
+            document.querySelectorAll('.email-list-item').forEach(item => {
+                item.style.backgroundColor = '';
+            });
+            if (element) {
+                element.style.backgroundColor = '#e8f0fe';
+            }
+            
+            const email = prototypeState.emails.find(e => e.id === id);
+            const contentPane = document.getElementById('email-content-pane');
+            
+            if (email) {
+                const formattedDate = email.date.toLocaleString('vi-VN');
+                contentPane.innerHTML = `
+                    <div style="border-bottom: 1px solid #e2e8f0; padding-bottom: 16px; margin-bottom: 16px;">
+                        <h2 style="font-size: 16px; font-weight: bold; margin-bottom: 8px; color: #202124;">${email.subject}</h2>
+                        <div style="display:flex; justify-content:space-between; font-size: 11px; color: #5f6368;">
+                            <span>Từ: <strong>${email.sender}</strong></span>
+                            <span>Thời gian: ${formattedDate}</span>
+                        </div>
+                    </div>
+                    <div>
+                        ${email.body}
+                    </div>
+                `;
+            }
+        }
+
+        function clickEmailLink() {
+            closeMockEmailClient();
+            
+            // Automatically log in and online back
+            prototypeState.isOnline = true;
+            document.getElementById('test-user-status').checked = true;
+            
+            const badge = document.getElementById('user-status-badge');
+            badge.className = 'badge-status online';
+            badge.innerText = 'Online';
+            
+            // Mark all notifications read
+            markAllNotificationsAsRead();
+            
+            showToast('Đã quay lại ONLINE & Tự động Đọc tất cả thông báo nhỡ từ Link email (AC4)!');
+        }
+
+        // 12. TOAST HELPER
+        let toastTimeout;
+        function showToast(message) {
+            clearTimeout(toastTimeout);
+            toastMsg.innerText = message;
+            toast.classList.add('show');
+            toastTimeout = setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // Close modal on escape key
+        window.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeEditModal();
+                closeMockEmailClient();
+            }
+        });
+    </script>
+</body>
+</html>

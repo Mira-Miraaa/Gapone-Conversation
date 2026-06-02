@@ -1,0 +1,615 @@
+**SRS CONVERSATION**
+
+**--------------------------------------------------------**
+
+
+# BẢNG GHI NHẬN THAY ĐỔI TÀI LIỆU
+
+
+
+| **Ngày thay đổi** | **Vị trí** | **Lý do** | **Mô tả thay đổi** | **Phiên bản cũ** | **Phiên bản mới** |
+| --- | --- | --- | --- | --- | --- |
+| 30/08/2025 | Tạo mới |  |  |  | V1 |
+|  |  |  |  |  |  |
+|  |  |  |  |  |  |
+|  |  |  |  |  |  |
+|  |  |  |  |  |  |
+
+
+--------------------------------------------------------
+
+
+# BẢNG QUẢN LÝ TIẾN ĐỘ THỰC THI
+
+
+
+| **Giai đoạn** | **Thời gian** | **Phần mục** | **Phiên bản áp dụng ** |
+| --- | --- | --- | --- |
+| Sprint 4 | 01/12/2025 - ../…/2025 |  | V1.1.1 |
+
+
+--------------------------------------------------------
+
+
+# Bảng tài liệu bổ sung từ nền tảng khác
+
+
+
+| **STT** | **Tài liệu** |
+| --- | --- |
+|  |  |
+|  |  |
+
+
+
+## I. Thiết kế hạ tầng
+
+
+**I. BẢNG ĐỊNH NGHĨA ĐỐI TƯỢNG**
+
+
+| **STT** | **Đối tượng** | **Mô tả** | **Thuộc tính** | **Mối quan hệ** |
+| --- | --- | --- | --- | --- |
+| 1 | Channel | Đại diện cho các kênh tích hợp như Zalo, Telegram, Messenger, … | - ChannelID (PK) - ChannelType (Zalo / Telegram / Messenger / …)IntegrationStatus (Active/Inactive) | Channel 1—n Conversation: Một kênh có thể có nhiều cuộc hội thoại; mỗi hội thoại thuộc duy nhất một kênh) |
+| 2 | ChannelGroup | Đại diện cho nhóm các tài khoản của từng kênh (ví dụ: Nhóm kênh chăm sóc khách hàng miền Bắc, Nhóm kênh Marketing, …) | - ChannelGroupID (PK) - GroupName - Description - CreatedDate | ChannelGroup 1 — n Channel: Một Channel Group có thể chứa nhiều Channel. Mỗi Channel chỉ thuộc duy nhất một Channel Group |
+| 3 | Account | Đại diện cho một tài khoản cụ thể thuộc về một kênh | - AccountID (PK) - ChannelID (FK → Channel) - AccountName - ExternalID (ID từ Zalo OA, Telegram Bot ID, Page ID, …) - Status (Active / Inactive) - CreatedDate | - Channel 1 — n Account: Một Channel có thể có nhiều Account. Mỗi Account thuộc duy nhất một Channel - Account 1 — n Conversation: Mỗi Conversation sẽ gắn với một Account. Khi đó, Conversation có AccountID (FK → Account) |
+| 4 | Conversation | Một chuỗi trao đổi tin nhắn giữa khách hàng và hệ thống/nhân viên trên một kênh cụ thể | - ConversationID (PK) - ChannelID (FK → Channel) - ContactID (FK → CustomerProfile) - Status (Open / Pending / Closed) - StartTime, EndTime | Conversation 1—1 CustomerProfile: một cuộc hội thoại chỉ thuộc về một khách hàng. |
+|  | Session - Session Conversation | Phiên hội thoại: Một phiên làm việc của cuộc hội thoại từ lúc mở mới đến lúc đóng. | - ConversationID (PK) - ChannelID (FK → Channel) - ContactID (FK → CustomerProfile) - Status (Open / Pending / Closed) - StartTime, EndTime | Session n – 1 Conversation: Một cuộc hội thoại chứa nhiều phiên hội thoại |
+| 5 | Message | Từng tin nhắn thuộc về một cuộc hội thoại | - MessageID (PK) - ConversationID (FK → Conversation) - SenderType (Customer / Agent / Bot) - MessageType (Text / Image / File / Sticker / …) - Content - SentTime | Conversation 1—n Message: Một cuộc hội thoại gồm nhiều tin nhắn; mỗi tin nhắn thuộc một hội thoại duy nhất. |
+| 6 | Agent/User | Đại diện cho người xử lý cuộc hội thoại | - AgentID (PK) - FullName - Role - TeamID (FK → Team) | Conversation n—1 Agent (khi có phân công): Một agent có thể xử lý nhiều cuộc hội thoại; một hội thoại có thể gán cho một agent chính. |
+| 7 | Team | Nhóm người dùng cho phân quyền & khi chỉ định hội thoại theo nhóm | - TeamID (PK) - TeamName | Agent n—1 Team (nếu sử dụng Team): Nhiều agent có thể thuộc một team. |
+| 8 | CustomerProfile | Hồ sơ khách hàng, đại diện cho khách hàng liên quan tới các cuộc hội thoại. | - ContactID (PK) - Phone number - Email - First Name - CreatedDate | Conversation n—1 CustomerProfile: Nhiều cuộc hội thoại có thể thuộc cùng một khách hàng. |
+
+
+**II. TRẠNG THÁI HỘI THOẠI1. Bảng định nghĩa trạng thái cuộc hội thoại (A Conversation) và phiên hội thoại ( A Session Conversation)**
+
+
+| **STT** | **Trạng thái** | **Mô tả** | **Hành vi chính trong trạng thái** |
+| --- | --- | --- | --- |
+| 1 | Mới (Open) | Cuộc hội thoại và phiên hội thoại mới phát sinh từ kênh, chưa được phân công cho nhân viên | - Hiển thị trong bộ lọc Filter > Status - Có thể tự động assign theo rule hoặc để chờ agent pick. |
+| 2 | Đang xử lý (In Progress) | Nhân viên đang xử lý phiên hội thoại. Trạng thái được chuyển từ Mới sang Đang xử lý khi và chỉ khi nhân viên hoặc kịch bản tự động hóa gửi đi tin nhắn đầu tiên | - Cho phép trao đổi tin nhắn hai chiều. - Có thể thêm thẻ/nhãn - Có thể cập nhật thông tin vào hồ sơ khách hàng (cập nhật sau khi phát triển chức năng này) |
+| 3 | Đã đóng (Closed) | Phiên hội thoại đã hoàn tất và đóng lại | - Agent vẫn được phép gửi tin nhắn bám đuôi khi cuộc hội thoại đã đóng vì khách hàng không reply trong thời gian dài - Nếu khách hàng nhắn lại → tạo hội thoại mới (trạng thái Mới) |
+
+
+Bảng phụ: Định nghĩa trạng thái phân công
+
+
+| **STT** | **Trạng thái** | **Mô tả** | **Hành vi chính trong trạng thái** |
+| --- | --- | --- | --- |
+| 1 | Chưa phân công | Cuộc hội thoại và phiên hội thoại chưa được gán cho một agent cụ thể | - Luôn luôn ở dạng chưa phân công đối với các cuộc hội thoại mới và phiên hội thoại mới. - Cho phép chỉ định Agent nhận phiên hội thoại trong danh sách chỉ định. |
+| 2 | Đã phân công (Assigned) | Cuộc hội thoại và phiên hội thoại đã được gán cho một agent cụ thể | - Agent nhận thông báo phụ trách cuộc hội thoại. - Cho phép Agent được phân công xem/chỉnh sửa/phản hồi hoặc từ chối nhận chăm sóc phiên làm việc của cuộc hội thoại đó - Có thể gửi/nhận tin nhắn. |
+
+
+**2. Bảng hành vi chuyển trạng thái**
+
+
+| **STT** | **Từ trạng thái** | **Sang trạng thái** | **Điều kiện kích hoạt/Hành vi** |
+| --- | --- | --- | --- |
+| 1 | Mới | Đang xử lý | User/Agent gửi tin nhắn đầu tiên phản hồi khách hàng trong phiên hội thoại |
+| 2 | Đang xử lý | Đã đóng | User/Agent đánh dấu "Đóng hội thoại" |
+| 3 | Đã đóng | Mới | Khi khách hàng phát sinh tin nhắn mới và khởi tạo phiên hội thoại mới. |
+
+
+**3. Lưu ý khác khi thiết kế**
+
+- Hội thoại chỉ có một trạng thái duy nhất tại một thời điểm.
+
+- Log toàn bộ lịch sử hội thoại và thời điểm chuyển trạng thái. Hiển thị trên Timeline cuộc trò chuyện như sau:
+
+
+| **STT** | **Trường hợp** | **Hiển thị** |
+| --- | --- | --- |
+| **1** | **Hội thoại mới** | **Cuộc trò chuyện mới được tạo lúc hh:mm** |
+| 2 | Hội thoại được phân công tự động bởi hệ thống đến AI | Cuộc trò chuyện này đã chỉ định tự động đến [AI Agent name] lúc hh:mm |
+| 3 | Hội thoại được phân công tự động bởi hệ thống đến người dùng | Cuộc trò chuyện này đã chỉ định tự động đến [username] lúc hh:mm |
+| 4 | Hội thoại được phân công thủ công từ người dùng A đến người dùng B | Cuộc trò chuyện được [username A] chỉ định đến [username B] lúc hh:mm |
+| **5** | **Hội thoại được xử lý bởi người dùng** | **[Username] bắt đầu phản hồi lúc hh:mm** |
+| **6** | **Hội thoại được xử lý bởi kịch bản tự động/Automation** | **Kịch bản [Automation scenario name] được kích hoạt lúc hh:mm** |
+| **7** | **Hội thoại được xử lý bởi AI** | **[AI Agent name] bắt đầu phản hồi lúc hh:mm** |
+| **8** | **Đóng hội thoại** | **[username] đã đóng cuộc trò chuyện này lúc hh:mm** |
+
+
+
+## II. PHÂN TÍCH CHI TIẾT
+
+
+
+### 1. Xem danh sách các cuộc hội thoại tổng quan
+
+
+
+#### Mô tả chức năng
+
+
+
+| **Tên nghiệp vụ** | Xem danh sách các cuộc hội thoại từ tất cả các kênh |
+| --- | --- |
+| **Module** | Trang chủ > Hội thoại |
+| **Mô tả** | Tính năng cho phép xem danh sách các cuộc hội thoại. |
+| **Điều kiện cần để thực hiện hành động** | Là người dùng trong hệ thống sẽ có quyền xem danh sách các cuộc hội thoại. Danh sách này sẽ luôn hiển thị khi người dùng đang ở tính năng “cuộc hội thoại”/ “conversation” |
+| **Hành động** | Người dùng đăng nhập hệ thống. Click chọn “Conversation” =>  Giao diện Conversation List hiển thị. |
+| **Kết quả** | Hiển thị list danh sách cuộc hội thoại từ tất cả các kênh |
+
+
+
+#### Giao diện
+
+
+
+##### b1. Giao diện tổng quan tính năng “Hội Thoại”
+
+
+Chưa áp dụng bộ lọc kênh, chưa chọn một cuộc hội thoại nào để xem. Màn hình chi tiết cuộc hội thoại sẽ hiển thị đề xuất “Chọn 1 hội thoại từ danh sách bên trái”. (Eng: “Select a conversation from the list on the left.”)
+
+**Trường dữ liệu và ràng buộc:**
+
+
+| **#** | **Tên Trường** | **Kiểu Dữ Liệu** | **Mô Tả Trường** | **Ràng Buộc** |
+| --- | --- | --- | --- | --- |
+| 1 | Avatar người dùng | IMAGE / STRING | Ảnh đại diện tài khoản khách hàng / người gửi | Mặc định hiển thị, có thể rỗng hoặc lấy ký tự đầu (nếu không có avatar) |
+| 2 | Tên người dùng | VARCHAR(255) | Tên hiển thị khách hàng gửi tin nhắn | Bắt buộc, không để trống |
+| 3 | Logo Channel Type | IMAGE / STRING | Ảnh của kênh (channel) phát sinh cuộc hội thoại | Bắt buộc, liên kết kênh gửi tin. Nếu cuộc hội thoại được phát sinh từ kênh gửi tin nào, sẽ hiện logo từ kênh gửi tin đó. (Liên kết tới bộ lọc  Channel Type) |
+| 4 | Thời gian gửi | DATE (dd/mm) | Ngày gửi tin nhắn gần nhất | Tự động cập nhật theo thời điểm tin mới nhất |
+| 5 | Nội dung xem trước | TEXT | Nội dung tin nhắn gần nhất (preview) | Tối đa 100 ký tự, cắt ngắn nếu dài quá |
+| 6 | Nhãn hội thoại | ENUM[] | Các nhãn phân loại hội thoại (VD: Hỏi giá, Đối tác, Xin tư vấn, v.v.) | Có thể có nhiều nhãn, lấy từ danh sách enum định nghĩa trước |
+| 7 | Trạng thái đọc | BOOLEAN | Đã đọc / Chưa đọc | Mặc định là false khi có tin mới, chuyển true khi người dùng click |
+| 8 | Menu … | BUTTON (hidden) | Menu thao tác: đánh dấu chưa đọc xóa cuộc hội thoại | Menu ẩn, chỉ hiện khi di chuyển con trỏ chuột vào cuộc hội thoại trong danh sách các cuộc hội thoại |
+| 9 | Bộ lọc 1 - Channel/Channel Group/Account | BUTTON - Channel | Bộ lọc các cuộc hội thoại theo kênh - là bộ lọc cấp 1 | Bao gồm droplist menu các nhóm kênh,kênh gửi tin, tài khoản theo từng nhóm kênh. Luôn mặc định là “All”. Khi ở chế độ lọc “All” (mặc định hoặc sau khi click chọn “all” thì tất cả các cuộc hội thoại từ tất cả các kênh sẽ được hiển thị trong giao diện danh sách các cuộc hội thoại. Cho phép multiple choise (chọn nhiều ô cùng lúc) nếu không chọn “All Channel”. Nếu chọn “All channel” đồng thời muốn click chọn ô khác, dấu tích ở ô “All channel” sẽ tự động biến mất, dấu tích ở ô được chọn sẽ hiện lên. Nếu không chọn bất cứ ô nào kể cả “all channel”, hệ thống sẽ tự động trả kết quả về “All channel”. Sau khi tích chọn xong, bấm enter để hiện kết quả lọc |
+| 11 | Bộ lọc 2 - Nhãn dán | BUTTON - Tag | Bộ lọc các cuộc hội thoại theo nhãn dán | Có bảng mô tả riêng: **Yêu cầu quản lý nhãn/tag cuộc hội thoại** Cho phép multiple choise (chọn nhiều ô cùng lúc) Sau khi tích chọn xong, bấm enter để hiện kết quả lọc. |
+| 13 | Tìm kiếm | STRING (query) | Tìm theo tên người dùng hoặc nội dung hội thoại | Tìm mờ (LIKE), không phân biệt chữ hoa/thường Nếu không tìm thấy kết quả, hệ thống hiển thị “Không tìm thấy cuộc hội thoại phù hợp” |
+| 14 | Logo Account | IMAGE/STRING | Logo tài khoản tích hợp hoặc Bot tích hợp. | Bắt buộc. Nếu tài khoản kênh hoặc Bot không có avt, hiện avt mặc định bắt đầu từ chữ cái đầu tên tài khoản hoặc tên BOT |
+
+
+(Giao diện bổ sung: Case chưa có hội thoại nào được ghi nhận.
+
+Situation: Khách mới sử dụng hệ thống, mới tích hợp các kênh, chưa có cuộc hội thoại phát sinh.
+
+
+###### Bộ lọc Channel/Channel Group/ Account:
+
+
+Giao diện:
+
+Ràng buộc:
+
+
+| **STT** | **Mô tả** | **Kết quả** | **Minh họa** |
+| --- | --- | --- | --- |
+| 1 | Chọn **tất cả (All channel)** | “All channel” chỉ hiển thị dấu tích chọn khi Agent chọn “all channel” => Hiển thị tất cả các kênh Tất cả các ô thuộc phần “kênh” đều được điền. Không cho phép bỏ chọn “All channel” nếu chưa chọn một điều kiện lọc khác. |  |
+| 2 | Chọn một loại kênh VD: Chọn zalo | Tất cả các tài khoản thuộc kênh đó đều được chọn. “All channel” sẽ không còn dấu tích chọn. |  |
+| 3 | Chọn hỗn hợp. Có thể chọn hỗn hợp kênh + tài khoản | Có thể chọn hỗn hợp các tài khoản kênh từ các kênh khác nhau. |  |
+| 4 | Chỉ chọn một nhóm kênh (không cho chọn hỗn hợp) | Đối với **Nhóm kênh**, chỉ chọn được một nhóm kênh, không được multiple choise. Các multiple choise phần Kênh sẽ được refresh nếu chọn 1 nhóm kênh. |  |
+
+
+
+###### ***Yêu cầu quản lý nhãn/tag cuộc hội thoại:***
+
+
+**Trường dữ liệu và ràng buộc:**
+
+- **Lựa chọn và tìm kiếm nhãn để gán**
+
+
+| **STT** | **Tên Trường** | **Kiểu Dữ Liệu** | **Mô Tả** | **Ràng Buộc** |
+| --- | --- | --- | --- | --- |
+| 1 | Thanh search |  | Thanh tìm kiếm | Cho phép tìm kiếm gần đúng, tìm kiếm không dấu |
+| 2 | Danh sách nhãn | DROPLIST | Danh sách nhãn | Hiển thị danh sách các nhãn dán, kèm thanh cuộn. |
+| 1 | ID Nhãn | INT | Mã định danh duy nhất cho nhãn hội thoại | **Bắt buộc**, AUTO_INCREMENT, duy nhất |
+| 2 | Tên Nhãn | VARCHAR(100) | Tên hiển thị của nhãn (VD: Hỏi giá, Bảo hành) | **Bắt buộc**, không được trùng trong cùng một nhóm hội thoại |
+| 3 | Màu Nhãn | VARCHAR(7) | Mã màu hiển thị nhãn dạng HEX (VD: #FF5733) | **Bắt buộc**, đúng định dạng HEX (#RRGGBB) |
+| 4 | Trạng Thái Chọn | BOOLEAN/TINYINT(1) | Xác định nhãn đang được chọn (1 = chọn, 0 = không chọn) | Mặc định 0, chỉ nhận giá trị 0 hoặc 1 |
+| 5 | ID Hội Thoạ (ẩn)i | INT | Mã hội thoại mà nhãn này gắn vào | **Bắt buộc**, tồn tại trong bảng hội thoại |
+| 6 | Người Tạo (ẩn) | VARCHAR(100) | Tên hoặc ID người tạo nhãn | **Bắt buộc**, tồn tại trong bảng người dùng |
+| 7 | Ngày Tạo (Ẩn) | DATETIME | Thời gian nhãn được thêm | **Bắt buộc**, định dạng YYYY-MM-DD hh:mm:ss |
+| 8 | Ngày Cập Nhật (Ẩn) | DATETIME | Thời gian nhãn được chỉnh sửa lần cuối | **Bắt buộc**, định dạng YYYY-MM-DD hh:mm:ss |
+
+
+
+| **STT** | **Tên trường (Label)** | **Tên dữ liệu (Field)** | **Kiểu dữ liệu** | **Mô tả chức năng** | **Ràng buộc / Định dạng** |
+| --- | --- | --- | --- | --- | --- |
+| 2 | **Tên nhãn** | tagName | VARCHAR(50) | Tên nhãn phân loại hội thoại hoặc dữ liệu liên quan | - Không trùng lặp với các tagName khác- Không chứa ký tự đặc biệt <, >, %, $, / - Bắt buộc phải nhập khi tạo mới |
+| 3 | **Tạo mới** | createTag | ACTION | Tạo mới 1 nhãn mới và thêm vào danh sách | - tagName không được null- Kiểm tra trùng lặp trước khi thêm |
+| 4 | **Sửa (icon bút chì)** | editTag | ACTION | Cho phép chỉnh sửa tên nhãn | - Phải kiểm tra trùng lặp trước khi lưu. Không cho phép đổi thành tên nhãn đã bị trùng trước đó |
+| 5 | **Xóa (icon thùng rác)** | deleteTag | ACTION | Xóa nhãn ra khỏi danh sách | - Cần xác nhận trước khi xóa. “Bạn chắc chắn xóa nhãn này? Khi chọn xóa, tất cả cuộc hội thoại từng được gán nhãn này sẽ không còn hiển thị nhãn và bạn không thể tìm kiếm nhãn này được nữa.” Khi nhãn bị xóa, các cuộc hội thoại được gán nhãn sẽ không còn hiển thị nhãn đã bị xóa. Danh sách trong bộ lọc nhãn/tag cũng không còn hiển thị để chọn lọc nhãn đã bị xóa |
+
+
+Quy hoạch lại tất cả các chức năng thêm mới, sửa, xóa đều vào phần “quản lý nhãn”, không còn tách riêng tạo mới nhãn ở phần “Thông tin khách hàng” để tránh việc User tạo quá nhiều bản ghi trùng lặp chỉ khác một vài ký tự.
+
+Bộ lọc nhãn dán là bộ lọc cấp 2.
+
+Trong trường hợp chưa thiết lập bộ lọc cấp 1-Channel và bộ lọc cấp 2-Account thì bộ lọc nhãn dán sẽ xuất hiện hội thoại chứa tất cả nhãn dán được lọc từ tất cả các kênh.
+
+Trong  trường hợp đã thiết lập bộ lọc cấp 1-Channel và bộ lọc cấp 2-Account thì bộ lọc nhãn dán sẽ xuất hiện nhữngnhãn dán được lọc từ kênh được chọn hoặc tài khoản được chọn.
+
+
+##### b2. Giao diện tổng quan khi click “Hội thoại” > Chọn chi tiết một cuộc hội thoại
+
+
+Khi truy cập vào tính năng hội thoại thành công đồng thời hoàn thành bước chọn một cuộc hội thoại từ danh sách bên trái, màn hình chi tiết lịch sử cuộc hội thoại được chọn sẽ hiển thị kèm bảng thông tin bên phải. (Thanh menu màu xám sẽ được rút gọn lại chỉ để lại symbol các tính năng).
+
+Hoặc khi click chọn ký hiệu >>, thanh menu cũng sẽ được rút gọn. Ngược lại, khi click chọn <<, phần thông tin khách hàng sẽ được ẩn đi và thanh menu lại hiện chi tiết.
+
+**Trường dữ liệu và ràng buộc chi tiết cuộc hội thoại:**
+
+
+| **STT** | **Tên Trường** | **Kiểu Dữ Liệu** | **Mô Tả** | **Ràng Buộc** |
+| --- | --- | --- | --- | --- |
+| 1 | ID hội thoại (Ẩn) |  |  | Mỗi cuộc hội thoại từ khách hàng tới nền tảng và tới hệ thống Gapone Conversation đều chỉ có một ID. |
+| 1.1 | Tên khách hàng | VARCHAR(255) | Tên người gửi tin nhắn | Không được để trống |
+| 1.2 | Tên công ty(Tên người nhận - tên tài khoản nhận) | VARCHAR(255) | Tên tào khoản nhận tin nhắn | Không được để trống |
+| 2 | Người phụ trách (CSKH) | VARCHAR(255) | Nhân viên đang tiếp nhận/tư vấn cuộc trò chuyện | Có thể rỗng nếu chưa phân công. |
+| 3.1 | Ảnh đại diện KH | IMAGE / STRING | Ảnh hồ sơ khách hàng (avatar) | Có thể null – hiển thị ký tự đầu nếu không có ảnh |
+| 3.2 | Logo Channel | IMAGE / STRING | Ảnh của kênh (channel) phát sinh cuộc hội thoại | Bắt buộc, liên kết với logo symbol channel ở danh sách bên trái. |
+| 4 | STATUS | BUTTON | Các nút hiển thị trạng thái cuộc hội thoại. **Mở**: Auto khi cuộc hội thoại được mở **Đang xử lý**: Auto khi có agent gửi tin nhắn đầu tiên để phản hồi khách hàng **Đóng**: Khi agent click chọn đóng | Bắt buộc. |
+| 5 | Nội dung tin nhắn | TEXT | Nội dung từng tin nhắn gửi hoặc nhận | Bắt buộc, có thể markdown hoặc plain text |
+| 6 | Thời gian gửi | DATETIME (dd/mm/yyyy HH:mm) | Thời điểm tin nhắn được gửi | Không được null |
+| 7 | Loại tin nhắn | ENUM('user', 'bot', 'staff') | Phân loại người gửi (khách, hệ thống, nhân viên) | Bắt buộc, để xử lý màu sắc / căn lề phù hợp |
+| 8 | Biểu tượng thương hiệu | IMAGE (logo nhỏ) | Logo thể hiện tin nhắn tự động từ hệ thống GAPIT | Chỉ hiển thị nếu loại tin nhắn = 'bot' |
+| 9 | Khung nhập nội dung | STRING | Ô nhập tin nhắn của nhân viên. Tối đa 2000 ký tự | Không được rỗng khi nhấn nút gửi |
+| 10 | Nút gửi | BUTTON | Nút để gửi nội dung vừa nhập | Chỉ hoạt động khi nội dung nhập không rỗng |
+| 11 | Trạng thái gửi | BOOLEAN | Xác định tin nhắn đã gửi thành công hay chưa | Mặc định true nếu gửi thành công, có thể dùng để hiển thị “sending…” |
+| 12 | Tin nhắn hệ thống (Tin nhắn sự kiện - event message) | TEXT | Phát sinh khi có event sảy ra. Gắn cùng các event liên quan tới status cuộc hội thoại, chỉ định nhân viên, gắn nhãn. | Bắt buộc. Chỉ hiển thị trên hệ thống GO Conversation. |
+
+
+b2. Giao diện Trạng thái cuộc hội thoại
+
+Khi đang mở
+
+Khi đang xử lý
+
+Khi đóng cuộc hội thoại
+
+Tình trạng cuộc hội thoại sẽ về “đóng” và cuộc hội thoại không còn hiển thị.
+
+
+##### b3. Giao diện thông tin khách hàng
+
+
+
+|  |  |
+| --- | --- |
+| *Giao diện rút gọn* | *Giao diện chi tiết* |
+
+
+**Trường dữ liệu và ràng buộc cho phần thông tin khách hàng:**
+
+
+| **STT** | **Tên Trường** | **Kiểu Dữ Liệu** | **Mô Tả** | **Ràng Buộc** |
+| --- | --- | --- | --- | --- |
+| - **Nhãn hội thoại** |  |  |  |  |
+| 1.1 | Nhãn hội thoại - Tìm kiếm & thêm nhãn | ENUM[] | Các thẻ gắn để phân loại cuộc hội thoại. Tìm kiếm tên nhãn và click chuột vào nhãn cần thêm. | Không bắt buộc, cho phép nhiều giá trị. Chọn từ danh sách nhãn có sẵn khi thiết lập trong “quản lý nhãn” |
+| 1.2 | Nhãn hội thoại - xóa nhãn đã thêm |  | Click “x” ở đuôi nhãn để xóa nhãn khỏi cuộc hội thoại | Chỉ xóa được khi có nhãn đã thêm |
+| - Thông tin khách hàng |  |  |  |  |
+| 2.1 | Họ | VARCHAR(150) | Họ của khách hàng | Không bắt buộc, cho phép để trống |
+| 2.1 | Tên | VARCHAR(50) | Tên riêng của khách hàng | **Bắt buộc**, không được để trống |
+| 2.3 | Số điện thoại | VARCHAR(15) | Số điện thoại liên hệ của khách hàng | **Bắt buộc**, định dạng số, không trùng, kiểm tra hợp lệ (10-11 chữ số) |
+| 2.4 | Email | VARCHAR(255) | Địa chỉ email của khách hàng | Có thể để trống, nếu nhập phải đúng định dạng email (abc@xyz.com) |
+| 2.5 | Ngày sinh | DATE | Ngày sinh của khách hàng | Không bắt buộc, nếu có thì kiểm tra định dạng dd/mm/yyyy hoặc ISO date |
+| 2.6 | Địa chỉ | TEXT | Địa chỉ sinh sống hoặc liên hệ | Không bắt buộc |
+| - Ghi chú |  |  |  |  |
+| 3.1 | Ghi chú | TEXT | Ghi lại các thông tin nội bộ, nhu cầu hoặc trạng thái khách hàng | Không bắt buộc |
+| - Nút thao tác |  |  |  |  |
+| 9 | Nút "Lưu" | BUTTON | Gửi và lưu thông tin khách hàng vào hệ thống | Chỉ hoạt động khi các trường **bắt buộc** hợp lệ |
+| 10 | Nút "Hủy" | BUTTON | Huỷ thao tác cập nhật | Không ràng buộc |
+
+
+
+##### b4. Giao diện “Chỉ định nhân viên”
+
+
+**Flow:**
+
+**Mô tả flow:**
+
+
+| **Bước** | **Mô tả** |
+| --- | --- |
+| Bước 1. Nhận cuộc hội thoại mới | - Sự kiện xảy ra khi có tin nhắn đầu tiên từ khách hàng. - Trạng thái cuộc hội thoại đang ở Open. Trạng thái chỉ định nhân viên đang ở Chưa chỉ định/Chờ chỉ định. - Hệ thống kích hoạt tính năng chỉ định nhân viên. |
+| Bước 2. Xác định quyền hạn phân công tự động hay thủ công | - Nếu doanh nghiệp **không bật phân bổ tự động **trong thiết lập **Tự động hóa**, hệ thống *không chủ động gán ai* và chờ Admin gán thủ công. - Nếu có, hệ thống tiếp tục sang bước tiếp theo. |
+| Bước 3. Kiểm tra cấu hình phân bổ theo nhóm | - Khi hệ thống phân công tự động theo nhóm, hoặc nhận được chỉ thị theo nhóm của Admin sẽ kích hoạt |
+| Bước 4. Lấy danh sách nhân viên thuộc nhóm | - Bao gồm tất cả nhân viên trong nhóm được chọn để phân bổ |
+| Bước 5. Loại bỏ nhân viên không hợp lệ | - Loại các nhân viên thuộc trường hợp sau đây - Nhân viên bị trùng trong các nhóm con của nhóm lớn đang được chọn - Nhân viên bị xóa khỏi nhóm - Nhân viên bị hủy hoặc ban tài khoản |
+| Bước 6. Phân công theo cơ chế Round Robin | Cơ chế vòng lặp: **Ví dụ:** Danh sách hợp lệ: A – B – C Con trỏ đang ở: **B** → Cuộc chat mới gán cho **C** → Con trỏ chuyển về **A** cho lượt tiếp theo. |
+| Bước 7. Gán nhân viên và cập nhật vị trí con trỏ Round-robin | - Gán trực tiếp vào cuộc hội thoại.- Ghi log: “Cuộc hội thoại được gán cho [Tên nhân viên] theo round-robin.” - Sự kiện update UI. |
+| Bước 8. Nhận thông tin chỉ định | - Gửi thông báo notificate tới nhân viên và quản trị viên phụ trách: “Cuộc hội thoại [Tên khách] được gán cho [Tên nhân viên] ” - Nhân viên có quyền phụ trách cuộc hội thoại |
+| Bước 9. Hiển thị tên nhân viên trong giao diện **Cuộc** **Hội Thoại chi tiết** | - Header hiển thị **[Tên nhân viên]**, trạng thái: **Đã phân công**: **Đang được xử lý bởi: [Tên nhân viên]** Ở dropdown “Chỉ định nhân viên”, nhân viên đó được đánh dấu (selected). |
+
+
+Lưu ý: Chỉ định nhân viên chỉ được áp dụng 1 lần cho 1 vòng đời cuộc hội thoại (Từ mở-đang xử lý-đóng).
+
+Nếu một khách hàng trung thành có tần suất tái nhắn tin 4 lần/tháng, tạo thành 4 vòng đời cuộc hội thoại thì phân công tự động theo nhóm sẽ phân công 4 nhân viên tương ứng với 4 lần vòng đời.
+
+Thời gian chờ của phân công tự động sẽ được áp dụng theo thiết lập tự động hóa.
+
+Case: User áp dụng phân công tự động cho nhóm kênh Zalo OA tài khoản Gapit, điều kiện event là bắt đầu cuộc hội thoại, điều kiện thời gian là chờ sau 1 phút, hành động là chuyển tới nhân sự. => Hệ thống sẽ phân công nhân viên phụ trách cuộc hội thoại sau 1 phút bắt đầu từ lúc lấy được event.
+
+**Extension Flow (Ngoại lệ bổ sung)**
+
+**Trường hợp 1: Admin tự chỉ định nhân viên khi đang áp dụng phân công tự động**
+
+- Ghi đè quy tắc round-robin.
+
+- Cuộc hội thoại đó không chạy cơ chế phân bổ tự động nữa cho tới khi sảy ra **trường hợp 2** bên dưới.
+
+- Nếu chỉ định tự động đã phân công một nhân viên, Admin chỉ định một nhân viên khác thay thế, hệ thống sẽ ghi log và hiển thị thông báo “[Tên nhân viên] không còn phụ trách cuộc hội thoại [Tên khách] ” và “Cuộc hội thoại [Tên khách] được [Tên admin] gán cho [Tên nhân viên] ”
+
+**Trường hợp 2: Nhân viên bị remove khỏi nhóm hoặc bị xóa tài khoản trong lúc đang được chỉ định và xử lý cuộc hội thoại**
+
+- Gỡ nhân viên đó ra khỏi tất cả cuộc hội thoại thuộc nhóm kênh đó
+
+- Cuộc hội thoại trở về trạng thái chờ phân công
+
+- Ghi log theo bảng log trạng thái
+
+- Gửi notificate: “[Tên nhân viên] không còn phụ trách cuộc hội thoại [Tên khách] ”
+
+- Quay lại flow chỉ định ở trên.
+
+**Trường hợp 3: Admin thay đổi nhóm chỉ định**
+
+- Gỡ nhân viên đang được chỉ định ra khỏi tất cả cuộc hội thoại đó
+
+- Ghi log theo bảng log trạng thái
+
+- Gửi notificate: “[Tên nhân viên] không còn phụ trách cuộc hội thoại [Tên khách] ”
+
+- Round-robin sẽ tự động phân công lại theo nhóm mới vừa được chọn.
+
+**Trường hợp 4: Admin thay đổi nhân viên được chỉ định**
+
+- Admin cần bỏ chỉ định/ gỡ nhân viên đã được chỉ định ra khỏi cuộc hội thoại
+
+- Ghi log theo bảng log trạng thái
+
+- Gửi notificate: “[Tên nhân viên] không còn phụ trách cuộc hội thoại [Tên khách] ”
+
+- Admin chỉ định nhân viên mới,
+
+- Ghi log theo bảng log trạng thái.
+
+- Gửi notificate: “Cuộc hội thoại [Tên khách] được [Tên admin] gán cho [Tên nhân viên] ”
+
+**Mô tả trường dữ liệu:**
+
+
+| **STT** | **Trường dữ liệu / Thành phần** | **Mô tả chức năng** | **Ràng buộc hệ thống** |
+| --- | --- | --- | --- |
+| 1 | **Tìm kiếm nhân viên** (ô search) | Cho phép tìm nhanh nhân viên hoặc nhóm bằng text | – Tìm theo tên, không phân biệt hoa/thường. – Kết quả phải được lọc theo thời gian thực. |
+| 2 | **Danh sách Nhóm nhân viên lớn (Chỉ định theo nhóm)** | Hiển thị các nhóm nhân viên lớn như CSKH, A2P, Toppup, Vận hành... | - Chỉ hiển thị những nhóm và người được cấp quyền xem, sửa, xóa nhóm kênh tương ứng. – Số lượng nhân viên trong từng nhóm hiển thị trong ngoặc. – Chỉ nhóm có nhân viên mới được chọn, nhóm rỗng không được chọn. - Logic chỉ định: Nếu chọn nhóm lớn, trong nhóm lớn bao gồm nhiều nhóm nhỏ và nhỏ hơn, số nhân viên từ tất cả các nhóm sẽ được tổng hợp, loại trừ nhân viên trùng lặp giữa các nhóm, sau đó hệ thống phân công tuần tự lần lượt cho từng nhân viên. |
+| 3 | **Danh sách nhóm nhân viên phân tách (Chỉ định theo nhóm nhỏ hơn) ** | Hiển thị danh sách nhóm nhân viên trong nhóm lớn | – Tên nhóm và phân cấp nhóm phải đồng bộ với nhóm người dùng được phân quyền xem,sửa, xóa trong nhóm kênh – Chỉ nhóm có nhân viên mới được chọn, nhóm rỗng không được chọn. –  Logic chỉ định: Nếu chọn nhóm và trong nhóm bao gồm nhiều nhóm nhỏ và nhỏ hơn, số nhân viên từ tất cả các nhóm sẽ được tổng hợp, loại trừ nhân viên trùng lặp giữa các nhóm, sau đó hệ thống phân công tuần tự lần lượt cho từng nhân viên. |
+| 4 | **Danh sách nhân viên trực tiếp (Chỉ định người dùng)** | Danh sách nhân viên/user trực tiếp cần chỉ định | - Đồng bộ hóa với những nhân viên được cấp quyền xem,sửa,xóa. Không hiển thị nhân viên chưa được cấp quyền trong nhóm kênh. |
+| 5 | **Nút “Bỏ chỉ định”** | Gỡ trạng thái chỉ định nhân viên hiện tại | – Chỉ active nếu cuộc hội thoại đang được chỉ định. |
+| 6 | **Tên nhân viên được chỉ định (hiển thị trên header)** | Tên người được hệ thống phân bổ hoặc người dùng chọn thủ công | – Luôn cập nhật theo kết quả phân bổ mới nhất. - Trường hợp Admin chọn nhóm người dùng, hệ thống sẽ tự động phân công theo tuần tự, tên người được phân công sẽ hiển thị ở header |
+| 7 | **Nút menu mở dropdown chỉ định** | Mở danh sách nhóm & nhân viên | – Dropdown phải đóng nếu click ra ngoài. |
+
+
+**Ràng buộc phân bổ nhân viên:**
+
+
+| **Quy tắc** | **Mô tả** |
+| --- | --- |
+| **1. Phân bổ tự động theo thứ tự lần lượt (round-robin)** | Hệ thống lần lượt chia cuộc hội thoại mới cho từng nhân viên trong nhóm theo thứ tự danh sách. |
+| **2. Nhân viên được phân bổ tự động luôn hiển thị trong mục “Chỉ định nhân viên”** | Khi hệ thống tự phân, tên nhân viên sẽ xuất hiện trên header cuộc hội thoại. |
+| **3. Nếu nhân viên bị remove khỏi nhóm → vòng lặp round-robin tự điều chỉnh** | Hệ thống nhảy sang nhân viên kế tiếp hợp lệ. |
+| **4. Nếu người dùng tự chọn nhân viên (override)** | Round-robin **không áp dụng** cho cuộc hội thoại này nữa. |
+
+
+**Ràng buộc khi phân công theo nhóm:**
+
+
+| **Tình huống** | **Ràng buộc** |
+| --- | --- |
+| 1. Nhóm không có nhân viên | Không cho chọn, hiển thị "0 nhân viên" hoặc disable |
+| 2. Nhóm có >1 nhân viên | Kích hoạt chế độ phân bổ theo round-robin |
+| 3. Người dùng chọn nhóm | Hệ thống tự phân theo round-robin ngay lập tức. Không cần phải chọn nhân viên chi tiết trong nhóm. |
+| 4. Người dùng chỉnh sửa/ thay đổi từ nhóm này sang nhóm khác | Quy tắc phân theo round-robin sẽ được áp dụng tại nhóm mới kể từ thời điểm thay đổi. |
+| 5. Người dùng chỉnh sửa/ thay đổi từ nhóm sang chỉ định cụ thể nhân viên/user | Quy tắc phân theo round-robin sẽ được hủy bỏ, người phụ trách cuộc hội thoại này sẽ được chuyển thành người vừa được chỉ định |
+
+
+**Ràng buộc khi chọn nhân viên:**
+
+
+| **Tình huống** | **Ràng buộc** |
+| --- | --- |
+| 1. Click chọn 1 nhân viên | Gán cố định nhân viên đó cho cuộc hội thoại |
+| 2. Nhân viên đã bị remove khỏi nhóm sau khi được chọn | Hệ thống gỡ nhân viên đó ra khỏi cuộc hội thoại, cuộc hội thoại về trạng thái chờ chỉ định |
+| 3. Nhân viên đã bị disable | Không hiển thị trong danh sách, không được chọn trong danh sách |
+| 4. Nhân viên đã nhận quá số lượng tối đa | Hiện tại chưa ràng buộc, một nhân viên có thể được chỉ định cho vô số cuộc hội thoại |
+
+
+Ràng buộc về hiển thị tên nhân viên được phân:
+
+
+| **Quy tắc hiển thị tên nhân viên** | **Mô tả** |
+| --- | --- |
+| Luôn hiển thị tên nhân viên đang được chỉ định | Ở phần tiêu đề cuộc hội thoại |
+| Nếu thay đổi nhân viên → cập nhật ngay | Không cache, không delay |
+| Nếu cuộc chat chưa ai xử lý → hiển thị “Chưa chỉ định” | Trạng thái mặc định |
+| Nếu hệ thống phân tự động → hiển thị đúng thứ tự round-robin | Bắt buộc chính xác theo vòng lặp |
+
+
+
+### 2. Xem danh sách các cuộc hội thoại Telegram
+
+
+
+#### 2.1. Lọc cuộc hội thoại Telegram
+
+
+- Mô tả chức năng
+
+
+| **Tên nghiệp vụ** | Lọc các cuộc hội thoại Telegram |
+| --- | --- |
+| **Module** | Trang chủ > Hội thoại > Bộ lọc: Telegram |
+| **Mô tả** | Tính năng cho phép lọc các cuộc hội thoại Telegram trên giao diện cuộc hội thoại tổng quan. |
+| **Điều kiện cần để thực hiện hành động** | Là người dùng trong hệ thống sẽ có quyền xem danh sách các cuộc hội thoại telegram, có quyền lọc cuộc hội thoại. |
+| **Hành động** | Người dùng đăng nhập hệ thống. Click chọn “Conversation” =>  Giao diện Conversation List hiển thị tất cả cuộc hội thoại từ tất cả các kênh => Lọc channel: Chọn telegram |
+| **Kết quả** | Hiển thị bộ lọc và lọc kết quả thành công. |
+
+
+- Giao diện
+
+*Giao diện cuộc hội thoại chưa lọc> Bắt đầu click điều kiện lọc Channel:Telegram*
+
+*Giao diện cuộc hội thoại đã lọc> Có thể click điều kiện lọc Channel để thay đổi bộ lọc*
+
+- Mô tả trường dữ liệu và ràng buộc
+
+(Như phần mô tả “””)
+
+
+#### 2.2. Xem danh sách các cuộc hội thoại Telegram
+
+
+- Mô tả chức năng
+
+
+| **Tên nghiệp vụ** | Xem danh sách các cuộc hội thoại Telegram |
+| --- | --- |
+| **Module** | Trang chủ > Hội thoại > Bộ lọc: Telegram |
+| **Mô tả** | Tính năng cho phép xem danh sách các cuộc hội thoại Telegram trên giao diện cuộc hội thoại tổng quan, sau khi đã áp dụng bộ lọc tin nhắn telegram |
+| **Điều kiện cần để thực hiện hành động** | Là người dùng trong hệ thống sẽ có quyền xem danh sách các cuộc hội thoại telegram. Người dùng đã lọc xong điều kiện để xem các tin nhắn thuộc kênh telegram từ giao diện “Conversation” |
+| **Hành động** | Người dùng đăng nhập hệ thống. Click chọn “Conversation” =>  Giao diện Conversation List hiển thị tất cả cuộc hội thoại từ tất cả các kênh => Lọc channel: Chọn telegram => Giao diện conversation list hiển thị tất cả cuộc hội thoại từ kênh Telegram |
+| **Kết quả** | Hiển thị list danh sách cuộc hội thoại từ tất cả kênh Telegram |
+
+
+- Giao diện
+
+Giao diện “Hội thoại” tổng quan
+
+Giao diện khi áp dụng bộ lọc “Channel”: Telegram.
+
+- Mô tả trường dữ liệu và ràng buộc
+
+(Như phần ”)
+
+
+#### 2.3. Xem chi tiết cuộc hội thoại Telegram
+
+
+- Mô tả nghiệp vụ
+
+
+| **Tên nghiệp vụ** | Xem danh sách các cuộc hội thoại Telegram |
+| --- | --- |
+| **Module** | Trang chủ > Hội thoại |
+| **Mô tả** | Tính năng cho phép xem chi tiết một cuộc hội thoại. |
+| **Điều kiện cần để thực hiện hành động** | Là người dùng trong hệ thống sẽ có quyền xem chi tiết một cuộc hội thoại. Cuộc hội thoại sẽ hiển thị khi người dùng click chọn một cuộc hội thoại trong danh sách cuộc ội thoại bên trái |
+| **Hành động** | Người dùng đăng nhập hệ thống. Click chọn “Conversation” >  Giao diện Conversation List hiển thị. > Click chọn cuộc hội thoại cần xem trong danh sách |
+| **Kết quả** | Hiển thị list danh sách cuộc hội thoại từ tất cả các kênh |
+
+
+- Giao diện
+
+- **Trường dữ liệu và ràng buộc chi tiết cuộc hội thoại:**
+
+
+| **STT** | **Tên Trường** | **Kiểu Dữ Liệu** | **Mô Tả** | **Ràng Buộc** |
+| --- | --- | --- | --- | --- |
+| 1.1 | Tên khách hàng (Tên người gửi) | VARCHAR(255) | Tên người gửi tin nhắn | Không được để trống |
+| 1.2 | Tên công ty(Tên người nhận - tên tài khoản nhận) | VARCHAR(255) | Tên tào khoản nhận tin nhắn | Không được để trống |
+| 2 | Người phụ trách (CSKH) | VARCHAR(100) | Nhân viên đang tiếp nhận/tư vấn cuộc trò chuyện | Có thể rỗng nếu chưa phân công. |
+| 3.1 | Ảnh đại diện KH | IMAGE / STRING | Ảnh hồ sơ khách hàng (avatar) | Có thể null – hiển thị ký tự đầu nếu không có ảnh |
+| 3.2 | Logo Channel | IMAGE / STRING | Ảnh của kênh (channel) phát sinh cuộc hội thoại | Bắt buộc, liên kết với logo symbol channel ở danh sách bên trái. |
+| 4.1 | Nội dung tin nhắn - chiều từ khách hàng | TEXT | Nội dung từng tin nhắn nhận được | Bắt buộc, đồng bộ real time. (Có bản mô tả các dạng nội dung tin nhắn) |
+| 4.2 | Nội dung tin nhắn - chiều từ CS |  | Nội dung tin nhắn gửi đi | Bắt buộc, đồng bộ real time. Với những tin do BOT tự động gửi đi từ phía BOT hoặc do hệ thống GapOne thiết lập gửi tin tự động, góc dưới bên phải sẽ hiện logo BOT. (Có bản mô tả các dạng nội dung tin nhắn) |
+| 5 | Thời gian gửi | DATETIME (dd/mm/yyyy HH:mm) | Thời điểm tin nhắn được gửi | Không được null |
+| 6 | Loại tin nhắn | ENUM('user', 'bot', 'staff') | Phân loại người gửi (khách, hệ thống, nhân viên) | Bắt buộc, để xử lý màu sắc / căn lề phù hợp |
+| 7 | Biểu tượng bot | IMAGE (logo nhỏ) | Logo thể hiện tin nhắn tự động từ hệ thống GAPIT | Chỉ hiển thị nếu loại tin nhắn = 'bot' |
+| 8 | Khung nhập nội dung | STRING | Ô nhập tin nhắn của nhân viên. Tối đa 2000 ký tự | Không được rỗng khi nhấn nút gửi |
+| 9 | Nút gửi | BUTTON | Nút để gửi nội dung vừa nhập | Chỉ hoạt động khi nội dung nhập không rỗng |
+| 10 | Trạng thái gửi | BOOLEAN | Xác định tin nhắn đã gửi thành công hay chưa | Mặc định true nếu gửi thành công, có thể dùng để hiển thị “sending…” |
+| 11 | Nút Status |  | Xác định trạng thái cuộc hội thoại Mở: tự động khi Agent click mở cuộc hội thoại Đang xử lý: Khi Agent (CS) trả lời bằng cách gửi tin nhắn đầu tiên vào cuộc hội thoại Close: Khi agent click chọn close cuộc hội thoại | Bắt buộc. Mặc định là “Mở” khi Agent mở mới một cuộc hội thoại. |
+| 12 | Tin nhắn hệ thống (Tin nhắn sự kiện - event message) | TEXT | Phát sinh khi có event sảy ra. Gắn cùng các event liên quan tới status cuộc hội thoại, chỉ định nhân viên, gắn nhãn. | Bắt buộc. Chỉ hiển thị trên hệ thống GO Conversation. |
+
+
+**Các dạng nội dung tin nhắn trong Telegram:**
+
+
+| **Loại nội dung** | **Mô tả** | **Đặc điểm kỹ thuật** | **Ví dụ hiển thị trong CRM** | **Scope** |
+| --- | --- | --- | --- | --- |
+| **Text Message** | Tin nhắn văn bản thuần | Khách hàng: - Tối đa 4096 ký tự - Có thể hiện icon - Hỗ trợ markdown hoặc HTML format Agent: - Tối đa 2000 ký tự (nếu có thể thì tăng lên 4096 ký tự cho đồng nhất) - Hỗ trợ markdown hoặc HTML format - Không icon | “Xin chào, bạn có thể hỗ trợ mình không?” “Vâng, chào bạn ABC. Chúng tôi có thể giúp gì được cho bạn? | Conversation Sprint 2: Đồng bộ chiều từ Telegram -> Gapone COnversation Đồng bộ chiều từ Gapone Conversation -> Telegram |
+| **Photo** | Hình ảnh | Khách hàng + Agent: - Hỗ trợ nhiều kích thước, dung lượng tối đa ~20MB (qua bot API) | Ảnh hiển thị thumbnail, có nút **Download/View** | Conversation Sprint 2: Đồng bộ chiều từ Telegram -> Gapone COnversation Chưa đồng bộ từ Gapone Conversation -> Telegram |
+| **Video** | Video clip | Khách hàng + Agent: - Giới hạn ~20MB (bot upload trực tiếp) hoặc link stream | Hiển thị thumbnail + nút **Play** | Conversation Sprint 2: Đồng bộ chiều từ Telegram -> Gapone COnversation Chưa đồng bộ từ Gapone Conversation -> Telegram |
+| **Audio** | File âm thanh (MP3, WAV…) | Khách hàng + Agent: - File nhạc/âm thanh giới hạn 20MB | Hiển thị player nhỏ (Play/Pause) | Conversation Sprint 2: Đồng bộ chiều từ Telegram -> Gapone COnversation Chưa đồng bộ từ Gapone Conversation -> Telegram |
+| **Voice Message** | Tin nhắn thoại ghi âm trực tiếp trên Telegram | Khách hàng: - Lấy được toàn bộ voice message của khách Agent: - Tin nhắn thoại từ 60 giây trở xuống | Hiển thị icon micro + nút **Play** | Conversation Sprint 2: Đồng bộ chiều từ Telegram -> Gapone COnversation Chưa đồng bộ từ Gapone Conversation -> Telegram |
+| **OTP** | Mã OTP | Mã OTP kèm nội dung tin nhắn | Hiển thị nội dung tin nhắn chứa mã OTP | Conversation Sprint 2: Đồng bộ chiều từ Telegram -> Gapone COnversation Chưa đồng bộ từ Gapone Conversation -> Telegram |
+| **Document** | File tài liệu (PDF, DOCX, ZIP…) | Khác hàng: - Nhận được file khách hàng gửi ~2GB Agent: - Tải lên không quá ~50MB | Hiển thị tên file + nút **Download** | Chưa triển khai trong Conversation Sprint 2 |
+| **Sticker** | Nhãn dán | Khách hàng: - Có thể là ảnh tĩnh hoặc động (WebP, TGS) Agent: - Không hỗ trợ gửi sticker từ hệ thống GO Convst | Hiển thị sticker trong khung chat | Conversation Sprint 2: Đồng bộ chiều từ Telegram -> Gapone COnversation Chưa đồng bộ từ Gapone Conversation -> Telegram |
+| **GIF / Animation** | Ảnh động (GIF, MP4 loop) | Telegram thường convert GIF thành MP4 ~20MB | Hiển thị preview động | Conversation Sprint 2: Đồng bộ chiều từ Telegram -> Gapone COnversation Chưa đồng bộ từ Gapone Conversation -> Telegram |
+| **Contact** | Chia sẻ liên hệ | Chứa số điện thoại, tên, username | Hiển thị card contact + nút **Save Contact** | Chưa triển khai trong Conversation Sprint 2 |
+| **Location** | Vị trí địa lý | Chứa tọa độ GPS (lat, long) | Hiển thị bản đồ mini + nút **Open in Maps** | Chưa triển khai trong Conversation Sprint 2 |
+| **Poll / Quiz** | Khảo sát hoặc quiz | Có nhiều lựa chọn trả lời | Hiển thị card Poll + nút chọn | Chưa triển khai trong Conversation Sprint 2 |
+| **Invoice** | Thanh toán qua Telegram Payments | Yêu cầu tích hợp payment provider | Hiển thị nút thanh toán | Chưa triển khai trong Conversation Sprint 2 |
+| **Inline Keyboard / Button** | Các nút bấm trong tin nhắn | Callback hoặc URL | Hiển thị hàng nút bên dưới message | Conversation Sprint 2: Đồng bộ chiều từ Telegram -> Gapone COnversation Đồng bộ chiều từ Gapone Conversation -> Telegram |
+| **URL ** | Link liên kết | URL | Mọi URL gửi trong conversation phải được quét qua Safe Browsing API trước khi hiển thị dạng hyperlink. **Error Handling**: Nếu link an toàn → hiển thị bình thường.Nếu nghi ngờ nguy hiểm hoặc chắc chắn → chặn không cho click + hiện cảnh báo: “Phát hiện rủi ro liên kết độc hại.” | Conversation Sprint 2: Đồng bộ chiều từ Telegram -> Gapone COnversation Đồng bộ chiều từ Gapone Conversation -> Telegram |
+
+
+
+#### 2.4. Xem và quản lý thông tin khách hàng + nhãn dán
+
+
+
+|  |  |
+| --- | --- |
+| *Giao diện rút gọn* | *Giao diện chi tiết* |
+
+
+**Trường dữ liệu và ràng buộc cho phần thông tin khách hàng:**
+
+
+| **STT** | **Tên Trường** | **Kiểu Dữ Liệu** | **Mô Tả** | **Ràng Buộc** |
+| --- | --- | --- | --- | --- |
+| - **Nhãn hội thoại** |  |  |  |  |
+| 1.1 | Nhãn hội thoại - Tìm kiếm & thêm nhãn | ENUM[] | Các thẻ gắn để phân loại cuộc hội thoại. Tìm kiếm tên nhãn và click chuột vào nhãn cần thêm. | Không bắt buộc, cho phép nhiều giá trị. Chọn từ danh sách nhãn có sẵn khi thiết lập trong “quản lý nhãn” |
+| 1.2 | Nhãn hội thoại - xóa nhãn đã thêm |  | Click “x” ở đuôi nhãn để xóa nhãn khỏi cuộc hội thoại | Chỉ xóa được khi có nhãn đã thêm |
+| - **Thông tin khách hàng** |  |  |  |  |
+| 2.1 | Họ | VARCHAR(150) | Họ của khách hàng | Không bắt buộc, cho phép để trống |
+| 2.1 | Tên | VARCHAR(50) | Tên riêng của khách hàng | **Bắt buộc**, không được để trống |
+| 2.3 | Số điện thoại | VARCHAR(15) | Số điện thoại liên hệ của khách hàng | **Bắt buộc**, định dạng số, không trùng, kiểm tra hợp lệ (10-11 chữ số) |
+| 2.4 | Email | VARCHAR(255) | Địa chỉ email của khách hàng | Có thể để trống, nếu nhập phải đúng định dạng email (abc@xyz.com) |
+| 2.5 | Ngày sinh | DATE | Ngày sinh của khách hàng | Không bắt buộc, nếu có thì kiểm tra định dạng dd/mm/yyyy hoặc ISO date |
+| 2.6 | Địa chỉ | TEXT | Địa chỉ sinh sống hoặc liên hệ | Không bắt buộc |
+| - **Ghi chú** |  |  |  |  |
+| 3.1 | Ghi chú | TEXT | Ghi lại các thông tin nội bộ, nhu cầu hoặc trạng thái khách hàng | Không bắt buộc |
+| - **Nút thao tác** |  |  |  |  |
+| 4.1 | Nút "Lưu" | BUTTON | Gửi và lưu thông tin khách hàng vào hệ thống | Chỉ hoạt động khi các trường **bắt buộc** hợp lệ |
+| 4.2 | Nút "Hủy" | BUTTON | Huỷ thao tác cập nhật | Không ràng buộc |
+
+
+
+### 3. Một số trường hợp đặc biệt
+
+
+
+#### 3.1. Gửi tin nhắn lỗi
+
+
+Wireframe minh họa:
+
+*Wireframe minh họa khi gửi tin nhắn bị lỗi*
+
+Bảng mô tả lỗi:
+
+
+| **Mã lỗi** | **Tên lỗi** | **Nguyên nhân** | **Thông báo hiển thị** |
+| --- | --- | --- | --- |
+| TG001 | Bot Unauthorized | Sai **Bot Token** hoặc bot chưa được kích hoạt | “Gửi tin nhắn không thành công: Không thể kết nối đến Telegram Bot” |
+| TG002 | Forbidden (403) | Bot không có quyền nhắn cho user (user chưa **Start bot** hoặc đã **Block bot**) | “Gửi tin nhắn không thành công: Người nhận chưa cho phép nhận tin nhắn từ bot.” |
+| TG003 | Chat Not Found (400) | Sai **chat_id** (user/group không tồn tại hoặc bị xóa) | “Gửi tin nhắn không thành công: Không tìm thấy cuộc trò chuyện.” |
+| TG004 | Message Too Long | Nội dung vượt quá giới hạn ký tự (Telegram giới hạn ~4096 ký tự cho 1 message. Hệ thống hiện tại giới hạn 2000 ký tự cho một message) | “Gửi tin nhắn không thành công: Tin nhắn vượt quá giới hạn kí tự.” |
+| TG005 | Media Too Large | File ảnh/video/gif vượt quá dung lượng (Telegram giới hạn ~50MB cho bot upload trực tiếp) | “Gửi tin nhắn không thành công: Tệp đính kèm vượt quá giới hạn dung lượng.” |
+| TG006 | Rate Limit / Flood Control | Gửi quá nhiều tin nhắn trong thời gian ngắn → Telegram áp dụng flood control | “Gửi tin nhắn không thành công: Bạn đang gửi quá nhanh. Vui lòng thử lại sau.” |
+| TG007 | Network Timeout | Mạng chậm hoặc server không phản hồi | “Gửi tin nhắn không thành công: Kết nối mạng không ổn định.” |
+| TG008 | Internal Server Error (500) | Telegram server gặp sự cố | “Gửi tin nhắn không thành công: Hệ thống Telegram đang bận.” |
+| TG009 | Unsupported Message Type | Gửi loại message bot không hỗ trợ (ví dụ: game, sticker lạ) | “Gửi tin nhắn không thành công: Định dạng tin nhắn không được hỗ trợ.” |
+| TG010 | Bot Blocked by Telegram | Bot bị khóa hoặc hạn chế do vi phạm chính sách | “Gửi tin nhắn không thành công: Bot không thể gửi tin nhắn do bị Telegram hạn chế.” |
+| TG011 | Account Blocked by Telegram | Account bị khóa, xóa hoặc hạn chế do vi phạm chính sách | “Gửi tin nhắn không thành công: Tài khoản không thể gửi tin nhắn do bị Telegram hạn chế.” |
+
+
+NOTE:
+
+- Cách đặt mã lỗi có thể thay đổi sao cho phù hợp với tiêu chuẩn trước đó của hệ thống.
+
+- Thay thế nội dung hiển thị thông báo lỗi theo các lỗi tương ứng.

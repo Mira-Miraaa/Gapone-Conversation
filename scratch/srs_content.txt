@@ -1,0 +1,303 @@
+SRS – TÍNH NĂNG NOTIFICATION (THÔNG BÁO) TRÊN GAPONE CONVERSATION
+BẢNG GHI NHẬN THAY ĐỔI TÀI LIỆU
+BẢNG QUẢN LÝ TIẾN ĐỘ THỰC THI
+TÀI LIỆU THAM CHIẾU
+I. TỔNG QUAN & MỤC TIÊU
+1.1. Hiện trạng
+Hệ thống Gapone Conversation hiện chưa có cơ chế thông báo thống nhất cho người dùng. Các sự kiện quan trọng như tin nhắn mới từ khách hàng, hội thoại được phân công, hay cảnh báo SLA đang phụ thuộc vào việc người dùng chủ động theo dõi màn hình. Điều này dẫn đến trễ phản hồi, giảm chất lượng CSKH và tăng áp lực vận hành.
+1.2. Mục tiêu tính năng
+Xây dựng module Notification (Thông báo) cho phép hệ thống tự động cảnh báo người dùng về các sự kiện liên quan đến công việc của họ, bao gồm:
+Thông báo trực tiếp trong ứng dụng qua biểu tượng chuông (Bell Icon) và Toast popup.
+Thông báo qua Email khi người dùng không online.
+Cài đặt cá nhân hóa theo loại sự kiện và kênh nhận thông báo.
+Chế độ Không làm phiền (DND) và Email tổng hợp định kỳ (Email Digest).
+1.3. Phạm vi áp dụng
+II. ĐỊNH NGHĨA ĐỐI TƯỢNG & PHÂN QUYỀN
+2.1. Đối tượng người dùng
+2.2. Các loại sự kiện kích hoạt thông báo (Notification Events)
+2.3. Định nghĩa & Từ viết tắt
+III. PHÂN TÍCH CHI TIẾT TÍNH NĂNG
+3.1. In-app Notification – Chuông thông báo (Bell Icon)
+Mô tả chức năng
+Các thành phần hiển thị
+Cấu trúc một mục thông báo
+Hành động khi click vào thông báo
+3.2. Toast Notification (Thông báo nổi pop-up)
+Mô tả chức năng
+Các thành phần của Toast
+Quy tắc hiển thị Toast
+3.3. Email Notification
+Mô tả chức năng
+Cấu trúc nội dung email
+Quy tắc gửi email
+3.4. Cài đặt thông báo (Notification Settings)
+Người dùng truy cập tại: Profile > Cài đặt thông báo (Notification Settings)
+Mô tả chức năng
+Các tùy chọn cấu hình
+Bảng ma trận Event × Kênh (ví dụ giao diện)
+3.5. Chế độ Không làm phiền (Do Not Disturb – DND)
+Mô tả chức năng
+Các tùy chọn cấu hình DND
+Quy tắc DND
+IV. GIAO DIỆN NGƯỜI DÙNG (UI/UX)
+4.1. Đường dẫn truy cập (Navigation Path) – Cài đặt thông báo
+4.2. Cấu trúc trang Notification Settings
+Trang Cài đặt thông báo được chia thành các nhóm thiết lập sau (từ trên xuống dưới):
+4.3. Chi tiết giao diện nhóm "Chế độ DND"
+V. YÊU CẦU PHI CHỨC NĂNG
+VI. BUSINESS RULES & EDGE CASES
+VII. ACCEPTANCE CRITERIA
+Happy Path
+Edge Cases
+VIII. DATA MODEL
+Bảng 1: Cấu trúc dữ liệu thông báo (notifications)
+Bảng 2: Cấu trúc dữ liệu của một Toast Notification
+Bảng 3: Cài đặt thông báo người dùng (notification_preferences)
+IX. PHỤ THUỘC & TÍCH HỢP
+X. OUT OF SCOPE
+--- TABLE 1 ---
+Ngày thay đổi | Vị trí | Lý do | Mô tả thay đổi | Phiên bản cũ | Phiên bản mới
+26/05/2026 | Tạo mới | Yêu cầu tính năng mới | Tài liệu đặc tả tính năng Notification (Thông báo) trên Gapone Conversation | — | V1.0
+--- TABLE 2 ---
+Giai đoạn | Thời gian | Phần mục | Phiên bản áp dụng
+Sprint — |  | Toàn bộ tài liệu | V1.0
+--- TABLE 3 ---
+STT | Tài liệu
+1 | SRS Conversation.docx
+--- TABLE 4 ---
+Phạm vi | Chi tiết
+Đường dẫn truy cập cài đặt | Profile > Cài đặt thông báo (Notification Settings)
+Đối tượng người dùng | Agent (Nhân viên CSKH), Admin / Quản lý (Manager)
+Ngoài phạm vi | SMS, phân tích nội dung AI/OCR
+--- TABLE 5 ---
+Vai trò | Quyền hạn | Ghi chú
+Admin / Quản lý (Manager) | Nhận thông báo về cảnh báo hệ thống, thay đổi cấu hình module, báo cáo tổng hợp. Có quyền thiết lập cấu hình thông báo cấp hệ thống | —
+Nhân viên CSKH (Agent) | Nhận thông báo khi có tin nhắn mới, hội thoại được phân công, được nhắc tới (@mention), cảnh báo SLA. Chỉ có quyền cấu hình thông báo cá nhân của riêng mình | Bị ảnh hưởng trực tiếp bởi các sự kiện hội thoại
+--- TABLE 6 ---
+STT | ID Sự kiện | Loại sự kiện | Mô tả | Đối tượng nhận
+1 | EVT-01 | Tin nhắn mới (New Message) | Khách hàng gửi tin nhắn tới các kênh (Zalo OA, Facebook Fanpage, Web Livechat). Hệ thống ghi nhận session mới xuất hiện. | Agent được phân công
+2 | EVT-02 | Phân công hội thoại (Assignment) | Một hội thoại được phân công thủ công hoặc tự động cho Agent. | Agent được gán
+3 | EVT-03 | Nhắc tới – Mention (@mention) | Agent khác tag/nhắc tới (@name) trong ghi chú nội bộ của một cuộc hội thoại. | Agent được tag
+4 | EVT-04 | Cảnh báo SLA (SLA Alert) | Hội thoại sắp hoặc đã vi phạm cam kết thời gian phản hồi SLA. | Agent + Manager
+5 | EVT-05 | Cảnh báo hệ thống (System Alert) | Hệ thống bảo trì, lỗi kết nối các kênh mạng xã hội, hoặc sự cố kỹ thuật. | Admin / Manager
+6 | EVT-06 | Thay đổi Module / Cấu hình (Function Event) | Có hoạt động tạo mới / chỉnh sửa / xóa quy trình, kênh gửi tin, nhóm kênh hoặc cấu hình hệ thống trong các module nghiệp vụ. | Admin / Manager
+--- TABLE 7 ---
+Thuật ngữ | Giải thích
+In-app | Thông báo hiển thị bên trong ứng dụng web (chuông Bell, toast popup)
+Toast | Cửa sổ popup nhỏ xuất hiện tạm thời ở góc phải dưới màn hình
+DND | Do Not Disturb – Chế độ không làm phiền
+Email Digest | Email tổng hợp định kỳ các sự kiện nhỡ
+SLA | Service Level Agreement – Cam kết thời gian phản hồi
+WebSocket | Giao thức kết nối thời gian thực giữa client và server
+Badge | Số / chấm đỏ trên icon thông báo thể hiện số lượng chưa đọc
+Agent | Nhân viên CSKH sử dụng hệ thống Gapone Conversation
+Admin | Quản lý / Product Owner có quyền cấu hình hệ thống
+--- TABLE 8 ---
+Tên nghiệp vụ | In-app Notification – Chuông thông báo
+Module | Navigation Bar (Thanh điều hướng chính của ứng dụng)
+Mô tả | Hệ thống hiển thị biểu tượng chuông cố định trên thanh điều hướng. Khi có sự kiện mới, chuông hiển thị badge số đỏ và người dùng có thể mở danh sách thông báo để xem và thao tác.
+Điều kiện kích hoạt | Người dùng đã đăng nhập; có sự kiện thuộc EVT-01 đến EVT-06 liên quan đến người dùng
+Kết quả | Người dùng thấy badge số đỏ trên chuông; click vào chuông để xem danh sách thông báo
+--- TABLE 9 ---
+STT | Thành phần | Mô tả
+1 | Biểu tượng Chuông | Luôn hiển thị cố định trên Navigation Bar với tất cả người dùng đã đăng nhập.
+2 | Badge số đỏ | Hiển thị số lượng thông báo chưa đọc. Nếu số lượng > 99, hiển thị "99+". Badge tự động ẩn khi không còn thông báo chưa đọc.
+3 | Dropdown danh sách | Khi click vào chuông: hiển thị danh sách tối đa 20 thông báo mới nhất. Cuộn xuống cuối danh sách → hệ thống tự động load thêm (Infinite Scroll) trong vòng 30 ngày.
+--- TABLE 10 ---
+STT | Thành phần | Mô tả
+1 | Avatar / Icon loại sự kiện | Icon phân biệt loại sự kiện (tin nhắn, phân công, mention, SLA, hệ thống).
+2 | [Module] Tiêu đề | Tên module và tiêu đề thông báo hiển thị in đậm.
+3 | Nội dung tóm tắt | Mô tả ngắn gọn nội dung sự kiện.
+4 | Thời gian | Hiển thị thời gian tuyệt đối (hh:mm, dd/mm/yyyy).
+5 | Trạng thái đọc | Chưa đọc: nền cam nhạt. Đã đọc: nền trắng
+--- TABLE 11 ---
+Hành động | Mô tả
+Đóng dropdown | Dropdown danh sách thông báo thu lại khi người dùng nhấp ra bên ngoài popup thông báo hoặc nhấp vào biểu tượng Bell
+Điều hướng | Chuyển đến cuộc hội thoại hoặc màn hình tương ứng với sự kiện.
+Đánh dấu đã đọc | Thông báo được click chuyển sang nền trắng (trạng thái Đã đọc).
+Cập nhật badge | Số đếm trên badge giảm đi 1 đơn vị khi User xem một thông báo chưa đọc
+--- TABLE 12 ---
+Tên nghiệp vụ | Toast Notification – Thông báo nổi pop-up
+Module | Toàn bộ ứng dụng (overlay, vị trí: góc phải dưới màn hình)
+Mô tả | Khi người dùng đang online và mở ứng dụng, hệ thống tự động hiển thị popup nhỏ ở góc phải dưới màn hình mỗi khi có sự kiện mới. Toast giúp người dùng nhận biết ngay lập tức mà không cần click vào chuông.
+Điều kiện kích hoạt | Người dùng đang online (có session ghi nhận hoạt động); có sự kiện mới; DND đang TẮT; In-app Toast được BẬT cho loại sự kiện tương ứng
+Kết quả | Toast popup xuất hiện ở góc phải dưới, tự động ẩn sau 5 giây
+--- TABLE 13 ---
+STT | Thành phần | Mô tả
+1 | [Module] Tiêu đề | Tên module và tiêu đề thông báo hiển thị in đậm.
+2 | Nội dung tóm tắt | Mô tả ngắn gọn nội dung sự kiện.
+3 | Điều hướng | Link dẫn ẩn giúp người dùng chuyển đến cuộc hội thoại hoặc màn hình tương ứng với sự kiện.
+--- TABLE 14 ---
+Quy tắc | Mô tả
+Tự động ẩn | Toast tự động ẩn sau 5 giây nếu người dùng không tương tác.
+Click vào Toast | Đóng Toast → Điều hướng đến hội thoại tương ứng → Đánh dấu thông báo là Đã đọc.
+Nhiều Toast cùng lúc | Nếu có nhiều sự kiện đến đồng thời, hệ thống xếp hàng và hiển thị tối đa 3 Toast cùng lúc. Toast tiếp theo xuất hiện sau khi Toast trước đóng
+--- TABLE 15 ---
+Tên nghiệp vụ | Email Notification – Thông báo qua Email
+Module | 
+Mô tả | Hệ thống tự động gửi email thông báo tới người dùng khi họ offline và có sự kiện quan trọng được gán cho họ. Nhằm đảm bảo người dùng không bỏ lỡ các sự kiện ngay cả khi không mở ứng dụng.
+Điều kiện kích hoạt | Người dùng offline (không có session hoạt động) quá 15 phút; có sự kiện EVT-01, EVT-02, EVT-03 hoặc EVT-04; người dùng đã bật Email cho loại sự kiện tương ứng
+Kết quả | Email tổng hợp được gửi đến hộp thư của người dùng trong vòng 30 giây
+--- TABLE 16 ---
+STT | Thành phần | Mô tả
+1 | Tiêu đề email | Mô tả rõ ràng loại sự kiện. VD: "[Gapone] Bạn có 3 tin nhắn mới chưa xử lý".
+2 | Nội dung tóm tắt | Liệt kê các sự kiện bị nhỡ trong khoảng thời gian offline.
+3 | Link "Xem chi tiết" | Điều hướng thẳng đến hội thoại tương ứng trên Gapone Conversation (yêu cầu đăng nhập nếu chưa có session).
+--- TABLE 17 ---
+Quy tắc | Mô tả
+Chống spam – Gộp email | Nếu có nhiều sự kiện trong vòng 15 phút offline, hệ thống gộp chung 1 email tổng hợp thay vì gửi nhiều email riêng lẻ.
+Ưu tiên Email Digest | Nếu người dùng bật Email Digest, hệ thống tắt Email tức thì để tránh trùng lặp. Người dùng chỉ nhận 1 trong 2 chế độ, không đồng thời.
+--- TABLE 18 ---
+Tên nghiệp vụ | Notification Settings – Cài đặt thông báo cá nhân
+Module | Profile > Cài đặt thông báo
+Mô tả | Cho phép mỗi người dùng tùy chỉnh cách họ nhận thông báo: bật/tắt theo loại sự kiện, theo kênh nhận, chọn nhạc chuông, bật DND và cấu hình Email Digest.
+Điều kiện kích hoạt | Người dùng đã đăng nhập, truy cập trang Cài đặt thông báo
+Kết quả | Cài đặt được lưu per-user và áp dụng ngay lập tức; duy trì qua các phiên đăng nhập và thiết bị khác nhau
+--- TABLE 19 ---
+STT | Cấu hình | Mô tả | Giá trị mặc định
+1 | Event-based Routing – Cài đặt theo loại sự kiện | Bảng ma trận cho phép tùy chỉnh (check/uncheck) việc nhận thông báo qua 2 kênh (In-app, Email) cho từng loại sự kiện: Tin nhắn mới, Phân công hội thoại, @Mention, Cảnh báo SLA, Thay đổi Module/Cấu hình. | In-app = BẬT cho tất cả;  | Email = TẮT cho tất cả | Người dùng có thể thay đổi theo nhu cầu
+--- TABLE 20 ---
+Loại sự kiện | In-app | Email
+Tin nhắn mới | ☑ | ☐
+Phân công hội thoại | ☑ | ☐
+Có người nhắc tới tôi (@mention) | ☑ | ☐
+Cảnh báo SLA / hệ thống | ☑ | ☐
+Thay đổi Module / Cấu hình | ☑ | ☐
+--- TABLE 21 ---
+Tên nghiệp vụ | Do Not Disturb (DND) – Chế độ Không làm phiền
+Module | Profile > Cài đặt thông báo > Chế độ DND
+Mô tả | Cho phép người dùng tạm thời ngừng nhận Toast và Email trong một khoảng thời gian nhất định. Các sự kiện vẫn được lưu lặng lẽ vào In-app Bell để xem lại sau.
+Điều kiện kích hoạt | Người dùng bật DND thủ công (Quick DND) hoặc DND tự động theo lịch trình (Scheduled DND)
+Kết quả | Trong thời gian DND: không có Toast, Email. In-app Bell vẫn cập nhật badge và lưu thông báo.
+--- TABLE 22 ---
+STT | Chế độ | Mô tả
+1 | Quick DND – Bật ngay | Người dùng có thể bật DND ngay lập tức và điền thời gian DND không quá 7 ngày.
+2 | Scheduled DND – Theo lịch trình | Thiết lập khung giờ bắt đầu và kết thúc, lặp lại theo ngày trong tuần. VD: Tự động bật từ 22:00 – 08:00 và lựa chọn các ngày cuối tuần
+--- TABLE 23 ---
+Quy tắc | Mô tả
+Không hiển thị Toast | Toast popup không xuất hiện trong thời gian DND.
+Không gửi Email | Email không được gửi đi.
+In-app Bell vẫn hoạt động | Sự kiện được lưu lặng lẽ vào danh sách In-app Bell; badge vẫn tăng.
+Ưu tiên tuyệt đối | Không có ngoại lệ cho Toast và Email (kể cả cảnh báo SLA).
+--- TABLE 24 ---
+Bước | Hành động | Mô tả
+1 | Đăng nhập hệ thống | Đăng nhập với bất kỳ tài khoản hợp lệ (Agent hoặc Admin).
+2 | Mở Profile | Click vào avatar / tên người dùng ở góc trên phải màn hình.
+3 | Chọn "Thông tin tài khoản” | Trong menu profile, chọn mục Thông tin tài khoản
+4 | Chọn “Cài đặt thông báo” | Trong menu profile, chọn mục Cài đặt thông báo (Notification Settings).
+--- TABLE 25 ---
+STT | Nhóm | Nội dung chính
+1 | Cài đặt theo sự kiện | Bảng ma trận Event × Kênh (In-app, Push, Email)
+2 | Chế độ DND | Scheduled DND theo ngày và giờ
+--- TABLE 26 ---
+STT | Tên trường | Loại UI | Bắt buộc | Mô tả
+1 | Thời gian DND nhanh | Radio button | Bắt buộc khi DND bật | Lựa chọn: nhập số giờ không quá 7 ngày.
+2 | Bật DND theo lịch trình | Toggle con | Không | Kích hoạt chế độ Scheduled DND.
+3 | Giờ bắt đầu | Time Picker (HH:mm) | Bắt buộc khi Scheduled DND bật | Giờ bắt đầu DND hàng ngày. VD: 22:00.
+4 | Giờ kết thúc | Time Picker (HH:mm) | Bắt buộc khi Scheduled DND bật | Giờ kết thúc DND hàng ngày. Phải lớn hơn Giờ bắt đầu (hoặc qua ngày hôm sau). VD: 08:00.
+5 | Ngày lặp lại |  | Bắt buộc khi Scheduled DND bật | Chọn các ngày trong tuần DND lịch trình áp dụng. Checkbox được check → màu cam; unchecked → màu xám.
+--- TABLE 27 ---
+STT | Danh mục | Yêu cầu
+1 | Hiệu năng In-app | Độ trễ từ khi sự kiện xảy ra ở backend đến khi In-app notification xuất hiện trên client không vượt quá 2 giây (sử dụng WebSocket/SSE).
+2 | Hiệu năng Email | Email thông báo được gửi trong vòng 30 giây |  sau khi sự kiện được kích hoạt và điều kiện offline được xác nhận.
+3 | Khả năng mở rộng | Hệ thống Message Broker / Notification Service phải chịu tải được 10,000 thông báo/giây trong các đợt campaign lớn.
+4 | Đồng thời | Hỗ trợ tối thiểu 10,000 đăng ký thông báo đồng thời (concurrent WebSocket subscriptions).
+5 | Độ tin cậy Email | Tỷ lệ thành công gửi email (delivery rate) >= 99.5%
+6 | Lưu trữ | Thông báo được lưu trữ tối đa 30 ngày. Sau 30 ngày, cronjob tự động dọn dẹp (cleanup) để tối ưu database.
+7 | Khả năng truy cập | Giao diện thông báo tuân thủ tiêu chuẩn WCAG 2.1 AA (tương phản màu sắc, nhãn screen reader, điều hướng bàn phím).
+8 | Bảo mật | Tùy chọn thông báo được bảo vệ bằng cơ chế xác thực/ủy quyền. Không để lộ nội dung thông báo của người dùng này sang người dùng khác.
+9 | Logging & Audit | Hệ thống ghi log mọi lần gửi thông báo: User ID, Kênh (in-app/email/push), Loại sự kiện, Timestamp, Trạng thái (delivered/failed).
+--- TABLE 28 ---
+STT | Quy tắc | Mô tả
+1 | Đồng bộ đa thiết bị | Nếu người dùng đăng nhập trên nhiều thiết bị (Web + Mobile App), khi xem thông báo trên Web, trạng thái "Đã đọc" phải đồng bộ ngay lập tức trên tất cả thiết bị (badge đỏ biến mất, nền cam chuyển trắng).
+2 | Mất kết nối WebSocket | Nếu kết nối WebSocket bị đứt, client tự động reconnect. Sau khi reconnect thành công, client gọi API fetch lại các thông báo bị nhỡ trong khoảng thời gian rớt mạng.
+3 | Giới hạn badge 30 ngày | Số đếm chưa đọc (Unread Count) trên badge chuông không bao gồm các thông báo đã quá 30 ngày (ngay cả khi chưa đọc).
+4 | DND – Ưu tiên tuyệt đối | Trong thời gian DND, không có ngoại lệ cho Toast và Email (kể cả cảnh báo SLA khẩn cấp), trừ khi Admin thiết lập "Critical Override" ở cấp hệ thống.
+5 | Thứ tự hiển thị thông báo | Danh sách thông báo trong dropdown sắp xếp theo thời gian giảm dần (mới nhất lên trên). Thông báo chưa đọc không được đẩy lên trên thông báo đã đọc có timestamp mới hơn.
+6 | Ngưỡng badge "99+" | Khi số thông báo chưa đọc vượt quá 99, badge hiển thị cố định "99+". Số thực vẫn được lưu chính xác trong hệ thống.
+7 | Phân công lại (Reassignment) | Khi hội thoại bị phân công lại từ Agent A sang Agent B: Agent B nhận thông báo EVT-02 mới; Agent A không nhận thông báo "mất phân công" (trừ khi có yêu cầu nghiệp vụ bổ sung từ PO).
+8 | Người dùng từ chối tất cả | Nếu Global Toggle = OFF, hệ thống không gửi bất kỳ Toast hoặc Email nào. In-app Bell vẫn lưu thông báo để người dùng xem lại.
+--- TABLE 29 ---
+AC | Mô tả | Điều kiện pass
+AC1 | Hiển thị badge khi có tin nhắn mới | Khi khách hàng gửi tin nhắn mới, trong vòng  | 2 giây | , badge trên chuông của Agent được phân công tăng lên 1 đơn vị và thông báo hiển thị nền cam nhạt trong dropdown.
+AC2 | Hiển thị Toast | Toast popup xuất hiện ở góc phải dưới với đúng nội dung (icon, tiêu đề, tóm tắt) trong vòng 2 giây kể từ khi sự kiện xảy ra.
+AC3 | Toast tự ẩn | Toast tự động ẩn sau đúng  | 5 giây |  nếu người dùng không tương tác.
+AC4 | Click Toast → Điều hướng & Đánh dấu đã đọc | Click vào Toast → Agent được điều hướng đến đúng hội thoại; thông báo chuyển sang nền trắng; badge giảm 1 đơn vị.
+AC5 | Đánh dấu tất cả đã đọc | Click "Đánh dấu tất cả đã đọc" → Badge về 0; toàn bộ thông báo trong dropdown chuyển nền trắng.
+AC6 | Lưu cài đặt thông báo | Người dùng thay đổi cài đặt Event × Kênh, click Lưu → Hệ thống hiển thị toast "Cập nhật thành công"; cài đặt được duy trì sau khi đăng xuất/đăng nhập lại.
+AC7 | Gửi email khi offline | Sau 15 phút offline, Agent nhận được email tổng hợp các sự kiện nhỡ  | trong vòng 30 giây | .
+AC8 | DND tự động tắt | Sau khi bật DND "1 giờ", sau đúng 60 phút hệ thống tự động tắt DND và Toast/Email hoạt động trở lại.
+AC9 | Icon DND hiển thị | Khi DND Scheduled đang hoạt động, chuông hiển thị icon trăng lưỡi liềm và thời gian kết thúc DND.
+--- TABLE 30 ---
+AC | Mô tả | Điều kiện pass
+AC10 | Toast bị ngăn khi DND | Khi DND đang bật và có sự kiện mới: Toast không xuất hiện, không phát âm thanh, nhưng badge vẫn tăng và thông báo được lưu vào In-app Bell với nền cam.
+AC11 | Badge "99+" | Khi số thông báo chưa đọc vượt 99, badge hiển thị "99+" thay vì số thực.
+AC12 | Reconnect WebSocket | Khi kết nối WebSocket bị gián đoạn rồi khôi phục, các thông báo bị nhỡ trong thời gian mất kết nối phải được hiển thị và badge cập nhật đúng số lượng.
+AC13 | Đồng bộ đa thiết bị | Người dùng đăng nhập trên 2 thiết bị; xem thông báo trên thiết bị 1 → badge và nền cam trên thiết bị 2 cập nhật tương ứng trong vòng 2 giây.
+AC14 | Xếp hàng Toast | Khi có 5 sự kiện đến đồng thời, hệ thống chỉ hiển thị tối đa 3 Toast cùng lúc; các Toast còn lại xếp hàng chờ.
+AC15 | Gộp email chống spam | Nếu có 5 sự kiện trong 15 phút offline, Agent chỉ nhận 1 email gộp (không phải 5 email riêng).
+AC16 | Email Digest loại trừ Email tức thì | Khi bật Email Digest, Agent không nhận email tức thì; chỉ nhận 1 email tổng hợp vào giờ đã cấu hình.
+AC17 | DND chặn cả SLA Alert | Trong DND, kể cả khi hội thoại vi phạm SLA, không có Toast hoặc Email nào được gửi.
+AC18 | Global Toggle = OFF | Sau khi tắt Global Toggle, Agent không nhận Toast và Email cho bất kỳ sự kiện nào; In-app Bell vẫn ghi nhận và badge vẫn tăng.
+--- TABLE 31 ---
+STT | Cột | Kiểu dữ liệu | Bắt buộc | Mô tả
+1 | id | UUID (PK) | Có | ID duy nhất của thông báo
+2 | user_id | UUID (FK) | Có | ID người dùng nhận thông báo
+3 | event_type | ENUM | Có | Loại sự kiện: NEW_MESSAGE / ASSIGNMENT / MENTION / SLA_ALERT / SYSTEM_ALERT / MODULE_CHANGE
+4 | module | VARCHAR(100) | Không | Tên module nguồn phát sinh sự kiện (VD: "Quy trình", "Kênh gửi tin")
+5 | title | VARCHAR(255) | Có | Tiêu đề thông báo (hiển thị in đậm)
+6 | body | TEXT | Không | Nội dung tóm tắt
+7 | resource_type | VARCHAR(50) | Không | Loại tài nguyên liên kết: conversation / system / module
+8 | resource_id | UUID | Không | ID tài nguyên liên kết (VD: conversation_id)
+9 | is_read | BOOLEAN | Có | Trạng thái đọc – mặc định: false
+10 | read_at | TIMESTAMP | Không | Thời điểm đánh dấu đã đọc
+11 | created_at | TIMESTAMP | Có | Thời điểm tạo thông báo
+12 | expires_at | TIMESTAMP | Có | Thời hạn lưu trữ = created_at + 30 ngày
+--- TABLE 32 ---
+STT | Trường | Kiểu | Mô tả
+1 | id | UUID | ID thông báo gốc (tham chiếu bảng  | notifications | )
+2 | icon_type | STRING | Loại icon hiển thị:  | message |  /  | assignment |  /  | alert |  /  | mention
+3 | title | STRING | Tiêu đề Toast (in đậm, tối đa 1 dòng)
+4 | body | STRING | Nội dung tóm tắt (tối đa 2 dòng)
+5 | action_url | STRING | URL điều hướng khi click vào Toast
+6 | display_at | TIMESTAMP | Thời điểm bắt đầu hiển thị Toast
+7 | auto_hide_ms | INT | Thời gian tự ẩn (mặc định: 5000ms)
+--- TABLE 33 ---
+STT | Cột | Kiểu dữ liệu | Mô tả
+1 | user_id | UUID (PK) | ID người dùng
+2 | global_enabled | BOOLEAN | Global toggle bật/tắt toàn bộ thông báo
+3 | ringtone | VARCHAR(50) | Tên nhạc chuông đã chọn
+4 | new_message_inapp | BOOLEAN | In-app cho tin nhắn mới
+5 | new_message_email | BOOLEAN | Email cho tin nhắn mới
+6 | assignment_inapp | BOOLEAN | In-app cho phân công hội thoại
+7 | assignment_email | BOOLEAN | Email cho phân công hội thoại
+8 | mention_inapp | BOOLEAN | In-app cho @mention
+9 | mention_email | BOOLEAN | Email cho @mention
+10 | sla_alert_inapp | BOOLEAN | In-app cho cảnh báo SLA
+11 | sla_alert_email | BOOLEAN | Email cho cảnh báo SLA
+12 | module_change_inapp | BOOLEAN | In-app cho thay đổi Module/Cấu hình
+13 | module_change_email | BOOLEAN | Email cho thay đổi Module/Cấu hình
+14 | dnd_enabled | BOOLEAN | DND đang bật/tắt
+15 | dnd_until | TIMESTAMP | Thời điểm kết thúc DND quick (null nếu không áp dụng)
+16 | dnd_scheduled_enabled | BOOLEAN | Có bật DND theo lịch trình không
+17 | dnd_schedule | JSONB | Cấu hình lịch: {"start":"22:00","end":"08:00","days":[1,2,3,4,5]}
+18 | email_digest_enabled | BOOLEAN | Có bật Email Digest không
+19 | email_digest_time | TIME | Giờ gửi Email Digest hàng ngày (VD: 08:00)
+--- TABLE 34 ---
+STT | Phụ thuộc | Mô tả
+1 | Hệ thống xác thực | Module xác thực/ủy quyền hiện có để bảo vệ API cài đặt thông báo và đảm bảo dữ liệu per-user.
+2 | WebSocket / SignalR | Hạ tầng real-time hiện có để đẩy thông báo tức thì xuống client (< 2 giây).
+3 | Email Service (SMTP/SendGrid) | Dịch vụ email đã tích hợp. Cần whitelist domain gửi, cấu hình SPF/DKIM/DMARC để tránh spam filter.
+4 | Message Broker (Kafka/RabbitMQ) | Hàng đợi tin nhắn để xử lý khối lượng lớn event không đồng bộ, đảm bảo không mất data khi spike tải.
+5 | Conversation Module | Cung cấp thông tin hội thoại để tạo nội dung thông báo và URL điều hướng.
+6 | User Management Module | Cung cấp thông tin người dùng, trạng thái online/offline, địa chỉ email liên hệ.
+7 | Scheduler / Cron Service | Xử lý: Scheduled DND bật/tắt đúng giờ, gửi Email Digest hàng ngày, cleanup thông báo quá 30 ngày.
+--- TABLE 35 ---
+Tính năng | Lý do
+Push Notification trên Mobile App (FCM/APNs) | Cần story riêng với hạ tầng Mobile Push (Firebase/APNs). Nằm ngoài phạm vi phát triển hiện tại.
+Thông báo qua SMS | Chưa có yêu cầu nghiệp vụ. Sẽ xem xét trong phiên bản sau.
+Phân tích nội dung tin nhắn bằng AI / OCR | Thuộc module AI riêng biệt.
+Critical Override DND cho Admin | Cần xác nhận thêm từ PO: trong DND, cảnh báo SLA khẩn cấp có vượt qua DND không?
+Thông báo "mất phân công" cho Agent A | Cần xác nhận từ PO: khi hội thoại bị lấy lại từ Agent A, có gửi thông báo không?
+Phân trang inbox khi > 10,000 thông báo/30 ngày | Sẽ đánh giá nhu cầu thực tế sau khi go-live.
+Lịch sử thay đổi cài đặt thông báo (Audit log) | Sẽ được xem xét trong phiên bản sau.

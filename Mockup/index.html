@@ -1555,6 +1555,457 @@
             background-color: #2e7d32;
         }
 
+        /* Time Settings Specific Styles */
+        .time-settings-container {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .channel-tabs-header {
+            display: flex;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 16px;
+            gap: 8px;
+        }
+
+        .channel-tab-btn {
+            background: none;
+            border: none;
+            padding: 10px 20px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-muted);
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s;
+            outline: none;
+        }
+
+        .channel-tab-btn:hover {
+            color: var(--text-main);
+        }
+
+        .channel-tab-btn.active {
+            color: var(--primary-color);
+            border-bottom-color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .sub-tabs-wrapper {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .sub-tab-btn {
+            background-color: var(--bg-input);
+            border: 1px solid var(--border-color);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.2s;
+            outline: none;
+        }
+
+        .sub-tab-btn:hover {
+            border-color: var(--border-heavy);
+            color: var(--text-main);
+        }
+
+        .sub-tab-btn.active {
+            background-color: var(--primary-light);
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        /* Business Hours Layout */
+        .bh-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 12px;
+        }
+
+        .bh-table th, .bh-table td {
+            padding: 12px 16px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .disabled-row {
+            opacity: 0.5;
+        }
+
+        .bh-time-input-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .bh-time-input-group span {
+            color: var(--text-muted);
+            font-size: 13px;
+        }
+
+        .bh-time-input {
+            width: 120px;
+        }
+
+        /* Time slot controls for multiple business hours */
+        .btn-slot-control {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: 1px solid var(--primary-color);
+            background-color: transparent;
+            color: var(--primary-color);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            padding: 0;
+            flex-shrink: 0;
+        }
+
+        .btn-slot-control:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-slot-control.btn-remove {
+            border-color: #ef4444;
+            color: #ef4444;
+        }
+
+        .btn-slot-control.btn-remove:hover {
+            background-color: #ef4444;
+            color: white;
+        }
+
+        .btn-slot-control:disabled {
+            opacity: 0.4;
+            pointer-events: none;
+            cursor: not-allowed;
+            border-color: var(--text-muted);
+            color: var(--text-muted);
+        }
+
+        /* Holidays List Styles */
+        .holidays-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 12px;
+        }
+
+        .holiday-list-inline {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding: 12px 16px;
+            background-color: var(--bg-hover);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            min-height: 50px;
+        }
+
+        .holiday-list-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            font-size: 13px;
+        }
+
+        .holiday-list-label {
+            font-weight: 600;
+            color: var(--text-main);
+            min-width: 100px;
+        }
+
+        .holiday-tag-container {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .holiday-tag {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            padding: 4px 10px;
+            border-radius: 14px;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text-main);
+            transition: all 0.2s;
+        }
+
+        .holiday-tag:hover {
+            border-color: var(--primary-border);
+            background-color: var(--primary-light);
+        }
+
+        .holiday-tag-remove {
+            cursor: pointer;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            width: 14px;
+            height: 14px;
+            transition: all 0.15s;
+        }
+
+        .holiday-tag-remove:hover {
+            background-color: #ef4444;
+            color: white;
+        }
+
+        /* Rule Cards Grid */
+        .rules-control-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .rules-cards-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            max-height: 650px;
+            overflow-y: auto;
+            padding-right: 8px;
+        }
+
+        .rule-card {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            box-shadow: var(--shadow-sm);
+            overflow: hidden;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            margin-bottom: 8px;
+        }
+
+        .rule-card:hover {
+            border-color: var(--primary-border);
+            box-shadow: var(--shadow-md);
+        }
+
+        .rule-card-column {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .rule-card-column:first-child {
+            border-right: 1px solid var(--border-color);
+            background-color: rgba(0, 0, 0, 0.01);
+        }
+
+        .rule-card-title-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            border-bottom: 1px dashed var(--border-color);
+            padding-bottom: 10px;
+        }
+
+        .rule-card-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .rule-card-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .rule-scope-row {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 12px;
+            border-bottom: 1px solid rgba(0,0,0,0.03);
+            padding-bottom: 10px;
+        }
+
+        .rule-scope-row:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .rule-scope-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .btn-scope-remove {
+            background: none;
+            border: none;
+            color: #ef4444;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .btn-scope-remove:hover {
+            text-decoration: underline;
+        }
+
+        /* Tags display inside rule scope */
+        .tags-display {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            min-height: 28px;
+            padding: 4px;
+            border-radius: 6px;
+        }
+
+        .scope-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background-color: var(--bg-hover);
+            border: 1px solid var(--border-color);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 500;
+            color: var(--text-main);
+        }
+
+        .scope-tag-remove {
+            cursor: pointer;
+            color: var(--text-muted);
+            border-radius: 50%;
+            width: 12px;
+            height: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 9px;
+        }
+
+        .scope-tag-remove:hover {
+            background-color: #ef4444;
+            color: white;
+        }
+
+        /* Holiday Custom Datepicker Styling */
+        .holiday-calendar-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .calendar-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .calendar-month-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .calendar-nav-btn {
+            background: none;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--text-main);
+            transition: all 0.15s;
+        }
+
+        .calendar-nav-btn:hover {
+            background-color: var(--bg-hover);
+            border-color: var(--border-heavy);
+        }
+
+        .calendar-weekdays {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            text-align: center;
+            font-weight: 600;
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+        }
+
+        .calendar-days-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 4px;
+        }
+
+        .calendar-day-cell {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: all 0.15s;
+            color: var(--text-main);
+        }
+
+        .calendar-day-cell:hover:not(.empty) {
+            background-color: var(--bg-hover);
+        }
+
+        .calendar-day-cell.empty {
+            cursor: default;
+            pointer-events: none;
+        }
+
+        .calendar-day-cell.selected {
+            background-color: var(--primary-color) !important;
+            color: white !important;
+            font-weight: 700;
+        }
+
+        .calendar-day-cell.already-saved {
+            background-color: var(--bg-hover);
+            border: 1px dashed var(--primary-border);
+            color: var(--primary-color);
+        }
+
+        .calendar-day-cell.already-saved:hover {
+            background-color: var(--primary-light);
+        }
+
         /* Mobile Optimization */
         @media (max-width: 768px) {
             .sidebar {
@@ -1650,7 +2101,7 @@
                         
                         <div class="submenu expanded" id="settings-submenu">
                             <div id="sub-menu-users" class="submenu-item active" onclick="navigateSubmenu('users')">Người dùng</div>
-                            <div class="submenu-item" onclick="selectSubmenu(this)">Kênh</div>
+                            <div id="sub-menu-channels" class="submenu-item" onclick="navigateSubmenu('channels')">Kênh</div>
                             <div class="submenu-item" onclick="selectSubmenu(this)">Kho kiến thức</div>
                             <div class="submenu-item" onclick="selectSubmenu(this)">AI</div>
                         </div>
@@ -2035,7 +2486,7 @@
                                     <div style="font-weight: 700; font-size: 13px; color: var(--text-main); text-align: left; padding-left: 10px;">Giờ kết thúc</div>
                                     
                                     <!-- Row 1: Monday -->
-                                    <div style="display: flex; align-items: center; gap: 8px;">
+                                    <div style="display: flex; align-items: center; gap: 8px;" id="dnd-row-1">
                                         <input type="checkbox" id="dnd-day-enable-1" class="pref-checkbox" checked onchange="toggleScheduleRow(1)">
                                         <label for="dnd-day-enable-1" style="font-size: 13px; font-weight: 500; cursor: pointer; color: var(--text-main);">Thứ 2:</label>
                                     </div>
@@ -2047,7 +2498,7 @@
                                     </div>
                                     
                                     <!-- Row 2: Tuesday -->
-                                    <div style="display: flex; align-items: center; gap: 8px;">
+                                    <div style="display: flex; align-items: center; gap: 8px;" id="dnd-row-2">
                                         <input type="checkbox" id="dnd-day-enable-2" class="pref-checkbox" checked onchange="toggleScheduleRow(2)">
                                         <label for="dnd-day-enable-2" style="font-size: 13px; font-weight: 500; cursor: pointer; color: var(--text-main);">Thứ 3:</label>
                                     </div>
@@ -2059,7 +2510,7 @@
                                     </div>
                                     
                                     <!-- Row 3: Wednesday -->
-                                    <div style="display: flex; align-items: center; gap: 8px;">
+                                    <div style="display: flex; align-items: center; gap: 8px;" id="dnd-row-3">
                                         <input type="checkbox" id="dnd-day-enable-3" class="pref-checkbox" checked onchange="toggleScheduleRow(3)">
                                         <label for="dnd-day-enable-3" style="font-size: 13px; font-weight: 500; cursor: pointer; color: var(--text-main);">Thứ 4:</label>
                                     </div>
@@ -2071,7 +2522,7 @@
                                     </div>
                                     
                                     <!-- Row 4: Thursday -->
-                                    <div style="display: flex; align-items: center; gap: 8px;">
+                                    <div style="display: flex; align-items: center; gap: 8px;" id="dnd-row-4">
                                         <input type="checkbox" id="dnd-day-enable-4" class="pref-checkbox" checked onchange="toggleScheduleRow(4)">
                                         <label for="dnd-day-enable-4" style="font-size: 13px; font-weight: 500; cursor: pointer; color: var(--text-main);">Thứ 5:</label>
                                     </div>
@@ -2083,7 +2534,7 @@
                                     </div>
                                     
                                     <!-- Row 5: Friday -->
-                                    <div style="display: flex; align-items: center; gap: 8px;">
+                                    <div style="display: flex; align-items: center; gap: 8px;" id="dnd-row-5">
                                         <input type="checkbox" id="dnd-day-enable-5" class="pref-checkbox" checked onchange="toggleScheduleRow(5)">
                                         <label for="dnd-day-enable-5" style="font-size: 13px; font-weight: 500; cursor: pointer; color: var(--text-main);">Thứ 6:</label>
                                     </div>
@@ -2095,7 +2546,7 @@
                                     </div>
                                     
                                     <!-- Row 6: Saturday -->
-                                    <div style="display: flex; align-items: center; gap: 8px;">
+                                    <div style="display: flex; align-items: center; gap: 8px;" id="dnd-row-6">
                                         <input type="checkbox" id="dnd-day-enable-6" class="pref-checkbox" onchange="toggleScheduleRow(6)">
                                         <label for="dnd-day-enable-6" style="font-size: 13px; font-weight: 500; cursor: pointer; color: var(--text-main);">Thứ 7:</label>
                                     </div>
@@ -2107,7 +2558,7 @@
                                     </div>
                                     
                                     <!-- Row 7: Sunday -->
-                                    <div style="display: flex; align-items: center; gap: 8px;">
+                                    <div style="display: flex; align-items: center; gap: 8px;" id="dnd-row-7">
                                         <input type="checkbox" id="dnd-day-enable-7" class="pref-checkbox" onchange="toggleScheduleRow(7)">
                                         <label for="dnd-day-enable-7" style="font-size: 13px; font-weight: 500; cursor: pointer; color: var(--text-main);">Chủ nhật:</label>
                                     </div>
@@ -2151,6 +2602,135 @@
 
                 </div>
 
+                <!-- VIEW 3: CHANNELS & TIME SETTINGS -->
+                <div id="view-channels" class="view-panel" style="display: none;">
+                    
+                    <!-- Channel settings breadcrumb or header is updated in navigateSubmenu, so we just have SPA layout -->
+                    <div class="channel-tabs-header">
+                        <button class="channel-tab-btn" id="btn-tab-channels-list" onclick="switchChannelMainTab(this, 'channels-list')">Kênh</button>
+                        <button class="channel-tab-btn" id="btn-tab-channels-groups" onclick="switchChannelMainTab(this, 'channels-groups')">Nhóm kênh</button>
+                        <button class="channel-tab-btn active" id="btn-tab-channels-timeout" onclick="switchChannelMainTab(this, 'channels-timeout')">Thời gian chờ</button>
+                    </div>
+
+                    <!-- Main Tab Content: Channels List (Mockup) -->
+                    <div id="tab-channels-list-content" class="settings-card" style="display: none; text-align: center; padding: 48px; color: var(--text-muted);">
+                        <svg width="48" height="48" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="margin-bottom: 12px; opacity: 0.5;">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 100-6 3 3 0 000 6z"></path>
+                        </svg>
+                        <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 4px; color: var(--text-main);">Tính năng kết nối Kênh liên lạc</h3>
+                        <p style="font-size: 13px;">Giao diện quản lý các kênh kết nối Zalo OA, Facebook Page, Webchat, Viber...</p>
+                    </div>
+
+                    <!-- Main Tab Content: Channels Groups (Mockup) -->
+                    <div id="tab-channels-groups-content" class="settings-card" style="display: none; text-align: center; padding: 48px; color: var(--text-muted);">
+                        <svg width="48" height="48" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="margin-bottom: 12px; opacity: 0.5;">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                        </svg>
+                        <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 4px; color: var(--text-main);">Tính năng quản lý Nhóm Kênh</h3>
+                        <p style="font-size: 13px;">Giao diện quản lý gom nhóm các kênh liên lạc phục vụ điều hướng tự động hoặc phân quyền.</p>
+                    </div>
+
+                    <!-- Main Tab Content: Timeout Settings (SRS Time Settings) -->
+                    <div id="tab-channels-timeout-content" class="time-settings-container">
+                        
+                        <div class="sub-tabs-wrapper">
+                            <button id="btn-subtab-config" class="sub-tab-btn active" onclick="switchTimeSubtab('config')">Cấu hình</button>
+                            <button id="btn-subtab-rules" class="sub-tab-btn" onclick="switchTimeSubtab('rules')">Quy tắc</button>
+                        </div>
+
+                        <!-- Subtab 1: Configuration -->
+                        <div id="subtab-config" class="time-settings-container" style="gap: 20px;">
+                            
+                            <!-- Section 1: Timezone -->
+                            <div class="settings-card">
+                                <h3 style="font-size: 15px; font-weight: 700; margin-bottom: 4px;">Múi giờ hệ thống</h3>
+                                <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px;">Thiết lập và áp dụng múi giờ tiêu chuẩn của toàn hệ thống</p>
+                                
+                                <div style="display: flex; gap: 16px; flex-wrap: wrap;">
+                                    <input type="hidden" id="config-country" value="VN">
+                                    <div class="form-group" style="width: 320px;">
+                                        <label class="form-label">Múi giờ *</label>
+                                        <select id="config-timezone" class="form-control">
+                                            <!-- Will be loaded dynamically -->
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Section 2: Weekly Business Hours -->
+                            <div class="settings-card">
+                                <h3 style="font-size: 15px; font-weight: 700; margin-bottom: 4px;">Lịch làm việc tiêu chuẩn trong tuần</h3>
+                                <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px;">Chọn ngày làm việc và định nghĩa khung giờ hoạt động chính thức (Business Hours) của bạn</p>
+                                
+                                <div id="business-hours-grid-container" style="display: grid; grid-template-columns: 140px 140px 220px; gap: 12px 24px; align-items: center; max-width: 520px; margin-top: 10px;">
+                                    <!-- Sẽ được render động bằng JavaScript -->
+                                </div>
+                            </div>
+
+                            <!-- Section 3: Holidays -->
+                            <div class="settings-card">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                                    <div>
+                                        <h3 style="font-size: 15px; font-weight: 700; margin-bottom: 4px;">Ngày nghỉ lễ, Tết (Holidays)</h3>
+                                        <p style="font-size: 13px; color: var(--text-muted);">Cấu hình danh sách ngày nghỉ lễ đặc biệt trong năm để kích hoạt trạng thái Ngoài giờ làm việc</p>
+                                    </div>
+                                    <button class="btn btn-primary" onclick="openHolidayDatePicker()" style="display: flex; align-items: center; gap: 6px;">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                                        Thêm ngày
+                                    </button>
+                                </div>
+
+                                <div class="holiday-list-inline">
+                                    <!-- Row 1: Lặp lại -->
+                                    <div class="holiday-list-row">
+                                        <span class="holiday-list-label">Lặp lại:</span>
+                                        <div class="holiday-tag-container" id="holiday-repeat-container">
+                                            <!-- Dynamically filled tags -->
+                                        </div>
+                                    </div>
+                                    <!-- Row 2: Trong năm -->
+                                    <div class="holiday-list-row" style="margin-top: 10px; border-top: 1px dashed var(--border-color); padding-top: 10px;">
+                                        <span class="holiday-list-label">Trong năm:</span>
+                                        <div class="holiday-tag-container" id="holiday-nonrepeat-container">
+                                            <!-- Dynamically filled tags -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Config bottom actions -->
+                            <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 8px;">
+                                <button class="btn btn-secondary" onclick="resetConfigTab()">Hủy</button>
+                                <button class="btn btn-primary" onclick="saveConfigTab()">Lưu cấu hình</button>
+                            </div>
+
+                        </div>
+
+                        <!-- Subtab 2: Rules list -->
+                        <div id="subtab-rules" class="time-settings-container" style="display: none; gap: 20px;">
+                            <div class="rules-control-bar">
+                                <div>
+                                    <h3 style="font-size: 15px; font-weight: 700; margin-bottom: 4px;">Quy tắc thời gian theo kênh</h3>
+                                    <p style="font-size: 13px; color: var(--text-muted);">Tạo các quy tắc đóng hội thoại tự động, SLA và thời gian phân công lại riêng cho từng kênh / tài khoản</p>
+                                </div>
+                                <button class="btn btn-primary" onclick="createNewRuleCard()" style="display: flex; align-items: center; gap: 6px;">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                                    Tạo mới +
+                                </button>
+                            </div>
+
+                            <!-- Cards Stack -->
+                            <div class="rules-cards-stack" id="rules-cards-container">
+                                <!-- Cards filled dynamically -->
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
             </div>
         </main>
     </div>
@@ -2190,6 +2770,51 @@
             <div class="modal-footer">
                 <button class="btn btn-secondary" onclick="closeEditModal()">Hủy bỏ</button>
                 <button class="btn btn-primary" onclick="saveUserChanges()">Lưu thay đổi</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Holiday Date Picker Modal -->
+    <div class="modal-overlay" id="holiday-modal">
+        <div class="modal-card" style="max-width: 400px;">
+            <div class="modal-header">
+                <h3 class="modal-title">Thêm ngày nghỉ lễ</h3>
+                <button class="modal-close" onclick="closeHolidayDatePicker()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="holiday-calendar-container">
+                    <div class="calendar-nav">
+                        <button class="calendar-nav-btn" onclick="prevHolidayMonth()">&lt;</button>
+                        <span class="calendar-month-title" id="holiday-calendar-title">Tháng 06 / 2026</span>
+                        <button class="calendar-nav-btn" onclick="nextHolidayMonth()">&gt;</button>
+                    </div>
+                    
+                    <div class="calendar-weekdays">
+                        <div>T2</div><div>T3</div><div>T4</div><div>T5</div><div>T6</div><div>T7</div><div>CN</div>
+                    </div>
+                    
+                    <div class="calendar-days-grid" id="holiday-calendar-days">
+                        <!-- Loaded dynamically via JS -->
+                    </div>
+                </div>
+                
+                <div style="margin-top: 16px; border-top: 1px dashed var(--border-color); padding-top: 16px;">
+                    <label class="form-label" style="margin-bottom: 8px; display: block;">Tần suất lặp lại *</label>
+                    <div class="dnd-radio-group">
+                        <label class="radio-label">
+                            <input type="radio" name="holiday-repeat" value="yearly" checked> Lặp lại hàng năm
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="holiday-repeat" value="once"> Không lặp lại
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeHolidayDatePicker()">Hủy bỏ</button>
+                <button class="btn btn-primary" onclick="saveSelectedHolidays()">Lưu ngày</button>
             </div>
         </div>
     </div>
@@ -2444,6 +3069,7 @@
         // View panels
         const viewUsers = document.getElementById('view-users');
         const viewNotifSettings = document.getElementById('view-notification-settings');
+        const viewChannels = document.getElementById('view-channels');
         const breadcrumbCurrentView = document.getElementById('breadcrumb-current-view');
 
         // Event triggering details preset
@@ -2478,6 +3104,7 @@
         window.addEventListener('DOMContentLoaded', () => {
             renderNotifications();
             loadNotificationPreferencesUI();
+            initTimeSettings();
             
             // Event listener to close dropdowns when clicking outside
             window.addEventListener('click', (e) => {
@@ -2491,6 +3118,12 @@
                 const profileCard = document.querySelector('.sidebar-profile');
                 if (profilePopup && profilePopup.style.display === 'block' && !profileCard.contains(e.target) && !profilePopup.contains(e.target)) {
                     profilePopup.style.display = 'none';
+                }
+                
+                // Close holiday date picker if click outside modal-card
+                const holidayModal = document.getElementById('holiday-modal');
+                if (holidayModal && holidayModal.classList.contains('open') && e.target === holidayModal) {
+                    closeHolidayDatePicker();
                 }
             });
         });
@@ -2540,6 +3173,7 @@
                 document.getElementById('sub-menu-users').classList.add('active');
                 viewUsers.style.display = 'flex';
                 viewNotifSettings.style.display = 'none';
+                viewChannels.style.display = 'none';
                 if (parentBreadcrumb) parentBreadcrumb.innerText = 'Cài đặt';
                 breadcrumbCurrentView.innerText = 'Người dùng';
             } else if (viewName === 'notif-settings') {
@@ -2547,8 +3181,16 @@
                 if (notifSubMenu) notifSubMenu.classList.add('active');
                 viewUsers.style.display = 'none';
                 viewNotifSettings.style.display = 'flex';
+                viewChannels.style.display = 'none';
                 if (parentBreadcrumb) parentBreadcrumb.innerText = 'Người dùng';
                 breadcrumbCurrentView.innerText = 'Cài đặt tài khoản';
+            } else if (viewName === 'channels') {
+                document.getElementById('sub-menu-channels').classList.add('active');
+                viewUsers.style.display = 'none';
+                viewNotifSettings.style.display = 'none';
+                viewChannels.style.display = 'flex';
+                if (parentBreadcrumb) parentBreadcrumb.innerText = 'Cài đặt';
+                breadcrumbCurrentView.innerText = 'Kênh';
             }
             
             // Close sidebar on mobile
@@ -3106,12 +3748,21 @@
                     enableChk.checked = dayData.enabled;
                     const startInput = document.getElementById(`pref-dnd-start-${i}`);
                     const endInput = document.getElementById(`pref-dnd-end-${i}`);
+                    const row = document.getElementById(`dnd-row-${i}`);
                     
                     startInput.value = dayData.start;
                     endInput.value = dayData.end;
                     
                     startInput.disabled = !dayData.enabled;
                     endInput.disabled = !dayData.enabled;
+                    
+                    if (row) {
+                        if (!dayData.enabled) {
+                            row.classList.add('disabled-row');
+                        } else {
+                            row.classList.remove('disabled-row');
+                        }
+                    }
                 }
             }
             
@@ -3264,9 +3915,18 @@
             const isChecked = document.getElementById(`dnd-day-enable-${dayIndex}`).checked;
             const startInput = document.getElementById(`pref-dnd-start-${dayIndex}`);
             const endInput = document.getElementById(`pref-dnd-end-${dayIndex}`);
+            const row = document.getElementById(`dnd-row-${dayIndex}`);
             
             startInput.disabled = !isChecked;
             endInput.disabled = !isChecked;
+            
+            if (row) {
+                if (!isChecked) {
+                    row.classList.add('disabled-row');
+                } else {
+                    row.classList.remove('disabled-row');
+                }
+            }
             
             saveScheduleFields();
         }
@@ -3644,8 +4304,919 @@
             
             prototypeState.emails.push(newEmail);
             
-            // Play alert sound/toast in email client preview
-            showToast('Hộp thư email của bạn đã nhận được thông báo mới!');
+        }
+
+        // ========================================================================================
+        // JS LOGIC FOR TIME SETTINGS & CHANNEL RULES (SRS TIME SETTINGS)
+        // =========================================================================
+
+        // Mock channels and accounts data
+        const channelsData = {
+            'Zalo': ['Zalo OA 01', 'Zalo OA Gapit', 'Zalo OA Demo'],
+            'Facebook': ['Facebook Page 01', 'Facebook Page 02', 'Facebook OA Support'],
+            'Telegram': ['Telegram Support Bot', 'Telegram Marketing Bot'],
+            'Webchat': ['Webchat Live 01', 'Webchat Live 02'],
+            'Email': ['Email Support', 'Email Sales', 'Email Contact']
+        };
+
+        const timezonePresets = {
+            'VN': ['(GMT+07:00) Bangkok, Hanoi, Jakarta'],
+            'US': ['(GMT-05:00) Eastern Time (US & Canada)', '(GMT-06:00) Central Time (US & Canada)', '(GMT-08:00) Pacific Time (US & Canada)'],
+            'JP': ['(GMT+09:00) Osaka, Sapporo, Tokyo'],
+            'SG': ['(GMT+08:00) Singapore']
+        };
+
+        // Time Settings States
+        let timeSettingsState = {
+            country: 'VN',
+            timezone: '(GMT+07:00) Bangkok, Hanoi, Jakarta',
+            businessHours: {
+                1: { enabled: true, slots: [{ start: '08:00', end: '18:00' }] }, // Mon
+                2: { enabled: true, slots: [{ start: '08:00', end: '18:00' }] }, // Tue
+                3: { enabled: true, slots: [{ start: '08:00', end: '18:00' }] }, // Wed
+                4: { enabled: true, slots: [{ start: '08:00', end: '18:00' }] }, // Thu
+                5: { enabled: true, slots: [{ start: '08:00', end: '18:00' }] }, // Fri
+                6: { enabled: true, slots: [{ start: '08:00', end: '12:00' }] }, // Sat
+                7: { enabled: false, slots: [{ start: '08:00', end: '18:00' }] }  // Sun
+            },
+            holidays: {
+                repeat: ['01/01', '30/04', '01/05', '02/09'], // DD/MM
+                once: ['23/04/2026', '08/07/2026', '09/07/2026', '10/07/2026', '11/07/2026', '19/11/2026'] // DD/MM/YYYY
+            }
+        };
+
+        let savedTimeSettingsState = JSON.parse(JSON.stringify(timeSettingsState));
+
+        let rulesState = [
+            {
+                id: 'rule_1',
+                scope: [
+                    { channel: 'Zalo', accounts: ['Zalo OA 01', 'Zalo OA Gapit'] },
+                    { channel: 'Facebook', accounts: ['Facebook Page 01'] }
+                ],
+                settings: {
+                    closeTime: '24:00:00',
+                    closeCondition: 'last_customer_msg',
+                    firstResponseSLA: '00:15:00',
+                    routingTimeout: '00:05:00'
+                }
+            },
+            {
+                id: 'rule_2',
+                scope: [
+                    { channel: 'Telegram', accounts: ['Telegram Support Bot'] }
+                ],
+                settings: {
+                    closeTime: '48:00:00',
+                    closeCondition: 'last_agent_msg',
+                    firstResponseSLA: '00:30:00',
+                    routingTimeout: '00:10:00'
+                }
+            }
+        ];
+
+        // Holiday calendar variables
+        let calendarYear = 2026;
+        let calendarMonth = 5; // June (0-indexed)
+        let selectedCalendarDates = new Set(); // store as "YYYY-MM-DD" or "MM-DD" (depending on repeat)
+
+        // Initialize Time Settings
+        function initTimeSettings() {
+            // Load countries timezone
+            handleCountryChange();
+            
+            // Load Weekly Business Hours
+            loadWeeklyBusinessHoursUI();
+            
+            // Render Holiday list
+            renderHolidaysList();
+
+            // Load Rule Cards
+            renderRuleCards();
+        }
+
+        // 1. COUNTRY & TIMEZONE LOGIC
+        function handleCountryChange() {
+            const timezoneSelect = document.getElementById('config-timezone');
+            if (!timezoneSelect) return;
+            timezoneSelect.innerHTML = '';
+            
+            // Populate all timezones
+            Object.keys(timezonePresets).forEach(c => {
+                timezonePresets[c].forEach(tz => {
+                    const option = document.createElement('option');
+                    option.value = tz;
+                    option.innerText = tz;
+                    timezoneSelect.appendChild(option);
+                });
+            });
+            
+            timezoneSelect.value = timeSettingsState.timezone || '(GMT+07:00) Bangkok, Hanoi, Jakarta';
+        }
+
+        // 2. WEEKLY BUSINESS HOURS LOGIC
+        function loadWeeklyBusinessHoursUI() {
+            renderWeeklyBusinessHoursUI();
+        }
+
+        function renderWeeklyBusinessHoursUI() {
+            const container = document.getElementById('business-hours-grid-container');
+            if (!container) return;
+
+            const bh = timeSettingsState.businessHours;
+            const dayNames = {
+                1: 'Thứ 2:',
+                2: 'Thứ 3:',
+                3: 'Thứ 4:',
+                4: 'Thứ 5:',
+                5: 'Thứ 6:',
+                6: 'Thứ 7:',
+                7: 'Chủ nhật:'
+            };
+
+            let html = `
+                <div style="font-weight: 700; font-size: 13px; color: var(--text-main);">Ngày áp dụng</div>
+                <div style="font-weight: 700; font-size: 13px; color: var(--text-main); text-align: left; padding-left: 10px;">Giờ bắt đầu</div>
+                <div style="font-weight: 700; font-size: 13px; color: var(--text-main); text-align: left; padding-left: 10px;">Giờ kết thúc</div>
+            `;
+
+            for (let i = 1; i <= 7; i++) {
+                const dayData = bh[i];
+                const slotsCount = dayData.slots.length;
+
+                for (let s = 0; s < slotsCount; s++) {
+                    const slot = dayData.slots[s];
+
+                    // Column 1: Checkbox & Label (only on first slot)
+                    if (s === 0) {
+                        const disabledClass = !dayData.enabled ? ' disabled-row' : '';
+                        html += `
+                            <div style="display: flex; align-items: center; gap: 8px;" id="bh-row-${i}" class="${disabledClass}">
+                                <input type="checkbox" id="bh-chk-${i}" class="pref-checkbox" ${dayData.enabled ? 'checked' : ''} onchange="toggleBHDay(${i})">
+                                <label for="bh-chk-${i}" style="font-size: 13px; font-weight: 500; cursor: pointer; color: var(--text-main);">${dayNames[i]}</label>
+                            </div>
+                        `;
+                    } else {
+                        // Empty placeholder for additional slots
+                        html += `<div></div>`;
+                    }
+
+                    // Column 2: Giờ bắt đầu
+                    html += `
+                        <div>
+                            <input type="time" id="bh-start-${i}-${s}" class="form-control bh-time-input" value="${slot.start}" 
+                                   style="height: 32px; padding: 4px 8px; font-size: 13px;" 
+                                   ${!dayData.enabled ? 'disabled' : ''} 
+                                   onchange="updateBHTimeValue(${i}, ${s}, 'start', this.value)">
+                        </div>
+                    `;
+
+                    // Column 3: Giờ kết thúc + Buttons
+                    const showPlus = dayData.enabled && slotsCount < 3 && s === 0;
+                    const showMinus = s > 0;
+                    
+                    let buttonHtml = '';
+                    if (showPlus) {
+                        buttonHtml = `
+                            <button type="button" class="btn-slot-control btn-add" title="Cộng thêm khung giờ" onclick="addBHTimeSlot(${i})">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                            </button>
+                        `;
+                    } else if (showMinus) {
+                        buttonHtml = `
+                            <button type="button" class="btn-slot-control btn-remove" title="Xóa khung giờ" onclick="removeBHTimeSlot(${i}, ${s})" ${!dayData.enabled ? 'disabled' : ''}>
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                            </button>
+                        `;
+                    }
+
+                    html += `
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <input type="time" id="bh-end-${i}-${s}" class="form-control bh-time-input" value="${slot.end}" 
+                                   style="height: 32px; padding: 4px 8px; font-size: 13px;" 
+                                   ${!dayData.enabled ? 'disabled' : ''} 
+                                   onchange="updateBHTimeValue(${i}, ${s}, 'end', this.value)">
+                            ${buttonHtml}
+                        </div>
+                    `;
+                }
+            }
+
+            container.innerHTML = html;
+        }
+
+        function toggleBHDay(dayIndex) {
+            const chk = document.getElementById(`bh-chk-${dayIndex}`);
+            if (!chk) return;
+            
+            timeSettingsState.businessHours[dayIndex].enabled = chk.checked;
+            renderWeeklyBusinessHoursUI();
+        }
+
+        function addBHTimeSlot(dayIndex) {
+            const dayData = timeSettingsState.businessHours[dayIndex];
+            if (dayData.slots.length >= 3) return;
+
+            // Generate a sensible default based on existing slots
+            let startVal = '13:00';
+            let endVal = '17:00';
+            
+            if (dayData.slots.length > 0) {
+                const lastSlot = dayData.slots[dayData.slots.length - 1];
+                // Try to make the next slot start after the end of last slot
+                const [h, m] = lastSlot.end.split(':').map(Number);
+                const nextHour = Math.min(23, h + 1);
+                const nextEndHour = Math.min(23, nextHour + 4);
+                
+                startVal = `${String(nextHour).padStart(2, '0')}:00`;
+                endVal = `${String(nextEndHour).padStart(2, '0')}:00`;
+            }
+
+            dayData.slots.push({ start: startVal, end: endVal });
+            renderWeeklyBusinessHoursUI();
+        }
+
+        function removeBHTimeSlot(dayIndex, slotIndex) {
+            const dayData = timeSettingsState.businessHours[dayIndex];
+            if (slotIndex > 0) {
+                dayData.slots.splice(slotIndex, 1);
+                renderWeeklyBusinessHoursUI();
+            }
+        }
+
+        // Keep the in-memory state updated immediately on value changes
+        function updateBHTimeValue(dayIndex, slotIndex, field, value) {
+            const dayData = timeSettingsState.businessHours[dayIndex];
+            if (dayData && dayData.slots[slotIndex]) {
+                dayData.slots[slotIndex][field] = value;
+            }
+        }
+
+        // 3. HOLIDAYS LIST RENDERING
+        function renderHolidaysList() {
+            const repeatContainer = document.getElementById('holiday-repeat-container');
+            const nonrepeatContainer = document.getElementById('holiday-nonrepeat-container');
+            
+            repeatContainer.innerHTML = '';
+            nonrepeatContainer.innerHTML = '';
+            
+            // Render Repeating holidays
+            timeSettingsState.holidays.repeat.forEach(dateStr => {
+                const tag = document.createElement('span');
+                tag.className = 'holiday-tag';
+                tag.innerHTML = `
+                    ${dateStr}
+                    <span class="holiday-tag-remove" onclick="removeHoliday('${dateStr}', true)" title="Hủy ngày nghỉ">×</span>
+                `;
+                repeatContainer.appendChild(tag);
+            });
+            if (timeSettingsState.holidays.repeat.length === 0) {
+                repeatContainer.innerHTML = '<span style="color: var(--text-muted); font-size: 12px; font-style: italic;">Chưa có ngày nghỉ</span>';
+            }
+            
+            // Format Non-repeating holidays to show ranges if consecutive
+            const formattedNonRepeat = formatHolidayRanges(timeSettingsState.holidays.once);
+            formattedNonRepeat.forEach(item => {
+                const tag = document.createElement('span');
+                tag.className = 'holiday-tag';
+                tag.innerHTML = `
+                    ${item.display}
+                    <span class="holiday-tag-remove" onclick="removeHolidayRange(${JSON.stringify(item.dates).replace(/"/g, '\'')})" title="Hủy ngày nghỉ">×</span>
+                `;
+                nonrepeatContainer.appendChild(tag);
+            });
+            if (timeSettingsState.holidays.once.length === 0) {
+                nonrepeatContainer.innerHTML = '<span style="color: var(--text-muted); font-size: 12px; font-style: italic;">Chưa có ngày nghỉ</span>';
+            }
+        }
+
+        // Format consecutive dates (DD/MM/YYYY) into ranges like DD-DD/MM/YYYY or DD/MM/YYYY
+        function formatHolidayRanges(datesArray) {
+            if (datesArray.length === 0) return [];
+            
+            // Parse dates into objects: { day, month, year, dateObj, origStr }
+            const parsed = datesArray.map(str => {
+                const parts = str.split('/');
+                const d = parseInt(parts[0]);
+                const m = parseInt(parts[1]) - 1;
+                const y = parseInt(parts[2]);
+                return {
+                    day: d,
+                    month: m,
+                    year: y,
+                    dateObj: new Date(y, m, d),
+                    origStr: str
+                };
+            });
+            
+            // Sort by date value
+            parsed.sort((a, b) => a.dateObj - b.dateObj);
+            
+            const results = [];
+            let i = 0;
+            
+            while (i < parsed.length) {
+                let rangeStart = parsed[i];
+                let rangeEnd = parsed[i];
+                let currentDates = [parsed[i].origStr];
+                
+                while (i + 1 < parsed.length) {
+                    const next = parsed[i + 1];
+                    const diffTime = Math.abs(next.dateObj - rangeEnd.dateObj);
+                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                    
+                    // If next day is consecutive, in the same month and year
+                    if (diffDays === 1 && next.month === rangeEnd.month && next.year === rangeEnd.year) {
+                        rangeEnd = next;
+                        currentDates.push(next.origStr);
+                        i++;
+                    } else {
+                        break;
+                    }
+                }
+                
+                let displayStr = '';
+                const formatDay = d => String(d).padStart(2, '0');
+                const formatMonth = m => String(m + 1).padStart(2, '0');
+                
+                if (currentDates.length > 1) {
+                    displayStr = `${formatDay(rangeStart.day)}-${formatDay(rangeEnd.day)}/${formatMonth(rangeStart.month)}/${rangeStart.year}`;
+                } else {
+                    displayStr = rangeStart.origStr;
+                }
+                
+                results.push({
+                    display: displayStr,
+                    dates: currentDates
+                });
+                
+                i++;
+            }
+            
+            return results;
+        }
+
+        function removeHoliday(dateStr, isRepeat) {
+            if (isRepeat) {
+                timeSettingsState.holidays.repeat = timeSettingsState.holidays.repeat.filter(d => d !== dateStr);
+            } else {
+                timeSettingsState.holidays.once = timeSettingsState.holidays.once.filter(d => d !== dateStr);
+            }
+            renderHolidaysList();
+            showToast(`Đã xóa ngày nghỉ: ${dateStr}`);
+        }
+
+        function removeHolidayRange(datesList) {
+            timeSettingsState.holidays.once = timeSettingsState.holidays.once.filter(d => !datesList.includes(d));
+            renderHolidaysList();
+            showToast('Đã xóa nhóm ngày nghỉ');
+        }
+
+        // 4. HOLIDAY DATE PICKER DIALOG
+        function openHolidayDatePicker() {
+            selectedCalendarDates.clear();
+            calendarYear = 2026;
+            calendarMonth = 5; // default June 2026
+            
+            const modal = document.getElementById('holiday-modal');
+            modal.classList.add('open');
+            renderHolidayCalendar();
+        }
+
+        function closeHolidayDatePicker() {
+            const modal = document.getElementById('holiday-modal');
+            modal.classList.remove('open');
+        }
+
+        function prevHolidayMonth() {
+            calendarMonth--;
+            if (calendarMonth < 0) {
+                calendarMonth = 11;
+                calendarYear--;
+            }
+            renderHolidayCalendar();
+        }
+
+        function nextHolidayMonth() {
+            calendarMonth++;
+            if (calendarMonth > 11) {
+                calendarMonth = 0;
+                calendarYear++;
+            }
+            renderHolidayCalendar();
+        }
+
+        function renderHolidayCalendar() {
+            const title = document.getElementById('holiday-calendar-title');
+            const grid = document.getElementById('holiday-calendar-days');
+            const repeatType = document.querySelector('input[name="holiday-repeat"]:checked').value;
+            
+            grid.innerHTML = '';
+            
+            const monthNames = ["Tháng 01", "Tháng 02", "Tháng 03", "Tháng 04", "Tháng 05", "Tháng 06", "Tháng 07", "Tháng 08", "Tháng 09", "Tháng 10", "Tháng 11", "Tháng 12"];
+            title.innerText = `${monthNames[calendarMonth]} / ${calendarYear}`;
+            
+            // Get first day of month (Monday - Sunday offset)
+            let firstDay = new Date(calendarYear, calendarMonth, 1).getDay(); // 0 is Sunday, 1 is Monday...
+            // Shift to Monday-first (0 = Monday, 6 = Sunday)
+            let dayOffset = firstDay === 0 ? 6 : firstDay - 1;
+            
+            // Total days in month
+            let totalDays = new Date(calendarYear, calendarMonth + 1, 0).getDate();
+            
+            // Fill empty cells before first day
+            for (let i = 0; i < dayOffset; i++) {
+                const cell = document.createElement('div');
+                cell.className = 'calendar-day-cell empty';
+                grid.appendChild(cell);
+            }
+            
+            // Fill month days
+            for (let d = 1; d <= totalDays; d++) {
+                const cell = document.createElement('div');
+                cell.className = 'calendar-day-cell';
+                cell.innerText = d;
+                
+                const formatDay = String(d).padStart(2, '0');
+                const formatMonth = String(calendarMonth + 1).padStart(2, '0');
+                
+                const dateKeyOnce = `${formatDay}/${formatMonth}/${calendarYear}`;
+                const dateKeyRepeat = `${formatDay}/${formatMonth}`;
+                
+                // Check if already saved
+                let isSaved = false;
+                if (repeatType === 'yearly') {
+                    isSaved = timeSettingsState.holidays.repeat.includes(dateKeyRepeat);
+                } else {
+                    isSaved = timeSettingsState.holidays.once.includes(dateKeyOnce);
+                }
+                
+                if (isSaved) {
+                    cell.classList.add('already-saved');
+                }
+                
+                // Check if selected in current picker session
+                const sessionKey = repeatType === 'yearly' ? dateKeyRepeat : dateKeyOnce;
+                if (selectedCalendarDates.has(sessionKey)) {
+                    cell.classList.add('selected');
+                }
+                
+                cell.onclick = () => {
+                    if (cell.classList.contains('already-saved')) {
+                        // Toggle deselect already saved holiday
+                        if (repeatType === 'yearly') {
+                            timeSettingsState.holidays.repeat = timeSettingsState.holidays.repeat.filter(x => x !== dateKeyRepeat);
+                        } else {
+                            timeSettingsState.holidays.once = timeSettingsState.holidays.once.filter(x => x !== dateKeyOnce);
+                        }
+                        cell.classList.remove('already-saved');
+                        showToast(`Đã bỏ chọn ngày nghỉ: ${sessionKey}`);
+                    } else {
+                        // Toggle select in current session
+                        if (selectedCalendarDates.has(sessionKey)) {
+                            selectedCalendarDates.delete(sessionKey);
+                            cell.classList.remove('selected');
+                        } else {
+                            selectedCalendarDates.add(sessionKey);
+                            cell.classList.add('selected');
+                        }
+                    }
+                };
+                
+                grid.appendChild(cell);
+            }
+            
+            // Re-render when radio repeat changes to draw correct dates
+            document.querySelectorAll('input[name="holiday-repeat"]').forEach(radio => {
+                radio.onchange = () => {
+                    selectedCalendarDates.clear();
+                    renderHolidayCalendar();
+                };
+            });
+        }
+
+        function saveSelectedHolidays() {
+            const repeatType = document.querySelector('input[name="holiday-repeat"]:checked').value;
+            
+            selectedCalendarDates.forEach(dateStr => {
+                if (repeatType === 'yearly') {
+                    if (!timeSettingsState.holidays.repeat.includes(dateStr)) {
+                        timeSettingsState.holidays.repeat.push(dateStr);
+                    }
+                } else {
+                    if (!timeSettingsState.holidays.once.includes(dateStr)) {
+                        timeSettingsState.holidays.once.push(dateStr);
+                    }
+                }
+            });
+            
+            renderHolidaysList();
+            closeHolidayDatePicker();
+            showToast('Đã lưu các ngày nghỉ lễ vào danh sách');
+        }
+
+        // 5. GLOBAL SAVE/CANCEL CONFIG
+        function saveConfigTab() {
+            // Save Country & Timezone
+            timeSettingsState.country = document.getElementById('config-country').value;
+            timeSettingsState.timezone = document.getElementById('config-timezone').value;
+            
+            const dayNames = {
+                1: 'Thứ 2',
+                2: 'Thứ 3',
+                3: 'Thứ 4',
+                4: 'Thứ 5',
+                5: 'Thứ 6',
+                6: 'Thứ 7',
+                7: 'Chủ Nhật'
+            };
+
+            // Validate Weekly Business Hours
+            for (let i = 1; i <= 7; i++) {
+                const dayData = timeSettingsState.businessHours[i];
+                if (dayData.enabled) {
+                    if (dayData.slots.length === 0) {
+                        alert(`Lỗi ngày ${dayNames[i]}: Vui lòng thêm ít nhất 1 khung giờ hoạt động!`);
+                        return;
+                    }
+                    
+                    for (let s = 0; s < dayData.slots.length; s++) {
+                        const slot = dayData.slots[s];
+                        if (!slot.start || !slot.end) {
+                            alert(`Lỗi ngày ${dayNames[i]} (Khung giờ ${s + 1}): Vui lòng nhập đầy đủ Giờ bắt đầu và Giờ kết thúc!`);
+                            return;
+                        }
+                        if (slot.start >= slot.end) {
+                            alert(`Lỗi ngày ${dayNames[i]} (Khung giờ ${s + 1}): Giờ kết thúc phải lớn hơn Giờ bắt đầu!`);
+                            return;
+                        }
+                        
+                        // Rule: next slot start time must be strictly greater than previous slot's end time
+                        if (s > 0) {
+                            const prevSlot = dayData.slots[s - 1];
+                            if (slot.start <= prevSlot.end) {
+                                alert(`Lỗi ngày ${dayNames[i]}: Giờ bắt đầu của khung giờ thứ ${s + 1} phải lớn hơn giờ kết thúc của khung giờ trước đó (${prevSlot.end})!`);
+                                return;
+                            }
+                        }
+                    }
+                }
+            }
+            
+            // Save successful, update backup
+            savedTimeSettingsState = JSON.parse(JSON.stringify(timeSettingsState));
+            showToast('Cập nhật cấu hình thời gian thành công (Toast: AC5)');
+        }
+
+        function resetConfigTab() {
+            // Revert state to last saved backup
+            timeSettingsState = JSON.parse(JSON.stringify(savedTimeSettingsState));
+            
+            // Revert inputs to state values
+            document.getElementById('config-country').value = timeSettingsState.country;
+            handleCountryChange();
+            document.getElementById('config-timezone').value = timeSettingsState.timezone;
+            
+            loadWeeklyBusinessHoursUI();
+            renderHolidaysList();
+            showToast('Đã hủy các thay đổi chưa lưu');
+        }
+
+        // =========================================================================
+        // ROUTING / RULE MANAGERS FOR SUBTAB 2 (QUY TẮC)
+        // =========================================================================
+
+        // Get list of accounts already selected in OTHER rules
+        function getUsedAccounts(excludeRuleId) {
+            let used = [];
+            rulesState.forEach(rule => {
+                if (rule.id !== excludeRuleId) {
+                    rule.scope.forEach(sc => {
+                        used = used.concat(sc.accounts);
+                    });
+                }
+            });
+            return used;
+        }
+
+        function renderRuleCards() {
+            const container = document.getElementById('rules-cards-container');
+            container.innerHTML = '';
+            
+            if (rulesState.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 48px; color: var(--text-muted); background: var(--bg-hover); border-radius: 8px;">
+                        <p>Chưa có quy tắc thời gian nào được tạo. Nhấp nút [Tạo mới +] để tạo quy tắc mới.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            rulesState.forEach((rule, idx) => {
+                const card = document.createElement('div');
+                card.className = 'rule-card';
+                card.id = `rule-card-${rule.id}`;
+                
+                // Left column: Scope setup
+                let scopeHtml = '';
+                rule.scope.forEach((sc, scIdx) => {
+                    scopeHtml += `
+                        <div class="rule-scope-row" data-row-idx="${scIdx}">
+                            <div class="rule-scope-header">
+                                <span style="font-size: 12px; font-weight: 700; color: var(--text-muted);">Scope #${scIdx + 1}</span>
+                                <button class="btn-scope-remove" onclick="removeRuleScopeRow('${rule.id}', ${scIdx})">
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                                    Xóa dòng
+                                </button>
+                            </div>
+                            
+                            <div style="display: flex; gap: 10px; align-items: flex-start; margin-top: 4px;">
+                                <div class="form-group" style="width: 120px; margin-bottom: 0;">
+                                    <select class="form-control" style="height:32px; font-size:12px; padding:4px 8px;" onchange="handleRuleScopeChannelChange('${rule.id}', ${scIdx}, this.value)">
+                                        <option value="">Chọn Kênh</option>
+                                        ${Object.keys(channelsData).map(ch => `<option value="${ch}" ${sc.channel === ch ? 'selected' : ''}>${ch}</option>`).join('')}
+                                    </select>
+                                </div>
+                                <div style="flex: 1;">
+                                    <div class="tags-display" style="border: 1px solid var(--border-color); background: var(--bg-hover);">
+                                        ${sc.accounts.length === 0 ? '<span style="color:var(--text-muted); font-size:11px; padding: 2px 4px;">Chưa chọn tài khoản...</span>' : ''}
+                                        ${sc.accounts.map(acc => `
+                                            <span class="scope-tag">
+                                                ${acc}
+                                                <span class="scope-tag-remove" onclick="removeRuleScopeAccount('${rule.id}', ${scIdx}, '${acc}')">×</span>
+                                            </span>
+                                        `).join('')}
+                                    </div>
+                                    
+                                    <!-- Accounts multiselect list (styled dropdown list) -->
+                                    ${sc.channel ? `
+                                        <div style="position:relative; margin-top: 4px;">
+                                            <select class="form-control" style="height:32px; font-size:12px; padding:4px 8px;" onchange="addRuleScopeAccount('${rule.id}', ${scIdx}, this.value); this.value=''">
+                                                <option value="">+ Thêm tài khoản</option>
+                                                ${getAvailableAccountsForChannel(sc.channel, rule.id, sc.accounts).map(acc => `<option value="${acc}">${acc}</option>`).join('')}
+                                            </select>
+                                        </div>
+                                    ` : ''}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                card.innerHTML = `
+                    <!-- Left: Scope column -->
+                    <div class="rule-card-column">
+                        <div class="rule-card-title-row">
+                            <span class="rule-card-title">Quy tắc #${idx + 1} (Phạm vi áp dụng)</span>
+                            <div class="rule-card-actions">
+                                <button class="btn btn-secondary" style="padding:4px 8px; font-size:11px;" onclick="addRuleScopeRow('${rule.id}')">+ Kênh</button>
+                            </div>
+                        </div>
+                        
+                        <div style="display:flex; flex-direction:column; gap:12px;">
+                            ${scopeHtml}
+                        </div>
+                    </div>
+                    
+                    <!-- Right: Config column -->
+                    <div class="rule-card-column">
+                        <div class="rule-card-title-row" style="border-bottom: 1px dashed var(--border-color);">
+                            <span class="rule-card-title">Cấu hình thời gian của quy tắc</span>
+                            <div class="rule-card-actions">
+                                <button class="btn btn-secondary" style="padding:4px 8px; font-size:11px; background:#ef4444; border-color:#ef4444; color:white;" onclick="deleteRuleCard('${rule.id}')">Xóa quy tắc</button>
+                                <button class="btn btn-primary" style="padding:4px 8px; font-size:11px;" onclick="saveRuleCard('${rule.id}')">Lưu quy tắc</button>
+                            </div>
+                        </div>
+                        
+                        <div style="display:flex; flex-direction:column; gap:12px;">
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                                <div class="form-group">
+                                    <label class="form-label" style="font-size:11px;">Thời gian đóng hội thoại</label>
+                                    <input type="text" id="rule-close-time-${rule.id}" class="form-control" style="height:32px; font-size:12px;" value="${rule.settings.closeTime}" placeholder="hh:mm:ss" onblur="validateTimeInputFormat(this)">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" style="font-size:11px;">Điều kiện đóng hội thoại</label>
+                                    <select id="rule-close-cond-${rule.id}" class="form-control" style="height:32px; font-size:12px; padding: 4px 8px;">
+                                        <option value="last_customer_msg" ${rule.settings.closeCondition === 'last_customer_msg' ? 'selected' : ''}>So với tin nhắn khách cuối</option>
+                                        <option value="last_agent_msg" ${rule.settings.closeCondition === 'last_agent_msg' ? 'selected' : ''}>So với tin nhắn nhân viên cuối</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                                <div class="form-group">
+                                    <label class="form-label" style="font-size:11px;">SLA phản hồi lần đầu</label>
+                                    <input type="text" id="rule-sla-${rule.id}" class="form-control" style="height:32px; font-size:12px;" value="${rule.settings.firstResponseSLA}" placeholder="hh:mm:ss" onblur="validateTimeInputFormat(this)">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" style="font-size:11px;">Thời gian chờ phân công lại</label>
+                                    <input type="text" id="rule-routing-${rule.id}" class="form-control" style="height:32px; font-size:12px;" value="${rule.settings.routingTimeout}" placeholder="hh:mm:ss" onblur="validateTimeInputFormat(this)">
+                                </div>
+                            </div>
+                            <span style="font-size: 10px; color: var(--text-muted); font-style: italic;">Lưu ý: Nhập định dạng hh:mm:ss (giờ:phút:giây), tối đa 99:59:59.</span>
+                        </div>
+                    </div>
+                `;
+                
+                container.appendChild(card);
+            });
+        }
+
+        // Helper to get available accounts for select dropdown (excluding selected in other cards)
+        function getAvailableAccountsForChannel(channel, ruleId, currentSelectedArray) {
+            const allAccounts = channelsData[channel] || [];
+            const usedInOthers = getUsedAccounts(ruleId);
+            
+            // Available = accounts in channel which are NOT used in other rules and NOT already selected in current rule row
+            return allAccounts.filter(acc => !usedInOthers.includes(acc) && !currentSelectedArray.includes(acc));
+        }
+
+        // Actions inside rule card
+        function addRuleScopeRow(ruleId) {
+            const rule = rulesState.find(r => r.id === ruleId);
+            if (rule) {
+                rule.scope.push({ channel: '', accounts: [] });
+                renderRuleCards();
+            }
+        }
+
+        function removeRuleScopeRow(ruleId, rowIdx) {
+            const rule = rulesState.find(r => r.id === ruleId);
+            if (rule) {
+                rule.scope.splice(rowIdx, 1);
+                renderRuleCards();
+            }
+        }
+
+        function handleRuleScopeChannelChange(ruleId, rowIdx, channelName) {
+            const rule = rulesState.find(r => r.id === ruleId);
+            if (rule) {
+                rule.scope[rowIdx].channel = channelName;
+                rule.scope[rowIdx].accounts = [];
+                renderRuleCards();
+            }
+        }
+
+        function addRuleScopeAccount(ruleId, rowIdx, accountName) {
+            if (!accountName) return;
+            const rule = rulesState.find(r => r.id === ruleId);
+            if (rule) {
+                if (!rule.scope[rowIdx].accounts.includes(accountName)) {
+                    rule.scope[rowIdx].accounts.push(accountName);
+                    renderRuleCards();
+                }
+            }
+        }
+
+        function removeRuleScopeAccount(ruleId, rowIdx, accountName) {
+            const rule = rulesState.find(r => r.id === ruleId);
+            if (rule) {
+                rule.scope[rowIdx].accounts = rule.scope[rowIdx].accounts.filter(a => a !== accountName);
+                renderRuleCards();
+            }
+        }
+
+        function deleteRuleCard(ruleId) {
+            if (confirm('Bạn có chắc chắn muốn xóa quy tắc thời gian này?')) {
+                rulesState = rulesState.filter(r => r.id !== ruleId);
+                renderRuleCards();
+                showToast('Đã xóa quy tắc thời gian');
+            }
+        }
+
+        function createNewRuleCard() {
+            const newId = 'rule_' + Date.now();
+            rulesState.unshift({
+                id: newId,
+                scope: [
+                    { channel: '', accounts: [] }
+                ],
+                settings: {
+                    closeTime: '24:00:00',
+                    closeCondition: 'last_customer_msg',
+                    firstResponseSLA: '00:15:00',
+                    routingTimeout: '00:05:00'
+                }
+            });
+            renderRuleCards();
+            showToast('Đã thêm quy tắc trống mới. Cần chọn kênh/tài khoản trước khi lưu!');
+        }
+
+        function saveRuleCard(ruleId) {
+            const rule = rulesState.find(r => r.id === ruleId);
+            if (!rule) return;
+            
+            // Check that at least one scope row has channel and at least one account
+            let hasValidScope = false;
+            for (let i = 0; i < rule.scope.length; i++) {
+                const sc = rule.scope[i];
+                if (sc.channel && sc.accounts.length > 0) {
+                    hasValidScope = true;
+                } else {
+                    alert('Lỗi: Tất cả các dòng Scope phải có Kênh và ít nhất một tài khoản được chọn!');
+                    return;
+                }
+            }
+            
+            if (!hasValidScope || rule.scope.length === 0) {
+                alert('Lỗi: Quy tắc phải có ít nhất một kênh và tài khoản được cấu hình!');
+                return;
+            }
+            
+            // Read settings fields
+            const closeTimeVal = document.getElementById(`rule-close-time-${ruleId}`).value.trim();
+            const closeCondVal = document.getElementById(`rule-close-cond-${ruleId}`).value;
+            const slaVal = document.getElementById(`rule-sla-${ruleId}`).value.trim();
+            const routingVal = document.getElementById(`rule-routing-${ruleId}`).value.trim();
+            
+            rule.settings = {
+                closeTime: closeTimeVal,
+                closeCondition: closeCondVal,
+                firstResponseSLA: slaVal,
+                routingTimeout: routingVal
+            };
+            
+            showToast('Lưu quy tắc thời gian thành công! (AC5)');
+            renderRuleCards(); // refresh to update other rules dropdown items
+        }
+
+        // Helper to validate and auto-correct hh:mm:ss format (limit values to caps)
+        function validateTimeInputFormat(inputElement) {
+            let val = inputElement.value.trim();
+            if (!val) {
+                inputElement.value = '00:00:00';
+                return;
+            }
+            
+            // Split by non-digits
+            let parts = val.split(':').map(x => parseInt(x) || 0);
+            
+            // Ensure 3 parts
+            while (parts.length < 3) {
+                parts.push(0);
+            }
+            parts = parts.slice(0, 3);
+            
+            let hh = parts[0];
+            let mm = parts[1];
+            let ss = parts[2];
+            
+            // Caps check: max 59 for min/sec
+            if (ss > 59) {
+                showToast(`Giây nhập vào là ${ss}s vượt quá giới hạn. Đã tự động đổi thành 59s.`);
+                ss = 59;
+            }
+            if (mm > 59) {
+                showToast(`Phút nhập vào là ${mm}m vượt quá giới hạn. Đã tự động đổi thành 59m.`);
+                mm = 59;
+            }
+            if (hh > 99) {
+                showToast(`Giờ nhập vào là ${hh}h vượt quá giới hạn. Đã tự động đổi thành 99h.`);
+                hh = 99;
+            }
+            
+            const format = (n) => String(n).padStart(2, '0');
+            inputElement.value = `${format(hh)}:${format(mm)}:${format(ss)}`;
+        }
+
+        // =========================================================================
+        // VIEW NAVIGATION & MAIN SWITCHERS
+        // =========================================================================
+        function switchChannelMainTab(btn, tabName) {
+            document.querySelectorAll('.channel-tab-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            
+            // Hide all tab contents
+            document.getElementById('tab-channels-list-content').style.display = 'none';
+            document.getElementById('tab-channels-groups-content').style.display = 'none';
+            document.getElementById('tab-channels-timeout-content').style.display = 'none';
+            
+            if (tabName === 'channels-list') {
+                document.getElementById('tab-channels-list-content').style.display = 'block';
+                showToast('Chuyển đến tab Kênh liên lạc');
+            } else if (tabName === 'channels-groups') {
+                document.getElementById('tab-channels-groups-content').style.display = 'block';
+                showToast('Chuyển đến tab Nhóm kênh');
+            } else {
+                document.getElementById('tab-channels-timeout-content').style.display = 'block';
+                showToast('Chuyển đến tab Cài đặt thời gian chờ');
+            }
+        }
+
+        function switchTimeSubtab(subtabName) {
+            document.querySelectorAll('.sub-tab-btn').forEach(btn => btn.classList.remove('active'));
+            
+            if (subtabName === 'config') {
+                document.getElementById('btn-subtab-config').classList.add('active');
+                document.getElementById('subtab-config').style.display = 'flex';
+                document.getElementById('subtab-rules').style.display = 'none';
+                showToast('Xem tiểu tab Cấu hình thời gian');
+            } else {
+                document.getElementById('btn-subtab-rules').classList.add('active');
+                document.getElementById('subtab-config').style.display = 'none';
+                document.getElementById('subtab-rules').style.display = 'flex';
+                showToast('Xem tiểu tab Quy tắc thời gian');
+            }
         }
 
         // Mock Email client dialog interface
@@ -3758,6 +5329,7 @@
             if (event.key === 'Escape') {
                 closeEditModal();
                 closeMockEmailClient();
+                closeHolidayDatePicker();
             }
         });
     </script>

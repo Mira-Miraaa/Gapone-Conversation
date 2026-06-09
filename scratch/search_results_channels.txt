@@ -1,0 +1,19 @@
+--- Line 53 (term: zalo) ---
+52: | --- | --- | --- | --- | --- |
+53: | 1 | Channel | Đại diện cho các kênh tích hợp như Zalo, Telegram, Messenger, … | - ChannelID (PK) - ChannelType (Zalo / Telegram / Messenger / …)IntegrationStatus (Active/Inactive) | Channel 1—n Conversation: Một kênh có thể có nhiều cuộc hội thoại; mỗi hội thoại thuộc duy nhất một kênh) |
+54: | 2 | ChannelGroup | Đại diện cho nhóm các tài khoản của từng kênh (ví dụ: Nhóm kênh chăm sóc khách hàng miền Bắc, Nhóm kênh Marketing, …) | - ChannelGroupID (PK) - GroupName - Description - CreatedDate | ChannelGroup 1 — n Channel: Một Channel Group có thể chứa nhiều Channel. Mỗi Channel chỉ thuộc duy nhất một Channel Group |
+
+--- Line 55 (term: zalo) ---
+54: | 2 | ChannelGroup | Đại diện cho nhóm các tài khoản của từng kênh (ví dụ: Nhóm kênh chăm sóc khách hàng miền Bắc, Nhóm kênh Marketing, …) | - ChannelGroupID (PK) - GroupName - Description - CreatedDate | ChannelGroup 1 — n Channel: Một Channel Group có thể chứa nhiều Channel. Mỗi Channel chỉ thuộc duy nhất một Channel Group |
+55: | 3 | Account | Đại diện cho một tài khoản cụ thể thuộc về một kênh | - AccountID (PK) - ChannelID (FK → Channel) - AccountName - ExternalID (ID từ Zalo OA, Telegram Bot ID, Page ID, …) - Status (Active / Inactive) - CreatedDate | - Channel 1 — n Account: Một Channel có thể có nhiều Account. Mỗi Account thuộc duy nhất một Channel - Account 1 — n Conversation: Mỗi Conversation sẽ gắn với một Account. Khi đó, Conversation có AccountID (FK → Account) |
+56: | 4 | Conversation | Một chuỗi trao đổi tin nhắn giữa khách hàng và hệ thống/nhân viên trên một kênh cụ thể | - ConversationID (PK) - ChannelID (FK → Channel) - ContactID (FK → CustomerProfile) - Status (Open / Pending / Closed) - StartTime, EndTime | Conversation 1—1 CustomerProfile: một cuộc hội thoại chỉ thuộc về một khách hàng. |
+
+--- Line 179 (term: zalo) ---
+178: | 1 | Chọn **tất cả (All channel)** | “All channel” chỉ hiển thị dấu tích chọn khi Agent chọn “all channel” => Hiển thị tất cả các kênh Tất cả các ô thuộc phần “kênh” đều được điền. Không cho phép bỏ chọn “All channel” nếu chưa chọn một điều kiện lọc khác. |  |
+179: | 2 | Chọn một loại kênh VD: Chọn zalo | Tất cả các tài khoản thuộc kênh đó đều được chọn. “All channel” sẽ không còn dấu tích chọn. |  |
+180: | 3 | Chọn hỗn hợp. Có thể chọn hỗn hợp kênh + tài khoản | Có thể chọn hỗn hợp các tài khoản kênh từ các kênh khác nhau. |  |
+
+--- Line 324 (term: zalo) ---
+323: 
+324: Case: User áp dụng phân công tự động cho nhóm kênh Zalo OA tài khoản Gapit, điều kiện event là bắt đầu cuộc hội thoại, điều kiện thời gian là chờ sau 1 phút, hành động là chuyển tới nhân sự. => Hệ thống sẽ phân công nhân viên phụ trách cuộc hội thoại sau 1 phút bắt đầu từ lúc lấy được event.
+325: 

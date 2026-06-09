@@ -1,0 +1,146 @@
+--- Line 6 (term: tài liệu) ---
+4: 
+5: 
+6: # BẢNG GHI NHẬN THAY ĐỔI TÀI LIỆU
+7: 
+8: 
+
+--- Line 34 (term: tài liệu) ---
+32: 
+33: 
+34: # Bảng tài liệu bổ sung từ nền tảng khác
+35: 
+36: 
+
+--- Line 38 (term: tài liệu) ---
+36: 
+37: 
+38: | **STT** | **Tài liệu** |
+39: | --- | --- |
+40: |  |  |
+
+--- Line 56 (term: file) ---
+54: | 2 | ChannelGroup | Đại diện cho nhóm các tài khoản của từng kênh (ví dụ: Nhóm kênh chăm sóc khách hàng miền Bắc, Nhóm kênh Marketing, …) | - ChannelGroupID (PK) - GroupName - Description - CreatedDate | ChannelGroup 1 — n Channel: Một Channel Group có thể chứa nhiều Channel. Mỗi Channel chỉ thuộc duy nhất một Channel Group |
+55: | 3 | Account | Đại diện cho một tài khoản cụ thể thuộc về một kênh | - AccountID (PK) - ChannelID (FK → Channel) - AccountName - ExternalID (ID từ Zalo OA, Telegram Bot ID, Page ID, …) - Status (Active / Inactive) - CreatedDate | - Channel 1 — n Account: Một Channel có thể có nhiều Account. Mỗi Account thuộc duy nhất một Channel - Account 1 — n Conversation: Mỗi Conversation sẽ gắn với một Account. Khi đó, Conversation có AccountID (FK → Account) |
+56: | 4 | Conversation | Một chuỗi trao đổi tin nhắn giữa khách hàng và hệ thống/nhân viên trên một kênh cụ thể | - ConversationID (PK) - ChannelID (FK → Channel) - ContactID (FK → CustomerProfile) - Status (Open / Pending / Closed) - StartTime, EndTime | Conversation 1—1 CustomerProfile: một cuộc hội thoại chỉ thuộc về một khách hàng. |
+57: |  | Session - Session Conversation | Phiên hội thoại: Một phiên làm việc của cuộc hội thoại từ lúc mở mới đến lúc đóng. | - ConversationID (PK) - ChannelID (FK → Channel) - ContactID (FK → CustomerProfile) - Status (Open / Pending / Closed) - StartTime, EndTime | Session n – 1 Conversation: Một cuộc hội thoại chứa nhiều phiên hội thoại |
+58: | 5 | Message | Từng tin nhắn thuộc về một cuộc hội thoại | - MessageID (PK) - ConversationID (FK → Conversation) - SenderType (Customer / Agent / Bot) - MessageType (Text / Image / File / Sticker / …) - Content - SentTime | Conversation 1—n Message: Một cuộc hội thoại gồm nhiều tin nhắn; mỗi tin nhắn thuộc một hội thoại duy nhất. |
+
+--- Line 57 (term: file) ---
+55: | 3 | Account | Đại diện cho một tài khoản cụ thể thuộc về một kênh | - AccountID (PK) - ChannelID (FK → Channel) - AccountName - ExternalID (ID từ Zalo OA, Telegram Bot ID, Page ID, …) - Status (Active / Inactive) - CreatedDate | - Channel 1 — n Account: Một Channel có thể có nhiều Account. Mỗi Account thuộc duy nhất một Channel - Account 1 — n Conversation: Mỗi Conversation sẽ gắn với một Account. Khi đó, Conversation có AccountID (FK → Account) |
+56: | 4 | Conversation | Một chuỗi trao đổi tin nhắn giữa khách hàng và hệ thống/nhân viên trên một kênh cụ thể | - ConversationID (PK) - ChannelID (FK → Channel) - ContactID (FK → CustomerProfile) - Status (Open / Pending / Closed) - StartTime, EndTime | Conversation 1—1 CustomerProfile: một cuộc hội thoại chỉ thuộc về một khách hàng. |
+57: |  | Session - Session Conversation | Phiên hội thoại: Một phiên làm việc của cuộc hội thoại từ lúc mở mới đến lúc đóng. | - ConversationID (PK) - ChannelID (FK → Channel) - ContactID (FK → CustomerProfile) - Status (Open / Pending / Closed) - StartTime, EndTime | Session n – 1 Conversation: Một cuộc hội thoại chứa nhiều phiên hội thoại |
+58: | 5 | Message | Từng tin nhắn thuộc về một cuộc hội thoại | - MessageID (PK) - ConversationID (FK → Conversation) - SenderType (Customer / Agent / Bot) - MessageType (Text / Image / File / Sticker / …) - Content - SentTime | Conversation 1—n Message: Một cuộc hội thoại gồm nhiều tin nhắn; mỗi tin nhắn thuộc một hội thoại duy nhất. |
+59: | 6 | Agent/User | Đại diện cho người xử lý cuộc hội thoại | - AgentID (PK) - FullName - Role - TeamID (FK → Team) | Conversation n—1 Agent (khi có phân công): Một agent có thể xử lý nhiều cuộc hội thoại; một hội thoại có thể gán cho một agent chính. |
+
+--- Line 58 (term: file) ---
+56: | 4 | Conversation | Một chuỗi trao đổi tin nhắn giữa khách hàng và hệ thống/nhân viên trên một kênh cụ thể | - ConversationID (PK) - ChannelID (FK → Channel) - ContactID (FK → CustomerProfile) - Status (Open / Pending / Closed) - StartTime, EndTime | Conversation 1—1 CustomerProfile: một cuộc hội thoại chỉ thuộc về một khách hàng. |
+57: |  | Session - Session Conversation | Phiên hội thoại: Một phiên làm việc của cuộc hội thoại từ lúc mở mới đến lúc đóng. | - ConversationID (PK) - ChannelID (FK → Channel) - ContactID (FK → CustomerProfile) - Status (Open / Pending / Closed) - StartTime, EndTime | Session n – 1 Conversation: Một cuộc hội thoại chứa nhiều phiên hội thoại |
+58: | 5 | Message | Từng tin nhắn thuộc về một cuộc hội thoại | - MessageID (PK) - ConversationID (FK → Conversation) - SenderType (Customer / Agent / Bot) - MessageType (Text / Image / File / Sticker / …) - Content - SentTime | Conversation 1—n Message: Một cuộc hội thoại gồm nhiều tin nhắn; mỗi tin nhắn thuộc một hội thoại duy nhất. |
+59: | 6 | Agent/User | Đại diện cho người xử lý cuộc hội thoại | - AgentID (PK) - FullName - Role - TeamID (FK → Team) | Conversation n—1 Agent (khi có phân công): Một agent có thể xử lý nhiều cuộc hội thoại; một hội thoại có thể gán cho một agent chính. |
+60: | 7 | Team | Nhóm người dùng cho phân quyền & khi chỉ định hội thoại theo nhóm | - TeamID (PK) - TeamName | Agent n—1 Team (nếu sử dụng Team): Nhiều agent có thể thuộc một team. |
+
+--- Line 61 (term: file) ---
+59: | 6 | Agent/User | Đại diện cho người xử lý cuộc hội thoại | - AgentID (PK) - FullName - Role - TeamID (FK → Team) | Conversation n—1 Agent (khi có phân công): Một agent có thể xử lý nhiều cuộc hội thoại; một hội thoại có thể gán cho một agent chính. |
+60: | 7 | Team | Nhóm người dùng cho phân quyền & khi chỉ định hội thoại theo nhóm | - TeamID (PK) - TeamName | Agent n—1 Team (nếu sử dụng Team): Nhiều agent có thể thuộc một team. |
+61: | 8 | CustomerProfile | Hồ sơ khách hàng, đại diện cho khách hàng liên quan tới các cuộc hội thoại. | - ContactID (PK) - Phone number - Email - First Name - CreatedDate | Conversation n—1 CustomerProfile: Nhiều cuộc hội thoại có thể thuộc cùng một khách hàng. |
+62: 
+63: 
+
+--- Line 199 (term: định dạng) ---
+197: | 1 | ID Nhãn | INT | Mã định danh duy nhất cho nhãn hội thoại | **Bắt buộc**, AUTO_INCREMENT, duy nhất |
+198: | 2 | Tên Nhãn | VARCHAR(100) | Tên hiển thị của nhãn (VD: Hỏi giá, Bảo hành) | **Bắt buộc**, không được trùng trong cùng một nhóm hội thoại |
+199: | 3 | Màu Nhãn | VARCHAR(7) | Mã màu hiển thị nhãn dạng HEX (VD: #FF5733) | **Bắt buộc**, đúng định dạng HEX (#RRGGBB) |
+200: | 4 | Trạng Thái Chọn | BOOLEAN/TINYINT(1) | Xác định nhãn đang được chọn (1 = chọn, 0 = không chọn) | Mặc định 0, chỉ nhận giá trị 0 hoặc 1 |
+201: | 5 | ID Hội Thoạ (ẩn)i | INT | Mã hội thoại mà nhãn này gắn vào | **Bắt buộc**, tồn tại trong bảng hội thoại |
+
+--- Line 203 (term: định dạng) ---
+201: | 5 | ID Hội Thoạ (ẩn)i | INT | Mã hội thoại mà nhãn này gắn vào | **Bắt buộc**, tồn tại trong bảng hội thoại |
+202: | 6 | Người Tạo (ẩn) | VARCHAR(100) | Tên hoặc ID người tạo nhãn | **Bắt buộc**, tồn tại trong bảng người dùng |
+203: | 7 | Ngày Tạo (Ẩn) | DATETIME | Thời gian nhãn được thêm | **Bắt buộc**, định dạng YYYY-MM-DD hh:mm:ss |
+204: | 8 | Ngày Cập Nhật (Ẩn) | DATETIME | Thời gian nhãn được chỉnh sửa lần cuối | **Bắt buộc**, định dạng YYYY-MM-DD hh:mm:ss |
+205: 
+
+--- Line 204 (term: định dạng) ---
+202: | 6 | Người Tạo (ẩn) | VARCHAR(100) | Tên hoặc ID người tạo nhãn | **Bắt buộc**, tồn tại trong bảng người dùng |
+203: | 7 | Ngày Tạo (Ẩn) | DATETIME | Thời gian nhãn được thêm | **Bắt buộc**, định dạng YYYY-MM-DD hh:mm:ss |
+204: | 8 | Ngày Cập Nhật (Ẩn) | DATETIME | Thời gian nhãn được chỉnh sửa lần cuối | **Bắt buộc**, định dạng YYYY-MM-DD hh:mm:ss |
+205: 
+206: 
+
+--- Line 208 (term: định dạng) ---
+206: 
+207: 
+208: | **STT** | **Tên trường (Label)** | **Tên dữ liệu (Field)** | **Kiểu dữ liệu** | **Mô tả chức năng** | **Ràng buộc / Định dạng** |
+209: | --- | --- | --- | --- | --- | --- |
+210: | 2 | **Tên nhãn** | tagName | VARCHAR(50) | Tên nhãn phân loại hội thoại hoặc dữ liệu liên quan | - Không trùng lặp với các tagName khác- Không chứa ký tự đặc biệt <, >, %, $, / - Bắt buộc phải nhập khi tạo mới |
+
+--- Line 285 (term: định dạng) ---
+283: | 2.1 | Họ | VARCHAR(150) | Họ của khách hàng | Không bắt buộc, cho phép để trống |
+284: | 2.1 | Tên | VARCHAR(50) | Tên riêng của khách hàng | **Bắt buộc**, không được để trống |
+285: | 2.3 | Số điện thoại | VARCHAR(15) | Số điện thoại liên hệ của khách hàng | **Bắt buộc**, định dạng số, không trùng, kiểm tra hợp lệ (10-11 chữ số) |
+286: | 2.4 | Email | VARCHAR(255) | Địa chỉ email của khách hàng | Có thể để trống, nếu nhập phải đúng định dạng email (abc@xyz.com) |
+287: | 2.5 | Ngày sinh | DATE | Ngày sinh của khách hàng | Không bắt buộc, nếu có thì kiểm tra định dạng dd/mm/yyyy hoặc ISO date |
+
+--- Line 286 (term: định dạng) ---
+284: | 2.1 | Tên | VARCHAR(50) | Tên riêng của khách hàng | **Bắt buộc**, không được để trống |
+285: | 2.3 | Số điện thoại | VARCHAR(15) | Số điện thoại liên hệ của khách hàng | **Bắt buộc**, định dạng số, không trùng, kiểm tra hợp lệ (10-11 chữ số) |
+286: | 2.4 | Email | VARCHAR(255) | Địa chỉ email của khách hàng | Có thể để trống, nếu nhập phải đúng định dạng email (abc@xyz.com) |
+287: | 2.5 | Ngày sinh | DATE | Ngày sinh của khách hàng | Không bắt buộc, nếu có thì kiểm tra định dạng dd/mm/yyyy hoặc ISO date |
+288: | 2.6 | Địa chỉ | TEXT | Địa chỉ sinh sống hoặc liên hệ | Không bắt buộc |
+
+--- Line 287 (term: định dạng) ---
+285: | 2.3 | Số điện thoại | VARCHAR(15) | Số điện thoại liên hệ của khách hàng | **Bắt buộc**, định dạng số, không trùng, kiểm tra hợp lệ (10-11 chữ số) |
+286: | 2.4 | Email | VARCHAR(255) | Địa chỉ email của khách hàng | Có thể để trống, nếu nhập phải đúng định dạng email (abc@xyz.com) |
+287: | 2.5 | Ngày sinh | DATE | Ngày sinh của khách hàng | Không bắt buộc, nếu có thì kiểm tra định dạng dd/mm/yyyy hoặc ISO date |
+288: | 2.6 | Địa chỉ | TEXT | Địa chỉ sinh sống hoặc liên hệ | Không bắt buộc |
+289: | - Ghi chú |  |  |  |  |
+
+--- Line 535 (term: file) ---
+533: | **Photo** | Hình ảnh | Khách hàng + Agent: - Hỗ trợ nhiều kích thước, dung lượng tối đa ~20MB (qua bot API) | Ảnh hiển thị thumbnail, có nút **Download/View** | Conversation Sprint 2: Đồng bộ chiều từ Telegram -> Gapone COnversation Chưa đồng bộ từ Gapone Conversation -> Telegram |
+534: | **Video** | Video clip | Khách hàng + Agent: - Giới hạn ~20MB (bot upload trực tiếp) hoặc link stream | Hiển thị thumbnail + nút **Play** | Conversation Sprint 2: Đồng bộ chiều từ Telegram -> Gapone COnversation Chưa đồng bộ từ Gapone Conversation -> Telegram |
+535: | **Audio** | File âm thanh (MP3, WAV…) | Khách hàng + Agent: - File nhạc/âm thanh giới hạn 20MB | Hiển thị player nhỏ (Play/Pause) | Conversation Sprint 2: Đồng bộ chiều từ Telegram -> Gapone COnversation Chưa đồng bộ từ Gapone Conversation -> Telegram |
+536: | **Voice Message** | Tin nhắn thoại ghi âm trực tiếp trên Telegram | Khách hàng: - Lấy được toàn bộ voice message của khách Agent: - Tin nhắn thoại từ 60 giây trở xuống | Hiển thị icon micro + nút **Play** | Conversation Sprint 2: Đồng bộ chiều từ Telegram -> Gapone COnversation Chưa đồng bộ từ Gapone Conversation -> Telegram |
+537: | **OTP** | Mã OTP | Mã OTP kèm nội dung tin nhắn | Hiển thị nội dung tin nhắn chứa mã OTP | Conversation Sprint 2: Đồng bộ chiều từ Telegram -> Gapone COnversation Chưa đồng bộ từ Gapone Conversation -> Telegram |
+
+--- Line 538 (term: file) ---
+536: | **Voice Message** | Tin nhắn thoại ghi âm trực tiếp trên Telegram | Khách hàng: - Lấy được toàn bộ voice message của khách Agent: - Tin nhắn thoại từ 60 giây trở xuống | Hiển thị icon micro + nút **Play** | Conversation Sprint 2: Đồng bộ chiều từ Telegram -> Gapone COnversation Chưa đồng bộ từ Gapone Conversation -> Telegram |
+537: | **OTP** | Mã OTP | Mã OTP kèm nội dung tin nhắn | Hiển thị nội dung tin nhắn chứa mã OTP | Conversation Sprint 2: Đồng bộ chiều từ Telegram -> Gapone COnversation Chưa đồng bộ từ Gapone Conversation -> Telegram |
+538: | **Document** | File tài liệu (PDF, DOCX, ZIP…) | Khác hàng: - Nhận được file khách hàng gửi ~2GB Agent: - Tải lên không quá ~50MB | Hiển thị tên file + nút **Download** | Chưa triển khai trong Conversation Sprint 2 |
+539: | **Sticker** | Nhãn dán | Khách hàng: - Có thể là ảnh tĩnh hoặc động (WebP, TGS) Agent: - Không hỗ trợ gửi sticker từ hệ thống GO Convst | Hiển thị sticker trong khung chat | Conversation Sprint 2: Đồng bộ chiều từ Telegram -> Gapone COnversation Chưa đồng bộ từ Gapone Conversation -> Telegram |
+540: | **GIF / Animation** | Ảnh động (GIF, MP4 loop) | Telegram thường convert GIF thành MP4 ~20MB | Hiển thị preview động | Conversation Sprint 2: Đồng bộ chiều từ Telegram -> Gapone COnversation Chưa đồng bộ từ Gapone Conversation -> Telegram |
+
+--- Line 570 (term: định dạng) ---
+568: | 2.1 | Họ | VARCHAR(150) | Họ của khách hàng | Không bắt buộc, cho phép để trống |
+569: | 2.1 | Tên | VARCHAR(50) | Tên riêng của khách hàng | **Bắt buộc**, không được để trống |
+570: | 2.3 | Số điện thoại | VARCHAR(15) | Số điện thoại liên hệ của khách hàng | **Bắt buộc**, định dạng số, không trùng, kiểm tra hợp lệ (10-11 chữ số) |
+571: | 2.4 | Email | VARCHAR(255) | Địa chỉ email của khách hàng | Có thể để trống, nếu nhập phải đúng định dạng email (abc@xyz.com) |
+572: | 2.5 | Ngày sinh | DATE | Ngày sinh của khách hàng | Không bắt buộc, nếu có thì kiểm tra định dạng dd/mm/yyyy hoặc ISO date |
+
+--- Line 571 (term: định dạng) ---
+569: | 2.1 | Tên | VARCHAR(50) | Tên riêng của khách hàng | **Bắt buộc**, không được để trống |
+570: | 2.3 | Số điện thoại | VARCHAR(15) | Số điện thoại liên hệ của khách hàng | **Bắt buộc**, định dạng số, không trùng, kiểm tra hợp lệ (10-11 chữ số) |
+571: | 2.4 | Email | VARCHAR(255) | Địa chỉ email của khách hàng | Có thể để trống, nếu nhập phải đúng định dạng email (abc@xyz.com) |
+572: | 2.5 | Ngày sinh | DATE | Ngày sinh của khách hàng | Không bắt buộc, nếu có thì kiểm tra định dạng dd/mm/yyyy hoặc ISO date |
+573: | 2.6 | Địa chỉ | TEXT | Địa chỉ sinh sống hoặc liên hệ | Không bắt buộc |
+
+--- Line 572 (term: định dạng) ---
+570: | 2.3 | Số điện thoại | VARCHAR(15) | Số điện thoại liên hệ của khách hàng | **Bắt buộc**, định dạng số, không trùng, kiểm tra hợp lệ (10-11 chữ số) |
+571: | 2.4 | Email | VARCHAR(255) | Địa chỉ email của khách hàng | Có thể để trống, nếu nhập phải đúng định dạng email (abc@xyz.com) |
+572: | 2.5 | Ngày sinh | DATE | Ngày sinh của khách hàng | Không bắt buộc, nếu có thì kiểm tra định dạng dd/mm/yyyy hoặc ISO date |
+573: | 2.6 | Địa chỉ | TEXT | Địa chỉ sinh sống hoặc liên hệ | Không bắt buộc |
+574: | - **Ghi chú** |  |  |  |  |
+
+--- Line 602 (term: file) ---
+600: | TG003 | Chat Not Found (400) | Sai **chat_id** (user/group không tồn tại hoặc bị xóa) | “Gửi tin nhắn không thành công: Không tìm thấy cuộc trò chuyện.” |
+601: | TG004 | Message Too Long | Nội dung vượt quá giới hạn ký tự (Telegram giới hạn ~4096 ký tự cho 1 message. Hệ thống hiện tại giới hạn 2000 ký tự cho một message) | “Gửi tin nhắn không thành công: Tin nhắn vượt quá giới hạn kí tự.” |
+602: | TG005 | Media Too Large | File ảnh/video/gif vượt quá dung lượng (Telegram giới hạn ~50MB cho bot upload trực tiếp) | “Gửi tin nhắn không thành công: Tệp đính kèm vượt quá giới hạn dung lượng.” |
+603: | TG006 | Rate Limit / Flood Control | Gửi quá nhiều tin nhắn trong thời gian ngắn → Telegram áp dụng flood control | “Gửi tin nhắn không thành công: Bạn đang gửi quá nhanh. Vui lòng thử lại sau.” |
+604: | TG007 | Network Timeout | Mạng chậm hoặc server không phản hồi | “Gửi tin nhắn không thành công: Kết nối mạng không ổn định.” |
+
+--- Line 606 (term: định dạng) ---
+604: | TG007 | Network Timeout | Mạng chậm hoặc server không phản hồi | “Gửi tin nhắn không thành công: Kết nối mạng không ổn định.” |
+605: | TG008 | Internal Server Error (500) | Telegram server gặp sự cố | “Gửi tin nhắn không thành công: Hệ thống Telegram đang bận.” |
+606: | TG009 | Unsupported Message Type | Gửi loại message bot không hỗ trợ (ví dụ: game, sticker lạ) | “Gửi tin nhắn không thành công: Định dạng tin nhắn không được hỗ trợ.” |
+607: | TG010 | Bot Blocked by Telegram | Bot bị khóa hoặc hạn chế do vi phạm chính sách | “Gửi tin nhắn không thành công: Bot không thể gửi tin nhắn do bị Telegram hạn chế.” |
+608: | TG011 | Account Blocked by Telegram | Account bị khóa, xóa hoặc hạn chế do vi phạm chính sách | “Gửi tin nhắn không thành công: Tài khoản không thể gửi tin nhắn do bị Telegram hạn chế.” |

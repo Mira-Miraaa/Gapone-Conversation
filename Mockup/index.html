@@ -1862,15 +1862,17 @@
             border: none;
             color: #ef4444;
             cursor: pointer;
-            font-size: 11px;
-            font-weight: 500;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
             display: flex;
             align-items: center;
-            gap: 2px;
+            justify-content: center;
+            transition: background-color 0.2s;
         }
 
         .btn-scope-remove:hover {
-            text-decoration: underline;
+            background-color: rgba(239, 68, 68, 0.08);
         }
 
         /* Tags display inside rule scope */
@@ -4924,9 +4926,8 @@
                         <div class="rule-scope-row" data-row-idx="${scIdx}">
                             <div class="rule-scope-header">
                                 <span style="font-size: 12px; font-weight: 700; color: var(--text-muted);">Scope #${scIdx + 1}</span>
-                                <button class="btn-scope-remove" onclick="removeRuleScopeRow('${rule.id}', ${scIdx})">
-                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-                                    Xóa dòng
+                                <button class="btn-scope-remove" onclick="removeRuleScopeRow('${rule.id}', ${scIdx})" title="Xóa dòng">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
                                 </button>
                             </div>
                             
@@ -4983,8 +4984,8 @@
                         <div class="rule-card-title-row" style="border-bottom: 1px dashed var(--border-color);">
                             <span class="rule-card-title">Cấu hình thời gian của quy tắc</span>
                             <div class="rule-card-actions">
-                                <button class="btn btn-secondary" style="padding:4px 8px; font-size:11px; background:#ef4444; border-color:#ef4444; color:white;" onclick="deleteRuleCard('${rule.id}')">Xóa quy tắc</button>
-                                <button class="btn btn-primary" style="padding:4px 8px; font-size:11px;" onclick="saveRuleCard('${rule.id}')">Lưu quy tắc</button>
+                                <button class="btn btn-secondary" style="padding:4px 8px; font-size:11px; background:#a3a3a3; border-color:#a3a3a3; color:white;" onclick="deleteRuleCard('${rule.id}')">Hủy</button>
+                                <button class="btn btn-primary" style="padding:4px 8px; font-size:11px;" onclick="saveRuleCard('${rule.id}')">Lưu</button>
                             </div>
                         </div>
                         
@@ -4993,13 +4994,7 @@
                                 <div class="form-group">
                                     <label class="form-label" style="font-size:11px;">Thời gian đóng hội thoại</label>
                                     <input type="text" id="rule-close-time-${rule.id}" class="form-control" style="height:32px; font-size:12px;" value="${rule.settings.closeTime}" placeholder="hh:mm:ss" onblur="validateTimeInputFormat(this)">
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label" style="font-size:11px;">Điều kiện đóng hội thoại</label>
-                                    <select id="rule-close-cond-${rule.id}" class="form-control" style="height:32px; font-size:12px; padding: 4px 8px;">
-                                        <option value="last_customer_msg" ${rule.settings.closeCondition === 'last_customer_msg' ? 'selected' : ''}>So với tin nhắn khách cuối</option>
-                                        <option value="last_agent_msg" ${rule.settings.closeCondition === 'last_agent_msg' ? 'selected' : ''}>So với tin nhắn nhân viên cuối</option>
-                                    </select>
+                                    <span style="font-size: 10px; color: var(--text-muted); font-style: italic; display: block; margin-top: 4px;">Đếm ngược thời gian từ tin nhắn cuối cùng trong một phiên hội thoại</span>
                                 </div>
                             </div>
                             
@@ -5125,7 +5120,7 @@
             
             // Read settings fields
             const closeTimeVal = document.getElementById(`rule-close-time-${ruleId}`).value.trim();
-            const closeCondVal = document.getElementById(`rule-close-cond-${ruleId}`).value;
+            const closeCondVal = 'last_customer_msg';
             const slaVal = document.getElementById(`rule-sla-${ruleId}`).value.trim();
             const routingVal = document.getElementById(`rule-routing-${ruleId}`).value.trim();
             

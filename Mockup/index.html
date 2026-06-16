@@ -2609,13 +2609,13 @@
                     
                     <!-- Channel settings breadcrumb or header is updated in navigateSubmenu, so we just have SPA layout -->
                     <div class="channel-tabs-header">
-                        <button class="channel-tab-btn" id="btn-tab-channels-list" onclick="switchChannelMainTab(this, 'channels-list')">Kênh</button>
+                        <button class="channel-tab-btn active" id="btn-tab-channels-list" onclick="switchChannelMainTab(this, 'channels-list')">Kênh</button>
                         <button class="channel-tab-btn" id="btn-tab-channels-groups" onclick="switchChannelMainTab(this, 'channels-groups')">Nhóm kênh</button>
-                        <button class="channel-tab-btn active" id="btn-tab-channels-timeout" onclick="switchChannelMainTab(this, 'channels-timeout')">Thời gian chờ</button>
+                        <button class="channel-tab-btn" id="btn-tab-channels-timeout" onclick="switchChannelMainTab(this, 'channels-timeout')">Thời gian chờ</button>
                     </div>
 
                     <!-- Main Tab Content: Channels List (Mockup) -->
-                    <div id="tab-channels-list-content" class="settings-card" style="display: none; text-align: center; padding: 48px; color: var(--text-muted);">
+                    <div id="tab-channels-list-content" class="settings-card" style="display: block; text-align: center; padding: 48px; color: var(--text-muted);">
                         <svg width="48" height="48" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="margin-bottom: 12px; opacity: 0.5;">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 100-6 3 3 0 000 6z"></path>
                         </svg>
@@ -2633,7 +2633,7 @@
                     </div>
 
                     <!-- Main Tab Content: Timeout Settings (SRS Time Settings) -->
-                    <div id="tab-channels-timeout-content" class="time-settings-container">
+                    <div id="tab-channels-timeout-content" class="time-settings-container" style="display: none;">
                         
                         <div class="sub-tabs-wrapper">
                             <button id="btn-subtab-config" class="sub-tab-btn active" onclick="switchTimeSubtab('config')">Cấu hình</button>
@@ -3193,6 +3193,12 @@
                 viewChannels.style.display = 'flex';
                 if (parentBreadcrumb) parentBreadcrumb.innerText = 'Cài đặt';
                 breadcrumbCurrentView.innerText = 'Kênh';
+                
+                // Reset to default tab (channels-list) and default subtab (config)
+                const listBtn = document.getElementById('btn-tab-channels-list');
+                if (listBtn) switchChannelMainTab(listBtn, 'channels-list');
+                const configBtn = document.getElementById('btn-subtab-config');
+                if (configBtn) switchTimeSubtab('config');
             }
             
             // Close sidebar on mobile
@@ -4349,33 +4355,7 @@
 
         let savedTimeSettingsState = JSON.parse(JSON.stringify(timeSettingsState));
 
-        let rulesState = [
-            {
-                id: 'rule_1',
-                scope: [
-                    { channel: 'Zalo', accounts: ['Zalo OA 01', 'Zalo OA Gapit'] },
-                    { channel: 'Facebook', accounts: ['Facebook Page 01'] }
-                ],
-                settings: {
-                    closeTime: '24:00:00',
-                    closeCondition: 'last_customer_msg',
-                    firstResponseSLA: '00:15:00',
-                    routingTimeout: '00:05:00'
-                }
-            },
-            {
-                id: 'rule_2',
-                scope: [
-                    { channel: 'Telegram', accounts: ['Telegram Support Bot'] }
-                ],
-                settings: {
-                    closeTime: '48:00:00',
-                    closeCondition: 'last_agent_msg',
-                    firstResponseSLA: '00:30:00',
-                    routingTimeout: '00:10:00'
-                }
-            }
-        ];
+        let rulesState = [];
 
         // Holiday calendar variables
         let calendarYear = 2026;

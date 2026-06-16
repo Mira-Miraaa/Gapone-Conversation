@@ -1834,6 +1834,7 @@
             overflow: hidden;
             transition: border-color 0.2s, box-shadow 0.2s;
             margin-bottom: 8px;
+            flex-shrink: 0;
         }
 
         .rule-card:hover {
@@ -5115,6 +5116,10 @@
         }
 
         function createNewRuleCard() {
+            if (rulesState.length >= 20) {
+                alert('Hệ thống chỉ cho phép tạo tối đa 20 quy tắc thời gian!');
+                return;
+            }
             const newId = 'rule_' + Date.now();
             rulesState.unshift({
                 id: newId,

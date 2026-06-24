@@ -1344,6 +1344,17 @@
             background-color: var(--border-color);
         }
 
+        .btn-danger {
+            background-color: #ef4444;
+            border: 1px solid #ef4444;
+            color: #ffffff;
+        }
+
+        .btn-danger:hover {
+            background-color: #dc2626;
+            border-color: #dc2626;
+        }
+
         .btn-gray {
             background-color: #a3a3a3;
             border: 1px solid #a3a3a3;
@@ -1825,6 +1836,7 @@
         }
 
         .rule-card {
+            position: relative;
             display: grid;
             grid-template-columns: 1fr 1fr;
             background-color: var(--bg-card);
@@ -1840,6 +1852,30 @@
         .rule-card:hover {
             border-color: var(--primary-border);
             box-shadow: var(--shadow-md);
+        }
+
+        .btn-rule-delete {
+            position: absolute;
+            top: 14px;
+            right: 16px;
+            background: none;
+            border: none;
+            color: var(--primary-color);
+            font-size: 22px;
+            font-weight: 700;
+            cursor: pointer;
+            line-height: 1;
+            padding: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s, color 0.2s;
+            z-index: 5;
+        }
+
+        .btn-rule-delete:hover {
+            color: var(--primary-hover);
+            transform: scale(1.2);
         }
 
         .rule-card-column {
@@ -4394,6 +4430,7 @@
         let savedTimeSettingsState = JSON.parse(JSON.stringify(timeSettingsState));
 
         let rulesState = [];
+        let savedRulesState = [];
 
         // Holiday calendar variables
         let calendarYear = 2026;
@@ -4983,6 +5020,9 @@
                 });
                 
                 card.innerHTML = `
+                    <!-- Close button in the top right corner -->
+                    <button class="btn-rule-delete" onclick="deleteRuleCard('${rule.id}')" title="Xóa quy tắc">×</button>
+                    
                     <!-- Left: Scope column -->
                     <div class="rule-card-column">
                         <div class="rule-card-title-row">
@@ -4999,12 +5039,8 @@
                     
                     <!-- Right: Config column -->
                     <div class="rule-card-column">
-                        <div class="rule-card-title-row" style="border-bottom: 1px dashed var(--border-color);">
+                        <div class="rule-card-title-row" style="border-bottom: 1px dashed var(--border-color); padding-bottom: 10px;">
                             <span class="rule-card-title">Cấu hình thời gian của quy tắc</span>
-                            <div class="rule-card-actions">
-                                <button class="btn btn-secondary" style="padding:4px 8px; font-size:11px; background:#a3a3a3; border-color:#a3a3a3; color:white;" onclick="deleteRuleCard('${rule.id}')">Hủy</button>
-                                <button class="btn btn-primary" style="padding:4px 8px; font-size:11px;" onclick="saveRuleCard('${rule.id}')">Lưu</button>
-                            </div>
                         </div>
                         
                         <div style="display:flex; flex-direction:column; gap:12px;">
@@ -5045,6 +5081,10 @@
                                 </div>
                             </div>
                             <span style="font-size: 10px; color: var(--text-muted); font-style: italic;">Lưu ý: Nhập định dạng hh:mm:ss (giờ:phút:giây), tối đa 99:59:59.</span>
+                            <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 12px;">
+                                <button class="btn btn-secondary" style="padding:4px 10px; font-size:11px; background:#a3a3a3; border-color:#a3a3a3; color:white;" onclick="cancelRuleCard('${rule.id}')">Hủy</button>
+                                <button class="btn btn-primary" style="padding:4px 10px; font-size:11px;" onclick="saveRuleCard('${rule.id}')">Lưu</button>
+                            </div>
                         </div>
                     </div>
                 `;
@@ -5110,9 +5150,25 @@
         function deleteRuleCard(ruleId) {
             if (confirm('Bạn có chắc chắn muốn xóa quy tắc thời gian này?')) {
                 rulesState = rulesState.filter(r => r.id !== ruleId);
+                savedRulesState = savedRulesState.filter(r => r.id !== ruleId);
                 renderRuleCards();
                 showToast('Đã xóa quy tắc thời gian');
             }
+        }
+
+        function cancelRuleCard(ruleId) {
+            const savedRule = savedRulesState.find(r => r.id === ruleId);
+            if (savedRule) {
+                const masterIdx = rulesState.findIndex(r => r.id === ruleId);
+                if (masterIdx > -1) {
+                    rulesState[masterIdx] = JSON.parse(JSON.stringify(savedRule));
+                }
+                showToast('Đã hủy các thay đổi chưa lưu của quy tắc này');
+            } else {
+                rulesState = rulesState.filter(r => r.id !== ruleId);
+                showToast('Đã hủy tạo quy tắc mới');
+            }
+            renderRuleCards();
         }
 
         function createNewRuleCard() {
@@ -5178,6 +5234,14 @@
                 firstResponseSLA: slaVal,
                 routingTimeout: routingVal
             };
+            
+            const savedIdx = savedRulesState.findIndex(r => r.id === ruleId);
+            const clonedRule = JSON.parse(JSON.stringify(rule));
+            if (savedIdx > -1) {
+                savedRulesState[savedIdx] = clonedRule;
+            } else {
+                savedRulesState.push(clonedRule);
+            }
             
             showToast('Lưu quy tắc thời gian thành công! (AC5)');
             renderRuleCards(); // refresh to update other rules dropdown items

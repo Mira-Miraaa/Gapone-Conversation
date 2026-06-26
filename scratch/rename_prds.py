@@ -1,0 +1,96 @@
+import os
+import shutil
+import sys
+import urllib.parse
+
+# Adjust stdout to handle UTF-8 printing
+sys.stdout.reconfigure(encoding='utf-8')
+
+root_dir = r"F:\Gapone Conversation"
+target_dir = os.path.join(root_dir, r"Docs\AI_Chatbot")
+
+# Current name -> Target name
+mapping = {
+    "prd-ai-chatbot.md": "PRD AI Chatbot for e-commerce.md",
+    "prd-ai-chatbot-intro.md": "PRD AI Chatbot for e-commerce (1).md",
+    "prd-reminder-agent.md": "PRD AI Chatbot for e-commerce (2).md",
+    "prd-image-upload-feasibility.md": "PRD AI Chatbot for e-commerce (3).md",
+    "prd-file-processing.md": "PRD AI Chatbot for e-commerce (4).md",
+    "prd-tool-calling-architecture.md": "PRD AI Chatbot for e-commerce 9.md"
+}
+
+def get_replacements(old, new):
+    replaces = []
+    # 1. Raw
+    replaces.append((old, new))
+    
+    # 2. URL-encoded standard
+    quoted_old = urllib.parse.quote(old)
+    quoted_new = urllib.parse.quote(new)
+    replaces.append((quoted_old, quoted_new))
+    
+    # 3. Custom quote for URL matching in markdown links (spaces -> %20, parentheses -> %28/%29)
+    quoted_old_c1 = old.replace(" ", "%20").replace("[", "%5B").replace("]", "%5D").replace("(", "%28").replace(")", "%29")
+    quoted_new_c1 = new.replace(" ", "%20").replace("[", "%5B").replace("]", "%5D").replace("(", "%28").replace(")", "%29")
+    if (quoted_old_c1, quoted_new_c1) not in replaces:
+        replaces.append((quoted_old_c1, quoted_new_c1))
+        
+    quoted_old_c2 = old.replace(" ", "%20").replace("[", "%5B").replace("]", "%5D")
+    quoted_new_c2 = new.replace(" ", "%20").replace("[", "%5B").replace("]", "%5D")
+    if (quoted_old_c2, quoted_new_c2) not in replaces:
+        replaces.append((quoted_old_c2, quoted_new_c2))
+        
+    return replaces
+
+def main():
+    all_replaces = []
+    for old, new in mapping.items():
+        all_replaces.extend(get_replacements(old, new))
+        
+    print("Các cặp chuỗi thay thế liên kết trong file:")
+    for src, dst in all_replaces:
+        if src != dst:
+            print(f"  '{src}' -> '{dst}'")
+            
+    # 1. Update contents of all markdown files
+    print("\nCập nhật nội dung trong các file .md...")
+    for root, dirs, files in os.walk(root_dir):
+        # Skip dot directories
+        dirs[:] = [d for d in dirs if not d.startswith('.')]
+        for file in files:
+            if file.lower().endswith('.md'):
+                file_path = os.path.join(root, file)
+                try:
+                    with open(file_path, 'r', encoding='utf-8') as f:
+                        content = f.read()
+                    
+                    modified = False
+                    new_content = content
+                    for src, dst in all_replaces:
+                        if src in new_content:
+                            new_content = new_content.replace(src, dst)
+                            modified = True
+                            
+                    if modified:
+                        with open(file_path, 'w', encoding='utf-8') as f:
+                            f.write(new_content)
+                        print(f"Đã cập nhật liên kết trong file: {os.path.relpath(file_path, root_dir)}")
+                except Exception as e:
+                    print(f"Lỗi khi xử lý nội dung file {file}: {e}")
+                    
+    # 2. Rename the files physically
+    print("\nTiến hành đổi tên file vật lý...")
+    for old, new in mapping.items():
+        old_path = os.path.join(target_dir, old)
+        new_path = os.path.join(target_dir, new)
+        if os.path.exists(old_path):
+            try:
+                shutil.move(old_path, new_path)
+                print(f"Đã đổi tên: {old} -> {new}")
+            except Exception as e:
+                print(f"Lỗi khi đổi tên {old}: {e}")
+        else:
+            print(f"File không tồn tại hoặc đã được đổi tên: {old}")
+
+if __name__ == "__main__":
+    main()

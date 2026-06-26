@@ -20,7 +20,7 @@
 
 | **STT** | **Tài liệu** | **Liên kết / Đường dẫn** |
 | --- | --- | --- |
-| 1 | GAPCon AI Chatbot for e-commerce (PRD) | [PRD](file:///f:/Gapone%20Conversation/Docs/%5BGAPCON%5D%20AI%20Chatbot%20for%20e-commerce%20(PRD).docx) |
+| 1 | GAPCon AI Chatbot for e-commerce (PRD) | [PRD](file:///f:/Gapone%20Conversation/Docs/AI_Chatbot/prd-ai-chatbot.md) |
 | 2 | SRS Conversation | [SRS Conversation](file:///f:/Gapone%20Conversation/Docs/SRS%20Conversation.md) |
 | 3 | SRS Time Settings | [SRS Time Settings](file:///f:/Gapone%20Conversation/Docs/SRS%20Time%20Settings.md) |
 

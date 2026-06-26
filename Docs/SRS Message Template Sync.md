@@ -21,8 +21,8 @@
 | **STT** | **Tài liệu** | **Liên kết / Đường dẫn** |
 | --- | --- | --- |
 | 1 | SRS Conversation | [SRS Conversation](file:///f:/Gapone%20Conversation/Docs/SRS%20Conversation.md) |
-| 2 | SRS Tự động hóa | [SRS AI chatbot - Automation](file:///f:/Gapone%20Conversation/Docs/SRS%20AI%20chatbot%20-%20Automation.md) |
-| 3 | GAPCon AI Chatbot (PRD) | [PRD](file:///f:/Gapone%20Conversation/Docs/%5BGAPCON%5D%20AI%20Chatbot%20for%20e-commerce%20(PRD).docx) |
+| 2 | SRS Tự động hóa | [SRS AI chatbot - Automation](file:///f:/Gapone%20Conversation/Docs/AI_Chatbot/srs-chatbot-scenarios.md) |
+| 3 | GAPCon AI Chatbot (PRD) | [PRD](file:///f:/Gapone%20Conversation/Docs/AI_Chatbot/prd-ai-chatbot.md) |
 
 ---
 

@@ -1,3 +1,11 @@
+---
+title: SRS AI Settings
+version: 1.0.5
+status: verified-by-ba
+related_code: F:/Gapone Conversation/Docs/AI_Chatbot/srs-ai-settings.md
+last_updated: 2026-06-26
+---
+
 **SRS TÍCH HỢP AI**
 
 **--------------------------------------------------------**

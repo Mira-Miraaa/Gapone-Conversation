@@ -1,3 +1,19 @@
+---
+title: PRD AI Chatbot for e-commerce - Core Specifications
+version: 1.0.0
+status: verified-by-ba
+related_code: F:/Gapone Conversation/Docs/AI_Chatbot/prd-ai-chatbot.md
+last_updated: 2026-06-26
+---
+
+# Nhật ký thay đổi (Revision History)
+
+| Phiên bản | Ngày | Người cập nhật | Vị trí thay đổi | Lý do chi tiết |
+| :--- | :--- | :--- | :--- | :--- |
+| 1.0.0 | 2026-06-26 | Mira-Miraaa | Toàn bộ tài liệu | Chuẩn hóa tài liệu từ tệp cũ |
+
+---
+
 Tổng quan
 **GAPCon AI Chatbot - Trợ lý mua sắm thông minh cho thương mại điện tử**
 

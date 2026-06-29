@@ -1,3 +1,11 @@
+---
+title: SRS Knowledge Base
+version: 1.0.0
+status: verified-by-ba
+related_code: F:/Gapone Conversation/Docs/AI_Chatbot/srs-knowledge-base.md
+last_updated: 2026-06-26
+---
+
 **SRS KHO KIẾN THỨC**
 
 **--------------------------------------------------------**

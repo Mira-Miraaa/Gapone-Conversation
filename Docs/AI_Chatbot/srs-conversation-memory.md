@@ -1,3 +1,11 @@
+---
+title: SRS Conversation Memory
+version: 1.0.0
+status: verified-by-ba
+related_code: F:/Gapone Conversation/Docs/AI_Chatbot/srs-conversation-memory.md
+last_updated: 2026-06-26
+---
+
 # SRS – AI GHI NHỚ LỊCH SỬ PHIÊN HỘI THOẠI (AI CONVERSATION MEMORY)
 
 # BẢNG GHI NHẬN THAY ĐỔI TÀI LIỆU

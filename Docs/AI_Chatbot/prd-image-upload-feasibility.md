@@ -1,3 +1,19 @@
+---
+title: PRD AI Chatbot for e-commerce - Image Upload & Feasibility Verification
+version: 1.0.0
+status: verified-by-ba
+related_code: F:/Gapone Conversation/Docs/AI_Chatbot/prd-image-upload-feasibility.md
+last_updated: 2026-06-26
+---
+
+# Nhật ký thay đổi (Revision History)
+
+| Phiên bản | Ngày | Người cập nhật | Vị trí thay đổi | Lý do chi tiết |
+| :--- | :--- | :--- | :--- | :--- |
+| 1.0.0 | 2026-06-26 | Mira-Miraaa | Toàn bộ tài liệu | Chuẩn hóa tài liệu từ tệp cũ |
+
+---
+
 **Upload Ảnh & Đánh giá Khả thi Kỹ thuật**
 
 # **1\. Mục tiêu** 

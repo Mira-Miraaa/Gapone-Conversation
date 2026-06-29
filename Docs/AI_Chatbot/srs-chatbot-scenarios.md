@@ -1,3 +1,11 @@
+---
+title: SRS Chatbot Scenarios
+version: 1.1.1
+status: verified-by-ba
+related_code: F:/Gapone Conversation/Docs/AI_Chatbot/srs-chatbot-scenarios.md
+last_updated: 2026-06-26
+---
+
 **SRS TỰ ĐỘNG HÓA**
 
 **--------------------------------------------------------**

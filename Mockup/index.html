@@ -3109,7 +3109,6 @@
             background-color: var(--primary-hover);
         }
 
-        /* Column 3: Right Profile Panel */
         .chat-info-sidebar {
             width: 300px;
             border-left: 1px solid var(--border-color);
@@ -3119,7 +3118,75 @@
             height: 100%;
             transition: width 0.25s ease, opacity 0.25s ease;
             flex-shrink: 0;
+            overflow: hidden;
+        }
+
+        .chat-info-body {
+            flex: 1;
             overflow-y: auto;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            text-align: left;
+        }
+
+        .chat-info-footer {
+            padding: 12px 16px;
+            border-top: 1px solid var(--border-color);
+            background-color: var(--bg-sidebar);
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            flex-shrink: 0;
+            z-index: 20;
+        }
+
+        /* Accordion CSS styling */
+        .accordion-section {
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background-color: var(--bg-card);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .accordion-header {
+            padding: 10px 14px;
+            background-color: var(--bg-hover);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            user-select: none;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-main);
+            border-bottom: 1px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .accordion-header:hover {
+            background-color: var(--border-color);
+        }
+
+        .accordion-header.expanded {
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .accordion-content {
+            padding: 12px;
+            background-color: var(--bg-card);
+        }
+
+        .chevron-icon {
+            transition: transform 0.2s ease;
+            color: var(--text-muted);
+        }
+
+        .chevron-icon.rotated {
+            transform: rotate(90deg);
         }
 
         .chat-info-sidebar.collapsed {
@@ -4603,7 +4670,7 @@
                         </div>
 
                         <!-- Column 3: Right Profile Panel -->
-                        <div class="chat-info-sidebar" id="chat-info-sidebar">
+                        <div class="chat-info-sidebar" id="chat-info-sidebar" style="display: none;">
                             <div class="chat-info-header">
                                 <button class="btn-info-close" onclick="toggleRightSidebar()" title="Ẩn thông tin">
                                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="13 17 18 12 13 7"></polyline><polyline points="6 17 11 12 6 7"></polyline></svg>
@@ -4612,77 +4679,112 @@
                                 <div id="chat-info-fullname" class="chat-info-name">Hằng Lê</div>
                             </div>
                             
-                            <!-- Nhãn hội thoại -->
-                            <div class="chat-info-section">
-                                <span class="chat-info-section-title">Nhãn hội thoại</span>
-                                <div class="tags-manager-wrapper">
-                                    <div class="tags-input-row">
-                                        <select id="chat-add-tag-select" class="form-control" style="height:32px; font-size:12px;" onchange="addTagToActiveConversation(this.value); this.value=''">
-                                            <option value="">+ Gán nhãn dán</option>
-                                            <!-- Dynamically filled -->
-                                        </select>
+                            <!-- Scrollable body container -->
+                            <div class="chat-info-body" id="chat-info-body">
+                                
+                                <!-- 1. Nhãn hội thoại (collapsed by default) -->
+                                <div class="accordion-section" id="section-tags">
+                                    <div class="accordion-header" onclick="toggleAccordion('tags')">
+                                        <div style="display:flex; align-items:center; gap:8px;">
+                                            <svg class="chevron-icon" id="chevron-tags" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                                            <span class="accordion-title">Nhãn hội thoại</span>
+                                        </div>
                                     </div>
-                                    <div class="tags-current-list" id="chat-info-tags-list">
-                                        <!-- Tag pills -->
+                                    <div class="accordion-content" id="content-tags" style="display: none;">
+                                        <div class="tags-manager-wrapper">
+                                            <div class="tags-input-row">
+                                                <select id="chat-add-tag-select" class="form-control" style="height:32px; font-size:12px;" onchange="markSidebarDirty(); addTagToActiveConversation(this.value); this.value=''">
+                                                    <option value="">+ Gán nhãn dán</option>
+                                                    <!-- Dynamically filled -->
+                                                </select>
+                                            </div>
+                                            <div class="tags-current-list" id="chat-info-tags-list">
+                                                <!-- Tag pills -->
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
 
-                            <!-- Ticket liên quan -->
-                            <div class="chat-info-section">
-                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-                                    <span class="chat-info-section-title" style="margin-bottom:0;">Ticket liên quan</span>
-                                    <button class="btn-tool-ticket" id="btn-create-ticket-sidebar" style="width:22px; height:22px;" onclick="openCreateTicketPopup()" title="Tạo Ticket mới">
-                                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-                                    </button>
-                                </div>
-                                <div class="sidebar-ticket-list" id="sidebar-related-tickets-list">
-                                    <!-- Dynamic related tickets -->
-                                </div>
-                            </div>
-                            
-                            <!-- Thông tin chi tiết khách hàng -->
-                            <div class="chat-info-section">
-                                <span class="chat-info-section-title">Thông tin khách hàng</span>
-                                <div style="display: flex; flex-direction: column; gap: 10px;">
-                                    <div class="form-group">
-                                        <label class="form-label" style="font-size:11px;">Họ</label>
-                                        <input type="text" id="cust-ho" class="form-control" style="height:32px; font-size:12px;" oninput="validateCustomerForm()">
+                                <!-- 2. Ticket (expanded by default) -->
+                                <div class="accordion-section" id="section-tickets">
+                                    <div class="accordion-header expanded" onclick="toggleAccordion('tickets')">
+                                        <div style="display:flex; align-items:center; gap:8px; width:100%; justify-content:space-between;">
+                                            <div style="display:flex; align-items:center; gap:8px;">
+                                                <svg class="chevron-icon rotated" id="chevron-tickets" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                                                <span class="accordion-title">Ticket</span>
+                                            </div>
+                                            <button class="btn-tool-ticket" id="btn-create-ticket-sidebar" style="width:22px; height:22px;" onclick="event.stopPropagation(); openCreateTicketPopup()" title="Tạo Ticket mới">
+                                                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                                            </button>
+                                        </div>
                                     </div>
-                                    <div class="form-group">
-                                        <label class="form-label" style="font-size:11px;">Tên *</label>
-                                        <input type="text" id="cust-ten" class="form-control" style="height:32px; font-size:12px;" oninput="validateCustomerForm()">
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="form-label" style="font-size:11px;">Số điện thoại *</label>
-                                        <input type="text" id="cust-phone" class="form-control" style="height:32px; font-size:12px;" oninput="validateCustomerForm()">
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="form-label" style="font-size:11px;">Email</label>
-                                        <input type="email" id="cust-email" class="form-control" style="height:32px; font-size:12px;" oninput="validateCustomerForm()">
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="form-label" style="font-size:11px;">Ngày sinh</label>
-                                        <input type="date" id="cust-dob" class="form-control" style="height:32px; font-size:12px;">
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="form-label" style="font-size:11px;">Địa chỉ</label>
-                                        <textarea id="cust-address" class="form-control" style="height:50px; font-size:12px; resize:none; padding:6px;"></textarea>
+                                    <div class="accordion-content" id="content-tickets" style="display: block;">
+                                        <div class="sidebar-ticket-list" id="sidebar-related-tickets-list" style="max-height: 158px; overflow-y: auto;">
+                                            <!-- Dynamic related tickets -->
+                                        </div>
                                     </div>
                                 </div>
+
+                                <!-- 3. Ghi chú (collapsed by default) -->
+                                <div class="accordion-section" id="section-notes">
+                                    <div class="accordion-header" onclick="toggleAccordion('notes')">
+                                        <div style="display:flex; align-items:center; gap:8px;">
+                                            <svg class="chevron-icon" id="chevron-notes" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                                            <span class="accordion-title">Ghi chú</span>
+                                        </div>
+                                    </div>
+                                    <div class="accordion-content" id="content-notes" style="display: none;">
+                                        <textarea id="cust-notes" class="form-control" style="height: 60px; line-height: 20px; font-size: 12px; resize: none; overflow-y: auto; padding: 6px; box-sizing: border-box;" maxlength="500" placeholder="Nhập ghi chú (tối đa 500 ký tự)..." oninput="markSidebarDirty(); handleNotesInput(this)"></textarea>
+                                        <div id="notes-char-counter" style="font-size: 10px; color: var(--text-muted); text-align: right; margin-top: 2px;">0 / 500</div>
+                                    </div>
+                                </div>
+
+                                <!-- 4. Thông tin khách hàng (collapsed by default) -->
+                                <div class="accordion-section" id="section-profile">
+                                    <div class="accordion-header" onclick="toggleAccordion('profile')">
+                                        <div style="display:flex; align-items:center; gap:8px;">
+                                            <svg class="chevron-icon" id="chevron-profile" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                                            <span class="accordion-title">Thông tin khách hàng</span>
+                                        </div>
+                                    </div>
+                                    <div class="accordion-content" id="content-profile" style="display: none;">
+                                        <div style="display: flex; flex-direction: column; gap: 10px; padding: 4px 0;">
+                                            <div class="form-group">
+                                                <label class="form-label" style="font-size:11px;">Họ</label>
+                                                <input type="text" id="cust-ho" class="form-control" style="height:32px; font-size:12px;" oninput="markSidebarDirty(); validateCustomerForm()">
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="form-label" style="font-size:11px;">Tên *</label>
+                                                <input type="text" id="cust-ten" class="form-control" style="height:32px; font-size:12px;" oninput="markSidebarDirty(); validateCustomerForm()">
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="form-label" style="font-size:11px;">Số điện thoại *</label>
+                                                <input type="text" id="cust-phone" class="form-control" style="height:32px; font-size:12px;" oninput="markSidebarDirty(); validateCustomerForm()">
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="form-label" style="font-size:11px;">Email</label>
+                                                <input type="email" id="cust-email" class="form-control" style="height:32px; font-size:12px;" oninput="markSidebarDirty(); validateCustomerForm()">
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="form-label" style="font-size:11px;">Ngày sinh</label>
+                                                <input type="date" id="cust-dob" class="form-control" style="height:32px; font-size:12px;" onchange="markSidebarDirty();">
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="form-label" style="font-size:11px;">Địa chỉ</label>
+                                                <textarea id="cust-address" class="form-control" style="height:50px; font-size:12px; resize:none; padding:6px;" oninput="markSidebarDirty();"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
                             </div>
                             
-                            <!-- Ghi chú -->
-                            <div class="chat-info-section">
-                                <span class="chat-info-section-title">Ghi chú</span>
-                                <textarea id="cust-notes" class="form-control" style="height:80px; font-size:12px; resize:none; padding:6px;" placeholder="Nhập ghi chú..."></textarea>
+                            <!-- Sticky action footer panel -->
+                            <div class="chat-info-footer">
+                                <button class="btn btn-secondary" style="padding:8px 16px; font-size:12px; flex: 1;" onclick="cancelCustomerEdit()">Hủy</button>
+                                <button class="btn btn-primary" id="btn-save-customer" style="padding:8px 16px; font-size:12px; flex: 1;" onclick="saveCustomerInfo()">Lưu</button>
                             </div>
-                            
-                            <!-- Actions -->
-                            <div class="chat-info-section" style="border-bottom:none; display:flex; flex-direction:row; justify-content:flex-end; gap:8px;">
-                                <button class="btn btn-secondary" style="padding:6px 12px; font-size:12px;" onclick="cancelCustomerEdit()">Hủy</button>
-                                <button class="btn btn-primary" id="btn-save-customer" style="padding:6px 12px; font-size:12px;" onclick="saveCustomerInfo()">Lưu</button>
-                            </div>
+                        </div>
                         </div>
                     </div>
                 </div>
@@ -4943,6 +5045,21 @@
             <div class="modal-footer" style="justify-content: space-between;">
                 <button class="btn btn-secondary" style="background-color:#ef4444; border-color:#ef4444; color:white;" id="btn-delete-ticket" onclick="deleteActiveTicket()">Xóa Ticket (Closed)</button>
                 <button class="btn btn-primary" onclick="closeDetailTicketPopup()">Đóng</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Popup Cảnh báo Chưa lưu Thiết lập (Dirty State confirmation) -->
+    <div class="modal-overlay" id="unsaved-changes-modal" style="z-index: 2100;">
+        <div class="modal-card" style="max-width: 400px; padding: 24px; text-align: center;">
+            <div style="font-size: 40px; color: #f59e0b; margin-bottom: 12px;">⚠️</div>
+            <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 8px; color: var(--text-main);">Thiết lập chưa được lưu</h3>
+            <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 24px; line-height: 1.6;">
+                Bạn vẫn chưa lưu các thiết lập, bạn có muốn tiếp tục lưu?
+            </p>
+            <div style="display: flex; gap: 12px; justify-content: center;">
+                <button class="btn btn-secondary" style="padding: 8px 16px; flex: 1;" onclick="discardAndNavigate()">Hủy</button>
+                <button class="btn btn-primary" style="padding: 8px 16px; flex: 1;" onclick="saveAndNavigate()">Lưu ngay</button>
             </div>
         </div>
     </div>
@@ -5709,6 +5826,11 @@
 
         // 1. NAVIGATION ROUTING
         function navigateSubmenu(viewName) {
+            if (isSidebarDirty) {
+                pendingNavigation = { type: 'submenu', target: viewName };
+                document.getElementById('unsaved-changes-modal').classList.add('open');
+                return;
+            }
             document.querySelectorAll('.submenu-item').forEach(item => item.classList.remove('active'));
             const parentBreadcrumb = document.getElementById('breadcrumb-parent-view');
 
@@ -5793,6 +5915,11 @@
         }
 
         function selectMenu(element) {
+            if (isSidebarDirty) {
+                pendingNavigation = { type: 'menu', target: element };
+                document.getElementById('unsaved-changes-modal').classList.add('open');
+                return;
+            }
             document.querySelectorAll('.menu-item').forEach(item => {
                 item.classList.remove('active');
                 item.style.color = '';
@@ -7925,6 +8052,100 @@
             }
         }
 
+        // =========================================================================
+        // ACCORDION & DIRTY STATE LOGIC
+        // =========================================================================
+        let isSidebarDirty = false;
+        let pendingNavigation = null;
+
+        function markSidebarDirty() {
+            isSidebarDirty = true;
+        }
+
+        function toggleAccordion(sectionId) {
+            const header = document.querySelector(`#section-${sectionId} .accordion-header`);
+            const content = document.getElementById(`content-${sectionId}`);
+            const chevron = document.getElementById(`chevron-${sectionId}`);
+
+            if (!content || !header) return;
+
+            const isCollapsed = content.style.display === 'none';
+            if (isCollapsed) {
+                content.style.display = 'block';
+                header.classList.add('expanded');
+                if (chevron) chevron.classList.add('rotated');
+            } else {
+                content.style.display = 'none';
+                header.classList.remove('expanded');
+                if (chevron) chevron.classList.remove('rotated');
+            }
+        }
+
+        function resetAccordionStates() {
+            // Nhãn hội thoại (tags) -> closed
+            document.getElementById('content-tags').style.display = 'none';
+            document.querySelector('#section-tags .accordion-header').classList.remove('expanded');
+            document.getElementById('chevron-tags').classList.remove('rotated');
+
+            // Ticket (tickets) -> open
+            document.getElementById('content-tickets').style.display = 'block';
+            document.querySelector('#section-tickets .accordion-header').classList.add('expanded');
+            document.getElementById('chevron-tickets').classList.add('rotated');
+
+            // Ghi chú (notes) -> closed
+            document.getElementById('content-notes').style.display = 'none';
+            document.querySelector('#section-notes .accordion-header').classList.remove('expanded');
+            document.getElementById('chevron-notes').classList.remove('rotated');
+
+            // Thông tin khách hàng (profile) -> closed
+            document.getElementById('content-profile').style.display = 'none';
+            document.querySelector('#section-profile .accordion-header').classList.remove('expanded');
+            document.getElementById('chevron-profile').classList.remove('rotated');
+        }
+
+        function handleNotesInput(textarea) {
+            let val = textarea.value;
+            if (val.length > 500) {
+                val = val.substring(0, 500);
+                textarea.value = val;
+            }
+            document.getElementById('notes-char-counter').innerText = `${val.length} / 500`;
+        }
+
+        function executePendingNavigation() {
+            if (!pendingNavigation) return;
+            const nav = pendingNavigation;
+            pendingNavigation = null;
+            
+            if (nav.type === 'conversation') {
+                selectConversation(nav.target);
+            } else if (nav.type === 'menu') {
+                selectMenu(nav.target);
+            } else if (nav.type === 'submenu') {
+                navigateSubmenu(nav.target);
+            }
+        }
+
+        function discardAndNavigate() {
+            isSidebarDirty = false;
+            cancelCustomerEdit();
+            document.getElementById('unsaved-changes-modal').classList.remove('open');
+            executePendingNavigation();
+        }
+
+        function saveAndNavigate() {
+            if (validateCustomerForm()) {
+                saveCustomerInfo();
+                isSidebarDirty = false;
+                document.getElementById('unsaved-changes-modal').classList.remove('open');
+                executePendingNavigation();
+            } else {
+                showToast('Không thể lưu thông tin do biểu mẫu không hợp lệ! Đã hủy chuyển hướng.');
+                document.getElementById('unsaved-changes-modal').classList.remove('open');
+                pendingNavigation = null;
+            }
+        }
+
         // Mock Email client dialog interface
         function openMockEmailClient() {
             const modal = document.getElementById('email-client-modal');
@@ -8065,6 +8286,12 @@
 
             // Initialize conversation module state if not already initialized
             initConversationModule();
+
+            // Toggle right sidebar visibility based on active conversation state
+            const sidebar = document.getElementById('chat-info-sidebar');
+            if (sidebar) {
+                sidebar.style.display = activeConvId ? 'flex' : 'none';
+            }
         }
 
         function initConversationModule() {
@@ -8097,11 +8324,14 @@
             renderConversationsList();
 
             // If activeConvId exists, load it, else show empty view
+            const sidebar = document.getElementById('chat-info-sidebar');
             if (activeConvId) {
                 selectConversation(activeConvId);
+                if (sidebar) sidebar.style.display = 'flex';
             } else {
                 document.getElementById('chat-empty-view').style.display = 'flex';
                 document.getElementById('chat-active-view').style.display = 'none';
+                if (sidebar) sidebar.style.display = 'none';
             }
         }
 
@@ -8526,6 +8756,13 @@
         }
 
         function selectConversation(convId) {
+            // Check dirty state first
+            if (isSidebarDirty && activeConvId !== convId) {
+                pendingNavigation = { type: 'conversation', target: convId };
+                document.getElementById('unsaved-changes-modal').classList.add('open');
+                return;
+            }
+
             activeConvId = convId;
             
             // Mark as read
@@ -8533,6 +8770,16 @@
             if (conv) {
                 conv.unreadCount = 0;
                 conv.isRead = true;
+
+                // Backup initial state for active conversation to support cancel edit
+                if (!conv.backupState) {
+                    conv.backupState = {
+                        tags: [...conv.tags],
+                        customerInfo: { ...conv.customerInfo },
+                        customerName: conv.customerName,
+                        avatar: conv.avatar
+                    };
+                }
             }
 
             renderConversationsList();
@@ -8542,6 +8789,13 @@
 
             // Load header info
             if (conv) {
+                // Show right panel
+                const sidebar = document.getElementById('chat-info-sidebar');
+                if (sidebar) sidebar.style.display = 'flex';
+
+                // Reset accordions to default states: Ticket open, others closed
+                resetAccordionStates();
+
                 const avatarDiv = document.getElementById('chat-active-avatar');
                 avatarDiv.innerText = conv.avatar;
                 avatarDiv.style.backgroundColor = conv.avatarColor;
@@ -8597,8 +8851,17 @@
                 // Load related tickets sidebar list
                 renderRelatedTicketsSidebar();
 
+                // Update notes character counter
+                const notesTextarea = document.getElementById('cust-notes');
+                if (notesTextarea) {
+                    handleNotesInput(notesTextarea);
+                }
+
                 // Validate form initially
                 validateCustomerForm();
+
+                // Since we just loaded a fresh conversation, reset dirty state to false
+                isSidebarDirty = false;
             }
 
             // Render Timeline messages
@@ -8957,18 +9220,53 @@
             conv.customerName = ho ? `${ho} ${ten}` : ten;
             conv.avatar = ten.substring(0, 2).toUpperCase();
 
+            // Create new backup state of the saved changes
+            conv.backupState = {
+                tags: [...conv.tags],
+                customerInfo: { ...conv.customerInfo },
+                customerName: conv.customerName,
+                avatar: conv.avatar,
+                createdTickets: []
+            };
+
+            // Reset dirty state
+            isSidebarDirty = false;
+
             // Re-render
             document.getElementById('chat-active-account-name').innerText = conv.customerName;
             document.getElementById('chat-info-fullname').innerText = conv.customerName;
             document.getElementById('chat-info-avatar-circle').innerText = conv.avatar;
 
             renderConversationsList();
-            showToast('Lưu thông tin khách hàng thành công!');
+            showToast('Lưu thiết lập thành công!');
         }
 
         function cancelCustomerEdit() {
             const conv = conversationsList.find(c => c.id === activeConvId);
             if (!conv) return;
+
+            // Restore from backup
+            if (conv.backupState) {
+                // Rollback created tickets in this unsaved session
+                if (conv.backupState.createdTickets && conv.backupState.createdTickets.length > 0) {
+                    ticketsList = ticketsList.filter(t => !conv.backupState.createdTickets.includes(t.ticket_id));
+                    
+                    // Filter out timeline logs of these created tickets
+                    messagesDatabase[conv.id] = messagesDatabase[conv.id].filter(msg => {
+                        if (msg.senderType === 'system' && msg.isTicketLink) {
+                            return !conv.backupState.createdTickets.includes(msg.ticketId);
+                        }
+                        return true;
+                    });
+                    
+                    conv.backupState.createdTickets = [];
+                }
+
+                conv.tags = [...conv.backupState.tags];
+                conv.customerInfo = { ...conv.backupState.customerInfo };
+                conv.customerName = conv.backupState.customerName;
+                conv.avatar = conv.backupState.avatar;
+            }
 
             // Restore form values
             document.getElementById('cust-ho').value = conv.customerInfo.ho || '';
@@ -8979,8 +9277,26 @@
             document.getElementById('cust-address').value = conv.customerInfo.address || '';
             document.getElementById('cust-notes').value = conv.customerInfo.notes || '';
 
+            // Update notes char counter
+            const notesTextarea = document.getElementById('cust-notes');
+            if (notesTextarea) {
+                handleNotesInput(notesTextarea);
+            }
+
+            // Reset dirty state
+            isSidebarDirty = false;
+
+            // Re-render UI elements
+            document.getElementById('chat-active-account-name').innerText = conv.customerName;
+            document.getElementById('chat-info-fullname').innerText = conv.customerName;
+            document.getElementById('chat-info-avatar-circle').innerText = conv.avatar;
+
+            renderConversationsList();
+            renderActiveTagsList();
+            renderRelatedTicketsSidebar();
             validateCustomerForm();
-            showToast('Đã hủy các thay đổi trên form');
+            
+            showToast('Đã hủy các thay đổi trên panel');
         }
 
         function addTagToActiveConversation(tagName) {
@@ -8989,6 +9305,7 @@
             if (!conv) return;
 
             if (!conv.tags.includes(tagName)) {
+                markSidebarDirty();
                 conv.tags.push(tagName);
                 
                 // Add event log message
@@ -9012,6 +9329,7 @@
             const conv = conversationsList.find(c => c.id === activeConvId);
             if (!conv) return;
 
+            markSidebarDirty();
             conv.tags = conv.tags.filter(t => t !== tagName);
             
             // Add event log message
@@ -9475,6 +9793,15 @@
             };
 
             ticketsList.push(newTicket);
+
+            // Mark sidebar dirty and track ticket creation
+            markSidebarDirty();
+            if (conv.backupState) {
+                if (!conv.backupState.createdTickets) {
+                    conv.backupState.createdTickets = [];
+                }
+                conv.backupState.createdTickets.push(ticketId);
+            }
 
             // Log event to conversation timeline
             const now = new Date();

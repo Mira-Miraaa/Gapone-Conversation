@@ -2197,6 +2197,1255 @@
                 display: flex;
             }
         }
+
+        /* CONVERSATION VIEW STYLES */
+        .conversation-layout {
+            display: flex;
+            height: calc(100vh - 60px);
+            width: 100%;
+            overflow: hidden;
+            background-color: var(--bg-main);
+        }
+
+        /* Column 1: Left List */
+        .chat-sidebar {
+            width: 320px;
+            min-width: 300px;
+            max-width: 380px;
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            background-color: var(--bg-sidebar);
+            flex-shrink: 0;
+        }
+
+        .chat-sidebar-header {
+            padding: 16px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .search-row {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .search-box-wrapper {
+            position: relative;
+            flex: 1;
+        }
+
+        .search-box-wrapper input {
+            width: 100%;
+            height: 36px;
+            padding: 8px 12px 8px 32px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background-color: var(--bg-input);
+            color: var(--text-main);
+            font-size: 13px;
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        .search-box-wrapper input:focus {
+            border-color: var(--primary-color);
+        }
+
+        .search-box-wrapper svg {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            width: 14px;
+            height: 14px;
+        }
+
+        .btn-filter-channels {
+            height: 36px;
+            padding: 0 12px;
+            border: 1px solid var(--border-color);
+            background-color: var(--bg-input);
+            color: var(--text-main);
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+        }
+
+        .btn-filter-channels:hover {
+            border-color: var(--border-heavy);
+        }
+
+        .chat-list-tabs {
+            display: flex;
+            border-bottom: 1px solid var(--border-color);
+            padding: 0 16px;
+            background-color: var(--bg-sidebar);
+        }
+
+        .chat-tab {
+            padding: 10px 16px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-muted);
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .chat-tab.active {
+            color: var(--primary-color);
+            border-bottom-color: var(--primary-color);
+        }
+
+        .chat-tab-badge {
+            background-color: #3b82f6;
+            color: white;
+            font-size: 10px;
+            padding: 1px 6px;
+            border-radius: 10px;
+            font-weight: 700;
+        }
+
+        .chat-list-scroll {
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        /* Conversation list items */
+        .chat-item {
+            padding: 14px 16px;
+            border-bottom: 1px solid var(--border-color);
+            cursor: pointer;
+            display: flex;
+            gap: 12px;
+            position: relative;
+            transition: background-color 0.2s;
+            text-align: left;
+        }
+
+        .chat-item:hover {
+            background-color: var(--bg-hover);
+        }
+
+        .chat-item.active {
+            background-color: var(--primary-light);
+            border-left: 3px solid var(--primary-color);
+        }
+
+        .chat-avatar-wrapper {
+            position: relative;
+            width: 44px;
+            height: 44px;
+            flex-shrink: 0;
+        }
+
+        .chat-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: white;
+            font-size: 15px;
+            text-transform: uppercase;
+        }
+
+        .channel-badge {
+            position: absolute;
+            bottom: -2px;
+            right: -2px;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background-color: white;
+            border: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .channel-badge img {
+            width: 12px;
+            height: 12px;
+            object-fit: contain;
+        }
+
+        .chat-item-details {
+            flex: 1;
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .chat-item-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .chat-item-name {
+            font-size: 13.5px;
+            font-weight: 600;
+            color: var(--text-main);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .chat-item-time {
+            font-size: 11px;
+            color: var(--text-muted);
+            white-space: nowrap;
+        }
+
+        .chat-item-preview {
+            font-size: 12px;
+            color: var(--text-muted);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            line-height: 1.4;
+        }
+
+        .chat-item.unread .chat-item-name {
+            font-weight: 700;
+        }
+
+        .chat-item.unread .chat-item-preview {
+            color: var(--text-main);
+            font-weight: 600;
+        }
+
+        .unread-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #3b82f6;
+            flex-shrink: 0;
+        }
+
+        .chat-item-tags {
+            display: flex;
+            gap: 4px;
+            flex-wrap: wrap;
+            margin-top: 4px;
+        }
+
+        .chat-item-tag {
+            font-size: 10px;
+            padding: 1px 6px;
+            border-radius: 4px;
+            color: white;
+            font-weight: 600;
+        }
+
+        .chat-item-actions-btn {
+            position: absolute;
+            right: 12px;
+            bottom: 12px;
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            padding: 2px 6px;
+            color: var(--text-muted);
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .chat-item:hover .chat-item-actions-btn {
+            opacity: 1;
+        }
+
+        .chat-item-actions-menu {
+            position: absolute;
+            bottom: 34px;
+            right: 12px;
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            box-shadow: var(--shadow-lg);
+            z-index: 20;
+            display: none;
+            flex-direction: column;
+            width: 140px;
+            overflow: hidden;
+        }
+
+        .chat-item-actions-item {
+            padding: 8px 12px;
+            font-size: 12px;
+            cursor: pointer;
+            color: var(--text-main);
+            transition: background-color 0.2s;
+            text-align: left;
+        }
+
+        .chat-item-actions-item:hover {
+            background-color: var(--bg-hover);
+        }
+
+        /* Column 2: Middle Chat Area */
+        .chat-main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background-color: var(--bg-main);
+            position: relative;
+        }
+
+        .chat-main-header {
+            height: 60px;
+            border-bottom: 1px solid var(--border-color);
+            padding: 0 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: var(--bg-main);
+            z-index: 10;
+        }
+
+        .chat-header-user {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .chat-header-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: white;
+            font-size: 13.5px;
+        }
+
+        .chat-header-info {
+            display: flex;
+            flex-direction: column;
+            text-align: left;
+        }
+
+        .chat-header-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .chat-header-sub {
+            font-size: 11px;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            cursor: pointer;
+        }
+
+        .chat-header-sub:hover {
+            color: var(--primary-color);
+        }
+
+        .chat-header-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .select-assignee-wrapper, .select-status-wrapper {
+            position: relative;
+        }
+
+        .btn-assignee, .btn-status {
+            height: 32px;
+            padding: 0 10px;
+            border: 1px solid var(--border-color);
+            background-color: var(--bg-input);
+            color: var(--text-main);
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+        }
+
+        .btn-assignee:hover, .btn-status:hover {
+            border-color: var(--border-heavy);
+        }
+
+        /* Chat Assignee Dropdown menu */
+        .assignee-dropdown-menu {
+            position: absolute;
+            top: 36px;
+            right: 0;
+            width: 250px;
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            box-shadow: var(--shadow-lg);
+            z-index: 50;
+            display: none;
+            flex-direction: column;
+            padding: 8px;
+        }
+
+        .assignee-search {
+            margin-bottom: 8px;
+        }
+
+        .assignee-search input {
+            width: 100%;
+            height: 28px;
+            padding: 4px 8px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            background-color: var(--bg-input);
+            color: var(--text-main);
+            font-size: 12px;
+            outline: none;
+        }
+
+        .assignee-list-container {
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .assignee-group-title {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text-muted);
+            padding: 4px 6px;
+            background-color: var(--bg-hover);
+            border-radius: 4px;
+            margin: 4px 0;
+            text-transform: uppercase;
+            text-align: left;
+        }
+
+        .assignee-item {
+            padding: 6px 8px;
+            font-size: 12.5px;
+            color: var(--text-main);
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background-color 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            text-align: left;
+        }
+
+        .assignee-item:hover {
+            background-color: var(--bg-hover);
+        }
+
+        .assignee-item.selected {
+            background-color: var(--primary-light);
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        /* Status Dropdown menu */
+        .status-dropdown-menu {
+            position: absolute;
+            top: 36px;
+            right: 0;
+            width: 140px;
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            box-shadow: var(--shadow-lg);
+            z-index: 50;
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .status-option {
+            padding: 8px 12px;
+            font-size: 12.5px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-main);
+            transition: background-color 0.2s;
+            text-align: left;
+        }
+
+        .status-option:hover {
+            background-color: var(--bg-hover);
+        }
+
+        .status-option.active {
+            font-weight: 600;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        .status-dot.status-open { background-color: #3b82f6; }
+        .status-dot.status-progress { background-color: #f59e0b; }
+        .status-dot.status-closed { background-color: #ef4444; }
+
+        .btn-toggle-info {
+            background: none;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--text-muted);
+            transition: all 0.2s;
+        }
+
+        .btn-toggle-info:hover {
+            border-color: var(--border-heavy);
+            color: var(--text-main);
+        }
+
+        /* Chat Timeline messages space */
+        .chat-timeline {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            background-color: var(--bg-main);
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            position: relative;
+        }
+
+        .timeline-date-divider {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 10px 0;
+        }
+
+        .timeline-date-text {
+            background-color: var(--bg-hover);
+            color: var(--text-muted);
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .msg-container {
+            display: flex;
+            gap: 8px;
+            max-width: 75%;
+            text-align: left;
+        }
+
+        .msg-container.customer {
+            align-self: flex-start;
+        }
+
+        .msg-container.staff {
+            align-self: flex-end;
+            flex-direction: row-reverse;
+            max-width: 70%;
+        }
+
+        .msg-container.bot {
+            align-self: flex-end;
+            flex-direction: row-reverse;
+            max-width: 70%;
+        }
+
+        .msg-avatar {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: white;
+            font-size: 11px;
+            flex-shrink: 0;
+        }
+
+        .msg-content-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .msg-sender-name {
+            font-size: 11px;
+            color: var(--text-muted);
+            padding: 0 4px;
+        }
+
+        .msg-bubble {
+            padding: 10px 14px;
+            border-radius: 12px;
+            font-size: 13px;
+            line-height: 1.5;
+            word-break: break-word;
+            position: relative;
+        }
+
+        .msg-container.customer .msg-bubble {
+            background-color: var(--bg-hover);
+            color: var(--text-main);
+            border-top-left-radius: 0;
+        }
+
+        .msg-container.staff .msg-bubble {
+            background-color: var(--primary-light);
+            color: var(--text-main);
+            border: 1px solid var(--primary-border);
+            border-top-right-radius: 0;
+        }
+
+        .msg-container.bot .msg-bubble {
+            background-color: rgba(59, 130, 246, 0.08);
+            color: var(--text-main);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-top-right-radius: 0;
+        }
+
+        .msg-bot-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 10px;
+            color: #3b82f6;
+            margin-top: 4px;
+            font-weight: 600;
+            padding-right: 4px;
+        }
+
+        .msg-time {
+            font-size: 10px;
+            color: var(--text-muted);
+            align-self: flex-end;
+            margin-top: 2px;
+            padding: 0 4px;
+            white-space: nowrap;
+        }
+
+        .msg-container.staff .msg-time, .msg-container.bot .msg-time {
+            align-self: flex-start;
+        }
+
+        /* Event Messages system */
+        .system-event-message {
+            align-self: center;
+            max-width: 80%;
+            background-color: rgba(240, 106, 36, 0.05);
+            border: 1px dashed var(--primary-border);
+            border-radius: 8px;
+            padding: 8px 16px;
+            font-size: 12px;
+            color: var(--primary-color);
+            font-weight: 600;
+            text-align: center;
+            margin: 6px 0;
+        }
+
+        /* Telegram attachments styles */
+        .attachment-photo {
+            border-radius: 8px;
+            overflow: hidden;
+            margin-top: 4px;
+            border: 1px solid var(--border-color);
+            background-color: var(--bg-hover);
+        }
+
+        .attachment-photo img {
+            max-width: 100%;
+            max-height: 200px;
+            display: block;
+            object-fit: cover;
+        }
+
+        .attachment-actions {
+            display: flex;
+            gap: 8px;
+            padding: 6px 12px;
+            background-color: var(--bg-card);
+            border-top: 1px solid var(--border-color);
+        }
+
+        .btn-attachment-action {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--primary-color);
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-attachment-action:hover {
+            text-decoration: underline;
+        }
+
+        .attachment-audio-player {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 8px 12px;
+            margin-top: 4px;
+            width: 220px;
+        }
+
+        .btn-audio-play {
+            background-color: var(--primary-color);
+            border: none;
+            color: white;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .audio-progress-bar {
+            flex: 1;
+            height: 4px;
+            background-color: var(--border-color);
+            border-radius: 2px;
+            position: relative;
+        }
+
+        .audio-progress {
+            width: 30%;
+            height: 100%;
+            background-color: var(--primary-color);
+            border-radius: 2px;
+        }
+
+        .attachment-voice {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 4px;
+            font-size: 12px;
+            color: var(--text-main);
+        }
+
+        .attachment-sticker img {
+            max-width: 100px;
+            max-height: 100px;
+            display: block;
+        }
+
+        .link-danger-alert {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #ef4444;
+            font-size: 12px;
+            font-weight: 600;
+            background-color: rgba(239, 68, 68, 0.05);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            padding: 8px 12px;
+            border-radius: 6px;
+            margin-top: 4px;
+        }
+
+        /* Error message send fail styling */
+        .msg-error-container {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: #ef4444;
+            font-size: 11px;
+            margin-top: 4px;
+            font-weight: 500;
+        }
+
+        .msg-error-icon {
+            width: 14px;
+            height: 14px;
+            color: #ef4444;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .chat-scroll-bottom-btn {
+            position: absolute;
+            bottom: 80px;
+            right: 20px;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: var(--shadow-md);
+            z-index: 10;
+        }
+
+        .chat-scroll-bottom-btn:hover {
+            color: var(--text-main);
+            background-color: var(--bg-hover);
+        }
+
+        /* Input area */
+        .chat-input-area {
+            border-top: 1px solid var(--border-color);
+            background-color: var(--bg-main);
+            padding: 12px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .chat-input-tabs {
+            display: flex;
+            gap: 4px;
+        }
+
+        .chat-input-tab {
+            padding: 4px 12px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--primary-color);
+            background-color: var(--primary-light);
+            border: 1px solid var(--primary-border);
+            border-radius: 4px 4px 0 0;
+            border-bottom: none;
+            cursor: pointer;
+        }
+
+        .chat-textarea-wrapper {
+            display: flex;
+            gap: 12px;
+            align-items: flex-end;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 8px 12px;
+            background-color: var(--bg-input);
+            transition: border-color 0.2s;
+        }
+
+        .chat-textarea-wrapper:focus-within {
+            border-color: var(--primary-color);
+        }
+
+        .chat-textarea-wrapper textarea {
+            flex: 1;
+            height: 36px;
+            max-height: 120px;
+            border: none;
+            background: none;
+            color: var(--text-main);
+            font-family: var(--font-family);
+            font-size: 13px;
+            resize: none;
+            outline: none;
+            padding: 0;
+            line-height: 1.5;
+        }
+
+        .btn-chat-send {
+            height: 36px;
+            padding: 0 18px;
+            background-color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+            color: white;
+            font-size: 13px;
+            font-weight: 600;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            align-self: flex-end;
+        }
+
+        .btn-chat-send:hover {
+            background-color: var(--primary-hover);
+        }
+
+        /* Column 3: Right Profile Panel */
+        .chat-info-sidebar {
+            width: 300px;
+            border-left: 1px solid var(--border-color);
+            background-color: var(--bg-sidebar);
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            transition: width 0.25s ease, opacity 0.25s ease;
+            flex-shrink: 0;
+            overflow-y: auto;
+        }
+
+        .chat-info-sidebar.collapsed {
+            width: 0;
+            border-left: none;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .chat-info-header {
+            padding: 16px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            position: relative;
+        }
+
+        .btn-info-close {
+            position: absolute;
+            left: 12px;
+            top: 16px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--text-muted);
+        }
+
+        .chat-info-avatar {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: white;
+            font-size: 24px;
+        }
+
+        .chat-info-name {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .chat-info-section {
+            padding: 16px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            text-align: left;
+        }
+
+        .chat-info-section-title {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .tags-manager-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .tags-input-row {
+            display: flex;
+            gap: 6px;
+        }
+
+        .tags-current-list {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .tag-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            color: white;
+            font-weight: 600;
+        }
+
+        .tag-pill-remove {
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: rgba(0, 0, 0, 0.15);
+            font-size: 9px;
+            transition: background-color 0.15s;
+        }
+
+        .tag-pill-remove:hover {
+            background-color: rgba(0, 0, 0, 0.3);
+        }
+
+        .chat-info-empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            padding: 40px;
+            color: var(--text-muted);
+            text-align: center;
+        }
+
+        .chat-info-empty-state svg {
+            width: 48px;
+            height: 48px;
+            opacity: 0.5;
+            margin-bottom: 16px;
+        }
+
+        /* TICKET VIEW STYLES */
+        .ticket-dashboard {
+            display: flex;
+            flex-direction: column;
+            padding: 24px;
+            gap: 20px;
+            width: 100%;
+            height: calc(100vh - 60px);
+            overflow-y: auto;
+            background-color: var(--bg-main);
+        }
+
+        /* Statistics Widgets */
+        .ticket-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+        }
+
+        .ticket-stat-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .ticket-stat-title {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .ticket-stat-value {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        /* Control/Filters Bar */
+        .ticket-filter-bar {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 16px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: center;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .ticket-search-wrapper {
+            position: relative;
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .ticket-search-wrapper input {
+            width: 100%;
+            height: 36px;
+            padding: 8px 12px 8px 32px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            background-color: var(--bg-input);
+            color: var(--text-main);
+            font-size: 13px;
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        .ticket-search-wrapper input:focus {
+            border-color: var(--primary-color);
+        }
+
+        .ticket-search-wrapper svg {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            width: 14px;
+            height: 14px;
+        }
+
+        /* Table Layout */
+        .ticket-table-wrapper {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .ticket-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 13px;
+        }
+
+        .ticket-table th {
+            background-color: var(--bg-hover);
+            color: var(--text-muted);
+            font-weight: 700;
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .ticket-table td {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-main);
+        }
+
+        .ticket-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .ticket-table tr:hover {
+            background-color: var(--bg-hover);
+        }
+
+        /* Badge indicators */
+        .badge-priority, .badge-ticket-status {
+            display: inline-flex;
+            align-items: center;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        /* Priority Colors */
+        .badge-priority.urgent { background-color: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.2); }
+        .badge-priority.high { background-color: rgba(245, 158, 11, 0.1); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.2); }
+        .badge-priority.medium { background-color: rgba(59, 130, 246, 0.1); color: #3b82f6; border: 1px solid rgba(59, 130, 246, 0.2); }
+        .badge-priority.low { background-color: rgba(107, 114, 128, 0.1); color: #6b7280; border: 1px solid rgba(107, 114, 128, 0.2); }
+
+        /* Status Colors */
+        .badge-ticket-status.open { background-color: rgba(59, 130, 246, 0.15); color: #3b82f6; }
+        .badge-ticket-status.in_progress { background-color: rgba(245, 158, 11, 0.15); color: #f59e0b; }
+        .badge-ticket-status.resolved { background-color: rgba(16, 185, 129, 0.15); color: #10b981; }
+        .badge-ticket-status.closed { background-color: rgba(107, 114, 128, 0.15); color: #6b7280; }
+
+        /* Right sidebar relative tickets styles */
+        .sidebar-ticket-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .sidebar-ticket-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px;
+            border-radius: 6px;
+            background-color: var(--bg-hover);
+            border: 1px solid var(--border-color);
+            font-size: 12px;
+            cursor: pointer;
+            transition: border-color 0.2s;
+            text-align: left;
+        }
+
+        .sidebar-ticket-item:hover {
+            border-color: var(--primary-border);
+        }
+
+        /* Popup styles for inline ticket creation */
+        .btn-tool-ticket {
+            background: none;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--text-muted);
+            transition: all 0.2s;
+        }
+
+        .btn-tool-ticket:hover {
+            border-color: var(--border-heavy);
+            color: var(--text-main);
+        }
+
+        .btn-tool-ticket:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
     </style>
 </head>
 
@@ -2271,6 +3520,19 @@
                                 </svg>
                             </span>
                             <span class="menu-text">Hội thoại</span>
+                        </div>
+                    </div>
+
+                    <div class="menu-item" onclick="selectMenu(this)">
+                        <div class="menu-item-link">
+                            <span class="menu-icon">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
+                                    <line x1="7" y1="7" x2="7.01" y2="7"></line>
+                                </svg>
+                            </span>
+                            <span class="menu-text">Ticket</span>
                         </div>
                     </div>
 
@@ -3178,10 +4440,335 @@
                             <div class="rules-cards-stack" id="rules-cards-container">
                                 <!-- Cards filled dynamically -->
                             </div>
-                        </div>
-
                     </div>
 
+                </div>
+
+                <!-- VIEW 4: CONVERSATION PANEL -->
+                <div id="view-conversation" class="view-panel" style="display: none;">
+                    <div class="conversation-layout">
+                        <!-- Column 1: Left List -->
+                        <div class="chat-sidebar">
+                            <div class="chat-sidebar-header">
+                                <div class="search-row">
+                                    <div class="search-box-wrapper">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                                        <input type="text" id="chat-search" placeholder="Tìm kiếm" oninput="filterConversations()">
+                                    </div>
+                                    <button class="btn-filter-channels" onclick="toggleChannelFilterDropdown(event)">
+                                        <span>Kênh</span>
+                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                                    </button>
+                                </div>
+                                
+                                <!-- Custom Dropdowns for filters -->
+                                <div id="chat-channels-dropdown" class="assignee-dropdown-menu" style="left:auto; right:16px; top:54px; width:180px;">
+                                    <div class="assignee-item selected" onclick="setChannelFilter('All', this)">Tất cả kênh</div>
+                                    <div class="assignee-item" onclick="setChannelFilter('Zalo', this)">Zalo</div>
+                                    <div class="assignee-item" onclick="setChannelFilter('Telegram', this)">Telegram</div>
+                                    <div class="assignee-item" onclick="setChannelFilter('Facebook', this)">Facebook</div>
+                                </div>
+
+                                <div class="search-row" style="margin-top: 4px;">
+                                    <select id="chat-tag-filter" class="form-control" style="height:32px; font-size:12px; padding:4px 8px;" onchange="filterConversations()">
+                                        <option value="All">Tất cả Nhãn dán</option>
+                                        <!-- Will populate dynamically -->
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <!-- Tabs -->
+                            <div class="chat-list-tabs">
+                                <div id="tab-chat-all" class="chat-tab active" onclick="switchChatListTab('all')">
+                                    Tất cả
+                                </div>
+                                <div id="tab-chat-unread" class="chat-tab" onclick="switchChatListTab('unread')">
+                                    Chưa đọc <span class="chat-tab-badge" id="chat-unread-badge">1</span>
+                                </div>
+                            </div>
+                            
+                            <!-- Scrollable list -->
+                            <div class="chat-list-scroll" id="chat-list-scroll-container">
+                                <!-- Dynamic rendering of conversations -->
+                            </div>
+                        </div>
+
+                        <!-- Column 2: Middle Chat Area -->
+                        <div class="chat-main">
+                            <!-- Empty State if no chat selected -->
+                            <div id="chat-empty-view" class="chat-info-empty-state" style="display: flex; height: 100%;">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                                </svg>
+                                <h3>Chọn 1 hội thoại từ danh sách bên trái</h3>
+                                <p style="font-size: 13px; margin-top: 4px;">Select a conversation from the list on the left.</p>
+                            </div>
+
+                            <!-- Chat Content pane (hidden by default) -->
+                            <div id="chat-active-view" style="display: none; flex-direction: column; flex: 1; height: 100%;">
+                                <!-- Header -->
+                                <div class="chat-main-header">
+                                    <div class="chat-header-user">
+                                        <div id="chat-active-avatar" class="chat-header-avatar">H</div>
+                                        <div class="chat-header-info">
+                                            <div id="chat-active-title" class="chat-header-title">Hằng Lê > Hang test</div>
+                                            <div id="chat-active-sub" class="chat-header-sub" onclick="toggleActiveChannelAccountDropdown(event)">
+                                                <span id="chat-active-account-name">Lê Thị Hằng</span>
+                                                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                                            </div>
+                                            
+                                            <!-- Sub-channel/Account switch dropdown -->
+                                            <div id="chat-active-accounts-dropdown" class="assignee-dropdown-menu" style="left:0; top:42px; width:200px;">
+                                                <!-- Populated dynamically -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="chat-header-actions">
+                                        <!-- Dropdown Chỉ định nhân viên -->
+                                        <div class="select-assignee-wrapper">
+                                            <button class="btn-assignee" id="btn-active-assignee" onclick="toggleAssigneeDropdown(event)">
+                                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                                                <span id="active-assignee-name">Chưa chỉ định</span>
+                                            </button>
+                                            
+                                            <div class="assignee-dropdown-menu" id="active-assignee-dropdown">
+                                                <div class="assignee-search">
+                                                    <input type="text" id="assignee-search-input" placeholder="Tìm nhân viên..." oninput="filterAssigneeList()">
+                                                </div>
+                                                <div style="margin-bottom: 6px;">
+                                                    <button class="btn btn-secondary" style="width: 100%; height: 26px; padding: 0 8px; font-size: 11px;" onclick="unassignCurrentConversation()">Bỏ chỉ định</button>
+                                                </div>
+                                                <div class="assignee-list-container" id="assignee-list-container">
+                                                    <!-- Loaded dynamically -->
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Dropdown Trạng thái -->
+                                        <div class="select-status-wrapper">
+                                            <button class="btn-status" id="btn-active-status" onclick="toggleStatusDropdown(event)">
+                                                <span class="status-dot status-progress" id="active-status-dot"></span>
+                                                <span id="active-status-text">Đang xử lý</span>
+                                            </button>
+                                            <div class="status-dropdown-menu" id="active-status-dropdown">
+                                                <div class="status-option" onclick="changeActiveStatus('Open')">
+                                                    <span class="status-dot status-open"></span>
+                                                    <span>Mới (Open)</span>
+                                                </div>
+                                                <div class="status-option" onclick="changeActiveStatus('In Progress')">
+                                                    <span class="status-dot status-progress"></span>
+                                                    <span>Đang xử lý</span>
+                                                </div>
+                                                <div class="status-option" onclick="changeActiveStatus('Closed')">
+                                                    <span class="status-dot status-closed"></span>
+                                                    <span>Đã đóng (Closed)</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Toggle Right Sidebar -->
+                                        <button class="btn-toggle-info" id="btn-toggle-right-sidebar" onclick="toggleRightSidebar()" title="Ẩn/hiện thông tin khách hàng">
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="9" y1="3" x2="9" y2="21"></line></svg>
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <!-- Timeline Area -->
+                                <div class="chat-timeline" id="chat-timeline-container" onscroll="handleTimelineScroll()">
+                                    <!-- Messages rendered dynamically -->
+                                </div>
+                                
+                                <!-- Scroll to bottom button -->
+                                <button class="chat-scroll-bottom-btn" id="chat-scroll-bottom-btn" onclick="scrollToBottomActiveChat()">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><polyline points="19 12 12 19 5 12"></polyline></svg>
+                                </button>
+                                
+                                <!-- Input box -->
+                                <div class="chat-input-area">
+                                    <div class="chat-input-tabs" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                                        <div class="chat-input-tab">Chat</div>
+                                        <button class="btn-tool-ticket" id="btn-create-ticket-chat" onclick="openCreateTicketPopup()" title="Tạo Ticket cho cuộc hội thoại này (BR-CRE-01)">
+                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>
+                                        </button>
+                                    </div>
+                                    <div class="chat-textarea-wrapper">
+                                        <textarea id="chat-message-input" placeholder="Nhập nội dung..." onkeydown="handleChatInputKeyDown(event)"></textarea>
+                                        <button class="btn-chat-send" onclick="sendChatMessage()">Gửi</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Column 3: Right Profile Panel -->
+                        <div class="chat-info-sidebar" id="chat-info-sidebar">
+                            <div class="chat-info-header">
+                                <button class="btn-info-close" onclick="toggleRightSidebar()" title="Ẩn thông tin">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="13 17 18 12 13 7"></polyline><polyline points="6 17 11 12 6 7"></polyline></svg>
+                                </button>
+                                <div id="chat-info-avatar-circle" class="chat-info-avatar">H</div>
+                                <div id="chat-info-fullname" class="chat-info-name">Hằng Lê</div>
+                            </div>
+                            
+                            <!-- Nhãn hội thoại -->
+                            <div class="chat-info-section">
+                                <span class="chat-info-section-title">Nhãn hội thoại</span>
+                                <div class="tags-manager-wrapper">
+                                    <div class="tags-input-row">
+                                        <select id="chat-add-tag-select" class="form-control" style="height:32px; font-size:12px;" onchange="addTagToActiveConversation(this.value); this.value=''">
+                                            <option value="">+ Gán nhãn dán</option>
+                                            <!-- Dynamically filled -->
+                                        </select>
+                                    </div>
+                                    <div class="tags-current-list" id="chat-info-tags-list">
+                                        <!-- Tag pills -->
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Ticket liên quan -->
+                            <div class="chat-info-section">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                                    <span class="chat-info-section-title" style="margin-bottom:0;">Ticket liên quan</span>
+                                    <button class="btn-tool-ticket" id="btn-create-ticket-sidebar" style="width:22px; height:22px;" onclick="openCreateTicketPopup()" title="Tạo Ticket mới">
+                                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                                    </button>
+                                </div>
+                                <div class="sidebar-ticket-list" id="sidebar-related-tickets-list">
+                                    <!-- Dynamic related tickets -->
+                                </div>
+                            </div>
+                            
+                            <!-- Thông tin chi tiết khách hàng -->
+                            <div class="chat-info-section">
+                                <span class="chat-info-section-title">Thông tin khách hàng</span>
+                                <div style="display: flex; flex-direction: column; gap: 10px;">
+                                    <div class="form-group">
+                                        <label class="form-label" style="font-size:11px;">Họ</label>
+                                        <input type="text" id="cust-ho" class="form-control" style="height:32px; font-size:12px;" oninput="validateCustomerForm()">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label" style="font-size:11px;">Tên *</label>
+                                        <input type="text" id="cust-ten" class="form-control" style="height:32px; font-size:12px;" oninput="validateCustomerForm()">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label" style="font-size:11px;">Số điện thoại *</label>
+                                        <input type="text" id="cust-phone" class="form-control" style="height:32px; font-size:12px;" oninput="validateCustomerForm()">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label" style="font-size:11px;">Email</label>
+                                        <input type="email" id="cust-email" class="form-control" style="height:32px; font-size:12px;" oninput="validateCustomerForm()">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label" style="font-size:11px;">Ngày sinh</label>
+                                        <input type="date" id="cust-dob" class="form-control" style="height:32px; font-size:12px;">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label" style="font-size:11px;">Địa chỉ</label>
+                                        <textarea id="cust-address" class="form-control" style="height:50px; font-size:12px; resize:none; padding:6px;"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Ghi chú -->
+                            <div class="chat-info-section">
+                                <span class="chat-info-section-title">Ghi chú</span>
+                                <textarea id="cust-notes" class="form-control" style="height:80px; font-size:12px; resize:none; padding:6px;" placeholder="Nhập ghi chú..."></textarea>
+                            </div>
+                            
+                            <!-- Actions -->
+                            <div class="chat-info-section" style="border-bottom:none; display:flex; flex-direction:row; justify-content:flex-end; gap:8px;">
+                                <button class="btn btn-secondary" style="padding:6px 12px; font-size:12px;" onclick="cancelCustomerEdit()">Hủy</button>
+                                <button class="btn btn-primary" id="btn-save-customer" style="padding:6px 12px; font-size:12px;" onclick="saveCustomerInfo()">Lưu</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- VIEW 5: TICKET MANAGEMENT PANEL -->
+                <div id="view-tickets" class="view-panel" style="display: none;">
+                    <div class="ticket-dashboard">
+                        <!-- Top Header -->
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <h1 style="font-size: 20px; font-weight: 700; margin: 0; color: var(--text-main);">Quản lý Ticket</h1>
+                                <p style="font-size: 13px; color: var(--text-muted); margin: 4px 0 0 0;">Tiếp nhận và giải quyết yêu cầu khách hàng</p>
+                            </div>
+                        </div>
+
+                        <!-- Stats Cards Grid -->
+                        <div class="ticket-stats-grid">
+                            <div class="ticket-stat-card">
+                                <span class="ticket-stat-title">Tổng số Ticket</span>
+                                <span class="ticket-stat-value" id="stat-total-tickets">0</span>
+                            </div>
+                            <div class="ticket-stat-card">
+                                <span class="ticket-stat-title">Đang xử lý</span>
+                                <span class="ticket-stat-value" id="stat-pending-tickets" style="color: #f59e0b;">0</span>
+                            </div>
+                            <div class="ticket-stat-card">
+                                <span class="ticket-stat-title">Tỷ lệ Giải quyết (RT)</span>
+                                <span class="ticket-stat-value" id="stat-resolution-rate" style="color: #10b981;">0%</span>
+                            </div>
+                        </div>
+
+                        <!-- Filter Bar -->
+                        <div class="ticket-filter-bar">
+                            <div class="ticket-search-wrapper">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px; height:14px;"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                                <input type="text" id="ticket-search-input" placeholder="Tìm theo Mã, Tiêu đề, Khách hàng..." oninput="renderTicketsTable()">
+                            </div>
+
+                            <div class="form-group" style="margin: 0; min-width: 140px;">
+                                <select id="ticket-filter-status" class="form-control" style="height: 36px; font-size: 12px;" onchange="renderTicketsTable()">
+                                    <option value="Active">Tất cả trừ Closed</option>
+                                    <option value="All">Tất cả trạng thái</option>
+                                    <option value="Open">Mới (Open)</option>
+                                    <option value="In_Progress">Đang xử lý (In Progress)</option>
+                                    <option value="Resolved">Đã giải quyết (Resolved)</option>
+                                    <option value="Closed">Đã đóng (Closed)</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group" style="margin: 0; min-width: 140px;">
+                                <select id="ticket-filter-priority" class="form-control" style="height: 36px; font-size: 12px;" onchange="renderTicketsTable()">
+                                    <option value="All">Tất cả độ ưu tiên</option>
+                                    <option value="Low">Low</option>
+                                    <option value="Medium">Medium</option>
+                                    <option value="High">High</option>
+                                    <option value="Urgent">Urgent</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group" style="margin: 0; min-width: 165px;">
+                                <select id="ticket-filter-assignee" class="form-control" style="height: 36px; font-size: 12px;" onchange="renderTicketsTable()">
+                                    <option value="All">Tất cả người phụ trách</option>
+                                    <option value="Unassigned">Chưa phân công</option>
+                                    <!-- Options filled dynamically -->
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Data Table -->
+                        <div class="ticket-table-wrapper">
+                            <table class="ticket-table">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 80px;">Mã</th>
+                                        <th>Tiêu đề</th>
+                                        <th>Khách hàng</th>
+                                        <th style="width: 120px;">Độ ưu tiên</th>
+                                        <th style="width: 140px;">Trạng thái</th>
+                                        <th style="width: 160px;">Người phụ trách</th>
+                                        <th style="width: 140px;">Ngày tạo</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="ticket-table-body">
+                                    <!-- Dynamic rows -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
 
             </div>
@@ -3229,6 +4816,132 @@
             <div class="modal-footer">
                 <button class="btn btn-secondary" onclick="closeEditModal()">Hủy bỏ</button>
                 <button class="btn btn-primary" onclick="saveUserChanges()">Lưu thay đổi</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Popup Form Tạo Ticket (SRS Create Ticket at Conversation 3.1) -->
+    <div class="modal-overlay" id="create-ticket-modal">
+        <div class="modal-card" style="max-width: 500px;">
+            <div class="modal-header">
+                <h3 class="modal-title">Tạo Ticket Hỗ Trợ</h3>
+                <button class="modal-close" onclick="closeCreateTicketPopup()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body" style="display:flex; flex-direction:column; gap:14px;">
+                <div class="form-group">
+                    <label class="form-label">Khách hàng</label>
+                    <input type="text" id="ticket-form-cust-name" class="form-control" disabled style="background-color: var(--bg-hover);">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Mã cuộc hội thoại</label>
+                    <input type="text" id="ticket-form-conv-id" class="form-control" disabled style="background-color: var(--bg-hover);">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Tiêu đề Ticket *</label>
+                    <input type="text" id="ticket-form-title" class="form-control" placeholder="Nhập tiêu đề tóm tắt vấn đề..." oninput="validateTicketForm()">
+                    <span id="ticket-form-title-error" style="color: #ef4444; font-size: 11px; display: none;">Tiêu đề là bắt buộc (tối đa 255 ký tự).</span>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Nội dung chi tiết</label>
+                    <textarea id="ticket-form-desc" class="form-control" style="height: 100px; resize: none; padding: 8px;" placeholder="Nhập nội dung mô tả chi tiết yêu cầu..."></textarea>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                    <div class="form-group">
+                        <label class="form-label">Mức độ ưu tiên *</label>
+                        <select id="ticket-form-priority" class="form-control" style="height: 36px;">
+                            <option value="Low">Low</option>
+                            <option value="Medium" selected>Medium</option>
+                            <option value="High">High</option>
+                            <option value="Urgent">Urgent</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Người xử lý</label>
+                        <select id="ticket-form-assignee" class="form-control" style="height: 36px;">
+                            <option value="">-- Chưa phân công --</option>
+                            <!-- Options filled dynamically -->
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeCreateTicketPopup()">Hủy</button>
+                <button class="btn btn-primary" id="btn-submit-ticket" onclick="submitCreateTicketForm()" disabled>Xác nhận</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Popup Chi tiết Ticket (SRS Create Ticket at Conversation 3.2.1) -->
+    <div class="modal-overlay" id="detail-ticket-modal">
+        <div class="modal-card" style="max-width: 550px;">
+            <div class="modal-header">
+                <h3 class="modal-title" id="ticket-detail-header">Chi tiết Ticket #ID</h3>
+                <button class="modal-close" onclick="closeDetailTicketPopup()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body" style="display:flex; flex-direction:column; gap:16px; font-size:13px;">
+                <div>
+                    <h4 style="font-size: 15px; font-weight: 700; margin: 0 0 4px 0;" id="ticket-detail-title">Tiêu đề Ticket</h4>
+                    <span id="ticket-detail-priority-badge" class="badge-priority" style="margin-right: 6px;">Urgent</span>
+                    <span id="ticket-detail-status-badge" class="badge-ticket-status">In Progress</span>
+                </div>
+                
+                <div style="background-color: var(--bg-hover); padding: 12px; border-radius: 6px; border: 1px solid var(--border-color); white-space: pre-wrap;" id="ticket-detail-desc">
+                    Nội dung chi tiết...
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; border-top: 1px solid var(--border-color); padding-top: 12px;">
+                    <div>
+                        <strong style="color: var(--text-muted);">Khách hàng:</strong>
+                        <div id="ticket-detail-cust" style="margin-top: 2px; font-weight: 600;">Lê Hằng</div>
+                    </div>
+                    <div>
+                        <strong style="color: var(--text-muted);">Mã hội thoại nguồn:</strong>
+                        <div id="ticket-detail-conv" style="margin-top: 2px; font-weight: 600;">#conv1</div>
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                    <div>
+                        <strong style="color: var(--text-muted);">Người phụ trách:</strong>
+                        <div id="ticket-detail-assignee" style="margin-top: 2px; font-weight: 600;">phuongntt</div>
+                    </div>
+                    <div>
+                        <strong style="color: var(--text-muted);">Người tạo:</strong>
+                        <div id="ticket-detail-creator" style="margin-top: 2px; font-weight: 600;">phuongntt</div>
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; border-bottom: 1px solid var(--border-color); padding-bottom: 12px;">
+                    <div>
+                        <strong style="color: var(--text-muted);">Ngày tạo:</strong>
+                        <div id="ticket-detail-created" style="margin-top: 2px;">01/07/2026 10:15</div>
+                    </div>
+                    <div>
+                        <strong style="color: var(--text-muted);">Thời điểm giải quyết:</strong>
+                        <div id="ticket-detail-resolved" style="margin-top: 2px;">--</div>
+                    </div>
+                </div>
+
+                <!-- SLA & performance notes -->
+                <div id="ticket-detail-sla-status" style="padding: 10px 12px; border-radius: 6px; font-weight: 600;">
+                    <!-- Realtime SLA info -->
+                </div>
+            </div>
+            <div class="modal-footer" style="justify-content: space-between;">
+                <button class="btn btn-secondary" style="background-color:#ef4444; border-color:#ef4444; color:white;" id="btn-delete-ticket" onclick="deleteActiveTicket()">Xóa Ticket (Closed)</button>
+                <button class="btn btn-primary" onclick="closeDetailTicketPopup()">Đóng</button>
             </div>
         </div>
     </div>
@@ -3395,6 +5108,8 @@
 
                 <button class="btn btn-primary" style="width: 100%; font-size: 12px; padding: 6px 12px;"
                     onclick="triggerPrototypeEvent()">Gửi Sự Kiện (Trigger Event)</button>
+                <button class="btn btn-primary" style="width: 100%; font-size: 12px; padding: 6px 12px; margin-top: 8px; background-color: #22c55e; border-color: #22c55e;"
+                    onclick="triggerNewConversationSimulation()">Giả lập Cuộc chat mới (Tự động Round-robin)</button>
             </div>
 
             <!-- Tab 2: Trạng thái & Giả lập Offline -->
@@ -3552,6 +5267,305 @@
             toastQueue: []
         };
 
+        // =========================================================================
+        // CONVERSATION MODULE STATE & VARIABLES
+        // =========================================================================
+        let conversationsList = [
+            {
+                id: 'conv1',
+                customerName: 'Lê Hằng',
+                avatar: 'LH',
+                avatarColor: '#f43f5e',
+                channel: 'Zalo',
+                channelLogo: 'https://img.icons8.com/color/48/zalo.png',
+                channelAccount: 'Zalo OA Gapit',
+                lastMessageTime: '01/07',
+                lastMessageText: 'Hệ thống đã kết thúc cuộc trò chuyện lúc 16:30',
+                unreadCount: 2,
+                isRead: false,
+                tags: ['Hỏi giá', 'Khách VIP'],
+                status: 'Open',
+                assignee: null,
+                customerInfo: {
+                    ho: 'Lê',
+                    ten: 'Hằng',
+                    phone: '0987654321',
+                    email: 'lehang@example.com',
+                    dob: '1995-10-12',
+                    address: 'Hà Nội, Việt Nam',
+                    notes: 'Khách hàng VIP, cần tư vấn dịch vụ SMS Brandname gấp.'
+                }
+            },
+            {
+                id: 'conv2',
+                customerName: 'Hằng Lê',
+                avatar: 'HL',
+                avatarColor: '#10b981',
+                channel: 'Telegram',
+                channelLogo: 'https://img.icons8.com/color/48/telegram-app.png',
+                channelAccount: 'Telegram Support Bot',
+                lastMessageTime: '01/07',
+                lastMessageText: 'sẽ không có gửi tổng hợp lần 2',
+                unreadCount: 0,
+                isRead: true,
+                tags: ['Tư vấn'],
+                status: 'In Progress',
+                assignee: 'phuongntt',
+                customerInfo: {
+                    ho: 'Lê Thị',
+                    ten: 'Hằng',
+                    phone: '0912345678',
+                    email: 'lethihang@example.com',
+                    dob: '1998-05-20',
+                    address: 'Hải Phòng, Việt Nam',
+                    notes: 'Đang chạy test kịch bản tin nhắn tổng hợp lần 2.'
+                }
+            },
+            {
+                id: 'conv3',
+                customerName: 'Team فريق Group 12322',
+                avatar: 'T',
+                avatarColor: '#3b82f6',
+                channel: 'Telegram',
+                channelLogo: 'https://img.icons8.com/color/48/telegram-app.png',
+                channelAccount: 'Telegram Marketing Bot',
+                lastMessageTime: '29/06',
+                lastMessageText: 'hungbm đã kết thúc cuộc trò chuyện lúc 16:45',
+                unreadCount: 0,
+                isRead: true,
+                tags: [],
+                status: 'Closed',
+                assignee: 'hungbm',
+                customerInfo: {
+                    ho: 'Team',
+                    ten: 'Group 12322',
+                    phone: '0901234567',
+                    email: '',
+                    dob: '',
+                    address: '',
+                    notes: 'Group test của bộ phận kỹ thuật.'
+                }
+            },
+            {
+                id: 'conv4',
+                customerName: 'Khánh Vũ',
+                avatar: 'KV',
+                avatarColor: '#8b5cf6',
+                channel: 'Facebook',
+                channelLogo: 'https://img.icons8.com/color/48/facebook-new.png',
+                channelAccount: 'Facebook Page 01',
+                lastMessageTime: '29/06',
+                lastMessageText: 'Hệ thống đã kết thúc cuộc trò chuyện lúc 20:15',
+                unreadCount: 0,
+                isRead: true,
+                tags: ['Đối tác'],
+                status: 'Closed',
+                assignee: 'khanhhn_gapone',
+                customerInfo: {
+                    ho: 'Vũ',
+                    ten: 'Khánh',
+                    phone: '0945678901',
+                    email: 'khanhvu@partner.com',
+                    dob: '1990-01-01',
+                    address: 'Hồ Chí Minh, Việt Nam',
+                    notes: 'Đối tác kết nối API.'
+                }
+            },
+            {
+                id: 'conv5',
+                customerName: 'Id: 199717435220870434',
+                avatar: 'ID',
+                avatarColor: '#6b7280',
+                channel: 'Zalo',
+                channelLogo: 'https://img.icons8.com/color/48/zalo.png',
+                channelAccount: 'Zalo OA Demo',
+                lastMessageTime: '29/06',
+                lastMessageText: 'Đã gửi hình ảnh',
+                unreadCount: 0,
+                isRead: true,
+                tags: [],
+                status: 'Open',
+                assignee: null,
+                customerInfo: {
+                    ho: '',
+                    ten: 'Zalo User 1997',
+                    phone: '0977665544',
+                    email: '',
+                    dob: '',
+                    address: '',
+                    notes: 'Khách hàng vãng lai nhắn tin qua mã QR.'
+                }
+            },
+            {
+                id: 'conv6',
+                customerName: 'Hoàng Bách',
+                avatar: 'HB',
+                avatarColor: '#f59e0b',
+                channel: 'Facebook',
+                channelLogo: 'https://img.icons8.com/color/48/facebook-new.png',
+                channelAccount: 'Facebook Page 01',
+                lastMessageTime: '30/06',
+                lastMessageText: 'Gửi cho mình xin lại báo giá thiết bị nhé',
+                unreadCount: 0,
+                isRead: true,
+                tags: ['Tư vấn'],
+                status: 'In Progress',
+                assignee: 'phuongntt',
+                customerInfo: {
+                    ho: 'Nguyễn Hoàng',
+                    ten: 'Bách',
+                    phone: '0978123456',
+                    email: 'hoangbach@gmail.com',
+                    dob: '1992-07-15',
+                    address: 'Đà Nẵng, Việt Nam',
+                    notes: 'Khách yêu cầu báo giá thiết bị phần cứng tích hợp.'
+                }
+            },
+            {
+                id: 'conv7',
+                customerName: 'Minh Thư',
+                avatar: 'MT',
+                avatarColor: '#ec4899',
+                channel: 'Telegram',
+                channelLogo: 'https://img.icons8.com/color/48/telegram-app.png',
+                channelAccount: 'Telegram Support Bot',
+                lastMessageTime: '01/07',
+                lastMessageText: 'Nhân viên hỗ trợ giúp mình hóa đơn đỏ với',
+                unreadCount: 1,
+                isRead: false,
+                tags: [],
+                status: 'Open',
+                assignee: null,
+                customerInfo: {
+                    ho: 'Trần',
+                    ten: 'Minh Thư',
+                    phone: '0934567890',
+                    email: 'minhthu@yahoo.com',
+                    dob: '1997-12-05',
+                    address: 'Cần Thơ, Việt Nam',
+                    notes: 'Yêu cầu xuất hóa đơn VAT cho hợp đồng SMS Brandname.'
+                }
+            }
+        ];
+
+        let messagesDatabase = {
+            'conv1': [
+                { id: 'm1_system', senderType: 'system', content: 'Cuộc trò chuyện mới được tạo lúc 10:15', sentTime: '01/07/2026 10:15' },
+                { id: 'm1_1', senderType: 'customer', content: 'Xin hỏi báo giá dịch vụ gửi SMS Brandname?', sentTime: '01/07/2026 10:15', messageType: 'text' },
+                { id: 'm1_2', senderType: 'bot', content: 'Chào bạn! Hệ thống SMS Brandname có giá từ 350đ/tin. Bạn vui lòng để lại số điện thoại để nhân viên liên hệ tư vấn.', sentTime: '01/07/2026 10:15', messageType: 'text' },
+                { id: 'm1_3', senderType: 'customer', content: 'Số điện thoại của mình là 0987654321. Mình cần báo giá gấp nhé.', sentTime: '01/07/2026 10:16', messageType: 'text' },
+                { id: 'm1_system2', senderType: 'system', content: 'Hệ thống đã kết thúc cuộc trò chuyện lúc 16:30', sentTime: '01/07/2026 16:30' }
+            ],
+            'conv2': [
+                { id: 'm2_1', senderType: 'system', content: 'Cuộc trò chuyện mới được tạo lúc 15:15', sentTime: '29/06/2026 15:15' },
+                { id: 'm2_2', senderType: 'customer', content: 'xin chao ngay moi', sentTime: '29/06/2026 15:15', messageType: 'text' },
+                { id: 'm2_3', senderType: 'customer', content: '1232123123', sentTime: '29/06/2026 15:16', messageType: 'text' },
+                { id: 'm2_4', senderType: 'customer', content: '73483434', sentTime: '29/06/2026 15:16', messageType: 'text' },
+                { id: 'm2_5', senderType: 'system', content: 'Kịch bản Gửi tin nhắn tự động được kích hoạt lúc 09:07', sentTime: '30/06/2026 09:07' },
+                { id: 'm2_6', senderType: 'customer', content: 'tong hop lan 2', sentTime: '30/06/2026 09:07', messageType: 'text' },
+                { id: 'm2_7', senderType: 'customer', content: 'gui anh', sentTime: '30/06/2026 09:08', messageType: 'text' },
+                { id: 'm2_8', senderType: 'customer', content: 'EG thuc su ung dat ten .png', sentTime: '30/06/2026 16:34', messageType: 'photo', mediaUrl: 'https://picsum.photos/400/300' },
+                { id: 'm2_9', senderType: 'staff', content: 'sẽ không có gửi tổng hợp lần 2', sentTime: '01/07/2026 08:30', messageType: 'text' }
+            ],
+            'conv3': [
+                { id: 'm3_1', senderType: 'customer', content: 'Test group chat Telegram', sentTime: '29/06/2026 16:40', messageType: 'text' },
+                { id: 'm3_2', senderType: 'staff', content: 'Ok nhận thông tin test.', sentTime: '29/06/2026 16:42', messageType: 'text' },
+                { id: 'm3_system', senderType: 'system', content: 'hungbm đã kết thúc cuộc trò chuyện lúc 16:45', sentTime: '29/06/2026 16:45' }
+            ],
+            'conv4': [
+                { id: 'm4_1', senderType: 'customer', content: 'Xin chào, tôi muốn hỏi về tích hợp API Facebook Messenger.', sentTime: '29/06/2026 19:30', messageType: 'text' },
+                { id: 'm4_2', senderType: 'staff', content: 'Chào anh Khánh, anh vui lòng xem tài liệu API tại link: https://api.gapone.vn/docs. Cảnh báo an toàn: https://unsafe-link-example.com.', sentTime: '29/06/2026 19:35', messageType: 'text' },
+                { id: 'm4_system', senderType: 'system', content: 'Hệ thống đã kết thúc cuộc trò chuyện lúc 20:15', sentTime: '29/06/2026 20:15' }
+            ],
+            'conv5': [
+                { id: 'm5_1', senderType: 'customer', content: 'Gửi ảnh hóa đơn thanh toán', sentTime: '29/06/2026 18:20', messageType: 'text' },
+                { id: 'm5_2', senderType: 'customer', content: 'hoa_don_t6.jpg', sentTime: '29/06/2026 18:22', messageType: 'photo', mediaUrl: 'https://picsum.photos/400/300' }
+            ],
+            'conv6': [
+                { id: 'm6_1', senderType: 'system', content: 'Cuộc trò chuyện mới được tạo lúc 09:30', sentTime: '30/06/2026 09:30' },
+                { id: 'm6_2', senderType: 'customer', content: 'Gửi cho mình xin lại báo giá thiết bị nhé', sentTime: '30/06/2026 09:31', messageType: 'text' }
+            ],
+            'conv7': [
+                { id: 'm7_1', senderType: 'system', content: 'Cuộc trò chuyện mới được tạo lúc 13:02', sentTime: '01/07/2026 13:02' },
+                { id: 'm7_2', senderType: 'customer', content: 'Nhân viên hỗ trợ giúp mình hóa đơn đỏ với', sentTime: '01/07/2026 13:03', messageType: 'text' }
+            ]
+        };
+
+        let ticketsList = [
+            {
+                ticket_id: 101,
+                title: 'Lỗi đồng bộ Zalo OA với CRM',
+                description: 'Khách hàng báo gửi tin nhắn chăm sóc khách hàng từ Zalo OA nhưng hệ thống CRM không ghi nhận thông tin và báo lỗi quá hạn.',
+                contact_id: 'conv1',
+                customerName: 'Lê Hằng',
+                conversation_id: 'conv1',
+                status: 'In_Progress',
+                priority: 'High',
+                assignee_id: 'phuongntt',
+                creator_id: 'phuongntt',
+                created_date: new Date(Date.now() - 1000 * 60 * 60 * 5),
+                resolved_date: null
+            },
+            {
+                ticket_id: 102,
+                title: 'Yêu cầu xuất hóa đơn VAT quý 2',
+                description: 'Yêu cầu xuất hóa đơn đỏ cho hợp đồng AI Chatbot ký ngày 15/06/2026.',
+                contact_id: 'conv2',
+                customerName: 'Hằng Lê',
+                conversation_id: 'conv2',
+                status: 'Open',
+                priority: 'Medium',
+                assignee_id: null,
+                creator_id: 'phuongntt',
+                created_date: new Date(Date.now() - 1000 * 60 * 60 * 2),
+                resolved_date: null
+            },
+            {
+                ticket_id: 103,
+                title: 'Khiếu nại hoàn tiền SMS Brandname lỗi',
+                description: 'Khách hàng gửi khiếu nại hoàn 150.000đ cho các tin nhắn SMS bị lỗi kỹ thuật vào ngày 28/06.',
+                contact_id: 'conv4',
+                customerName: 'Khánh Vũ',
+                conversation_id: 'conv4',
+                status: 'Closed',
+                priority: 'Urgent',
+                assignee_id: 'khanhhn_gapone',
+                creator_id: 'khanhhn_gapone',
+                created_date: new Date(Date.now() - 1000 * 60 * 60 * 24 * 3),
+                resolved_date: new Date(Date.now() - 1000 * 60 * 60 * 20)
+            }
+        ];
+
+        let agentsList = [
+            { username: 'phuongntt', fullName: 'Nguyen Phuong', role: 'Administrator', team: 'CSKH miền Bắc' },
+            { username: 'khanhhn_gapone', fullName: 'Hà Ngọc Khánh', role: 'Administrator', team: 'CSKH miền Bắc' },
+            { username: 'duyennt', fullName: 'Nguyễn Thị Duyên', role: 'Administrator', team: 'CSKH miền Nam' },
+            { username: 'hungbm', fullName: 'bùi hung', role: 'Administrator', team: 'Hỗ trợ Kỹ thuật' },
+            { username: 'maimit5', fullName: 'LT Mai', role: 'Nhóm 4', team: 'Hỗ trợ Kỹ thuật' },
+            { username: 'uyendtt', fullName: 'Dỗ Thị Thu Uyên', role: 'nhóm x2', team: 'CSKH miền Nam' }
+        ];
+
+        let teamsList = [
+            { id: 'team_cskh_bac', name: 'CSKH miền Bắc', agents: ['phuongntt', 'khanhhn_gapone'] },
+            { id: 'team_cskh_nam', name: 'CSKH miền Nam', agents: ['duyennt', 'uyendtt'] },
+            { id: 'team_tech', name: 'Hỗ trợ Kỹ thuật', agents: ['hungbm', 'maimit5'] }
+        ];
+
+        let availableTagsList = [
+            { id: 1, name: 'Hỏi giá', color: '#ff5733' },
+            { id: 2, name: 'Khách VIP', color: '#f59e0b' },
+            { id: 3, name: 'Tư vấn', color: '#10b981' },
+            { id: 4, name: 'Đối tác', color: '#3b82f6' },
+            { id: 5, name: 'Khiếu nại', color: '#ef4444' }
+        ];
+
+        // Active State variables for chat screen
+        let activeConvId = null;
+        let activeFilterChannel = 'All';
+        let activeTabChatList = 'all'; // all, unread
+        let isRightSidebarCollapsed = false;
+        let roundRobinIndex = 0; // for auto assignee allocation
+
         // DOM elements
         const sidebar = document.getElementById('sidebar');
         const themeIcon = document.getElementById('theme-icon');
@@ -3628,6 +5642,31 @@
                 if (holidayModal && holidayModal.classList.contains('open') && e.target === holidayModal) {
                     closeHolidayDatePicker();
                 }
+
+                // Close conversation dropdowns
+                const activeAssigneeDropdown = document.getElementById('active-assignee-dropdown');
+                const btnActiveAssignee = document.getElementById('btn-active-assignee');
+                if (activeAssigneeDropdown && activeAssigneeDropdown.style.display === 'flex' && btnActiveAssignee && !btnActiveAssignee.contains(e.target) && !activeAssigneeDropdown.contains(e.target)) {
+                    activeAssigneeDropdown.style.display = 'none';
+                }
+
+                const activeStatusDropdown = document.getElementById('active-status-dropdown');
+                const btnActiveStatus = document.getElementById('btn-active-status');
+                if (activeStatusDropdown && activeStatusDropdown.style.display === 'flex' && btnActiveStatus && !btnActiveStatus.contains(e.target) && !activeStatusDropdown.contains(e.target)) {
+                    activeStatusDropdown.style.display = 'none';
+                }
+
+                const filterDropdown = document.getElementById('chat-channels-dropdown');
+                const btnFilterChannels = document.querySelector('.btn-filter-channels');
+                if (filterDropdown && filterDropdown.style.display === 'flex' && btnFilterChannels && !btnFilterChannels.contains(e.target) && !filterDropdown.contains(e.target)) {
+                    filterDropdown.style.display = 'none';
+                }
+
+                const accountsDropdown = document.getElementById('chat-active-accounts-dropdown');
+                const btnActiveSub = document.getElementById('chat-active-sub');
+                if (accountsDropdown && accountsDropdown.style.display === 'flex' && btnActiveSub && !btnActiveSub.contains(e.target) && !accountsDropdown.contains(e.target)) {
+                    accountsDropdown.style.display = 'none';
+                }
             });
         });
 
@@ -3672,6 +5711,10 @@
             document.querySelectorAll('.submenu-item').forEach(item => item.classList.remove('active'));
             const parentBreadcrumb = document.getElementById('breadcrumb-parent-view');
 
+            // Hide conversation panel
+            const viewConv = document.getElementById('view-conversation');
+            if (viewConv) viewConv.style.display = 'none';
+
             if (viewName === 'users') {
                 document.getElementById('sub-menu-users').classList.add('active');
                 viewUsers.style.display = 'flex';
@@ -3711,6 +5754,11 @@
         function selectSubmenu(element) {
             document.querySelectorAll('.submenu-item').forEach(item => item.classList.remove('active'));
             element.classList.add('active');
+            
+            // Hide conversation panel
+            const viewConv = document.getElementById('view-conversation');
+            if (viewConv) viewConv.style.display = 'none';
+            
             const parentBreadcrumb = document.getElementById('breadcrumb-parent-view');
             if (parentBreadcrumb) parentBreadcrumb.innerText = 'Cài đặt';
             breadcrumbCurrentView.innerText = element.innerText;
@@ -3753,7 +5801,24 @@
             document.querySelectorAll('.submenu-item').forEach(item => item.classList.remove('active'));
 
             element.classList.add('active');
-            showToast(`Mở: ${element.innerText.trim()}`);
+            const menuText = element.innerText.trim();
+            showToast(`Mở: ${menuText}`);
+            
+            if (menuText === 'Hội thoại') {
+                showConversationView();
+            } else if (menuText === 'Ticket') {
+                showTicketsView();
+            } else {
+                const viewConv = document.getElementById('view-conversation');
+                if (viewConv) viewConv.style.display = 'none';
+                const viewTickets = document.getElementById('view-tickets');
+                if (viewTickets) viewTickets.style.display = 'none';
+                
+                // Show default panel or hide others
+                viewUsers.style.display = 'none';
+                viewNotifSettings.style.display = 'none';
+                viewChannels.style.display = 'none';
+            }
         }
 
         function switchTab(element) {
@@ -5953,7 +8018,1669 @@
             showToast('Đã quay lại ONLINE & Tự động Đọc tất cả thông báo nhỡ từ Link email (AC4)!');
         }
 
-        // 12. TOAST HELPER
+        function getFormattedTime(date = new Date()) {
+            const h = String(date.getHours()).padStart(2, '0');
+            const m = String(date.getMinutes()).padStart(2, '0');
+            return `${h}:${m}`;
+        }
+        function getFormattedDateTime(date = new Date()) {
+            const d = String(date.getDate()).padStart(2, '0');
+            const mo = String(date.getMonth() + 1).padStart(2, '0');
+            const y = date.getFullYear();
+            const h = String(date.getHours()).padStart(2, '0');
+            const m = String(date.getMinutes()).padStart(2, '0');
+            return `${d}/${mo}/${y} ${h}:${m}`;
+        }
+
+        // =========================================================================
+        // CONVERSATION MODULE LOGIC FUNCTIONS
+        // =========================================================================
+        function showConversationView() {
+            // Hide other panels
+            viewUsers.style.display = 'none';
+            viewNotifSettings.style.display = 'none';
+            viewChannels.style.display = 'none';
+            
+            // Show conversation panel
+            const viewConv = document.getElementById('view-conversation');
+            if (viewConv) viewConv.style.display = 'flex';
+            
+            // Update breadcrumbs
+            const parentBreadcrumb = document.getElementById('breadcrumb-parent-view');
+            if (parentBreadcrumb) parentBreadcrumb.innerText = 'Hội thoại';
+            breadcrumbCurrentView.innerText = 'Chat';
+            
+            // Highlight sidebar menu
+            document.querySelectorAll('.menu-item').forEach(item => {
+                const text = item.innerText.trim();
+                if (text === 'Hội thoại') {
+                    item.classList.add('active');
+                } else {
+                    item.classList.remove('active');
+                }
+            });
+
+            // Initialize conversation module state if not already initialized
+            initConversationModule();
+        }
+
+        function initConversationModule() {
+            // Populate channel filters drop list
+            const selectFilterTag = document.getElementById('chat-tag-filter');
+            const selectAddTag = document.getElementById('chat-add-tag-select');
+            
+            if (selectFilterTag && selectFilterTag.options.length <= 1) {
+                availableTagsList.forEach(t => {
+                    const opt = document.createElement('option');
+                    opt.value = t.name;
+                    opt.innerText = t.name;
+                    selectFilterTag.appendChild(opt);
+                });
+            }
+
+            if (selectAddTag && selectAddTag.options.length <= 1) {
+                availableTagsList.forEach(t => {
+                    const opt = document.createElement('option');
+                    opt.value = t.name;
+                    opt.innerText = t.name;
+                    selectAddTag.appendChild(opt);
+                });
+            }
+
+            // Populate assignee list
+            renderAssigneeDropdown();
+
+            // Render conversations list
+            renderConversationsList();
+
+            // If activeConvId exists, load it, else show empty view
+            if (activeConvId) {
+                selectConversation(activeConvId);
+            } else {
+                document.getElementById('chat-empty-view').style.display = 'flex';
+                document.getElementById('chat-active-view').style.display = 'none';
+            }
+        }
+
+        function renderConversationsList() {
+            const listContainer = document.getElementById('chat-list-scroll-container');
+            if (!listContainer) return;
+            
+            listContainer.innerHTML = '';
+            
+            const searchQuery = document.getElementById('chat-search').value.toLowerCase().trim();
+            const tagFilter = document.getElementById('chat-tag-filter').value;
+            
+            // Calculate active unread count
+            const unreadCount = conversationsList.filter(c => c.unreadCount > 0).length;
+            const unreadBadge = document.getElementById('chat-unread-badge');
+            if (unreadBadge) {
+                unreadBadge.innerText = unreadCount;
+                unreadBadge.style.display = unreadCount > 0 ? 'inline-block' : 'none';
+            }
+
+            let filteredList = conversationsList.filter(c => {
+                // Channel filter
+                if (activeFilterChannel !== 'All' && c.channel !== activeFilterChannel) {
+                    return false;
+                }
+                
+                // Tag filter
+                if (tagFilter !== 'All' && !c.tags.includes(tagFilter)) {
+                    return false;
+                }
+                
+                // Unread tab filter
+                if (activeTabChatList === 'unread' && c.unreadCount === 0) {
+                    return false;
+                }
+                
+                // Text search query
+                if (searchQuery) {
+                    const nameMatch = c.customerName.toLowerCase().includes(searchQuery);
+                    const phoneMatch = c.customerInfo.phone.includes(searchQuery);
+                    
+                    // Search in messages of this conversation
+                    let messageMatch = false;
+                    const msgs = messagesDatabase[c.id] || [];
+                    for (let m of msgs) {
+                        if (m.content && m.content.toLowerCase().includes(searchQuery)) {
+                            messageMatch = true;
+                            break;
+                        }
+                    }
+                    
+                    return nameMatch || phoneMatch || messageMatch;
+                }
+                
+                return true;
+            });
+
+            if (filteredList.length === 0) {
+                listContainer.innerHTML = `
+                    <div style="text-align: center; padding: 32px; color: var(--text-muted); font-size: 13px;">
+                        Không tìm thấy cuộc hội thoại phù hợp
+                    </div>
+                `;
+                return;
+            }
+
+            // Sort active first or last message date
+            filteredList.forEach(c => {
+                const item = document.createElement('div');
+                item.className = `chat-item ${c.unreadCount > 0 ? 'unread' : ''} ${activeConvId === c.id ? 'active' : ''}`;
+                item.onclick = () => selectConversation(c.id);
+                
+                // Build tag tags HTML
+                let tagsHtml = '';
+                c.tags.forEach(tName => {
+                    const tagObj = availableTagsList.find(tag => tag.name === tName);
+                    const color = tagObj ? tagObj.color : '#6b7280';
+                    tagsHtml += `<span class="chat-item-tag" style="background-color: ${color}">${tName}</span>`;
+                });
+
+                item.innerHTML = `
+                    <div class="chat-avatar-wrapper">
+                        <div class="chat-avatar" style="background-color: ${c.avatarColor}">
+                            ${c.avatar}
+                        </div>
+                        <div class="channel-badge" title="${c.channel} - ${c.channelAccount}">
+                            <img src="${c.channelLogo}" alt="${c.channel}">
+                        </div>
+                    </div>
+                    
+                    <div class="chat-item-details">
+                        <div class="chat-item-meta">
+                            <span class="chat-item-name">${c.customerName}</span>
+                            <span class="chat-item-time">${c.lastMessageTime}</span>
+                        </div>
+                        <div class="chat-item-meta">
+                            <span class="chat-item-preview">${c.lastMessageText}</span>
+                            ${c.unreadCount > 0 ? `<span class="unread-dot"></span>` : ''}
+                        </div>
+                        <div class="chat-item-tags">
+                            ${tagsHtml}
+                        </div>
+                    </div>
+
+                    <!-- Hidden hover action -->
+                    <button class="chat-item-actions-btn" onclick="toggleChatItemActions(event, '${c.id}')" title="Thao tác">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg>
+                    </button>
+                    
+                    <div class="chat-item-actions-menu" id="actions-menu-${c.id}">
+                        <div class="chat-item-actions-item" onclick="markConvUnread('${c.id}', event)">Đánh dấu chưa đọc</div>
+                        <div class="chat-item-actions-item" style="color: #ef4444;" onclick="deleteConv('${c.id}', event)">Xóa cuộc hội thoại</div>
+                    </div>
+                `;
+                
+                listContainer.appendChild(item);
+            });
+        }
+
+        function toggleChatItemActions(event, convId) {
+            event.stopPropagation();
+            const menus = document.querySelectorAll('.chat-item-actions-menu');
+            menus.forEach(m => {
+                if (m.id !== `actions-menu-${convId}`) m.style.display = 'none';
+            });
+            const menu = document.getElementById(`actions-menu-${convId}`);
+            if (menu) {
+                const isVisible = menu.style.display === 'flex';
+                menu.style.display = isVisible ? 'none' : 'flex';
+            }
+        }
+
+        function markConvUnread(convId, event) {
+            event.stopPropagation();
+            const conv = conversationsList.find(c => c.id === convId);
+            if (conv) {
+                conv.unreadCount = 1;
+                conv.isRead = false;
+                renderConversationsList();
+                showToast(`Đã đánh dấu cuộc hội thoại của ${conv.customerName} là chưa đọc`);
+            }
+            const menu = document.getElementById(`actions-menu-${convId}`);
+            if (menu) menu.style.display = 'none';
+        }
+
+        function deleteConv(convId, event) {
+            event.stopPropagation();
+            const menu = document.getElementById(`actions-menu-${convId}`);
+            if (menu) menu.style.display = 'none';
+
+            if (confirm('Bạn chắc chắn xóa cuộc hội thoại này? Tất cả tin nhắn và thông tin liên quan sẽ không hiển thị trên danh sách.')) {
+                conversationsList = conversationsList.filter(c => c.id !== convId);
+                if (activeConvId === convId) {
+                    activeConvId = null;
+                }
+                renderConversationsList();
+                initConversationModule();
+                showToast('Đã xóa cuộc hội thoại thành công');
+            }
+        }
+
+        function toggleChannelFilterDropdown(event) {
+            event.stopPropagation();
+            const dp = document.getElementById('chat-channels-dropdown');
+            const isVisible = dp.style.display === 'flex';
+            dp.style.display = isVisible ? 'none' : 'flex';
+        }
+
+        function setChannelFilter(channel, element) {
+            activeFilterChannel = channel;
+            
+            // Update selected class
+            const dropdown = document.getElementById('chat-channels-dropdown');
+            dropdown.querySelectorAll('.assignee-item').forEach(item => item.classList.remove('selected'));
+            element.classList.add('selected');
+            dropdown.style.display = 'none';
+            
+            // Update filter button text
+            const btn = document.querySelector('.btn-filter-channels span');
+            btn.innerText = channel === 'All' ? 'Kênh' : channel;
+            
+            renderConversationsList();
+            showToast(`Lọc theo kênh: ${channel === 'All' ? 'Tất cả' : channel}`);
+        }
+
+        function switchChatListTab(tab) {
+            activeTabChatList = tab;
+            document.getElementById('tab-chat-all').classList.toggle('active', tab === 'all');
+            document.getElementById('tab-chat-unread').classList.toggle('active', tab === 'unread');
+            renderConversationsList();
+        }
+
+        function toggleActiveChannelAccountDropdown(event) {
+            event.stopPropagation();
+            const activeConv = conversationsList.find(c => c.id === activeConvId);
+            if (!activeConv) return;
+            
+            const dp = document.getElementById('chat-active-accounts-dropdown');
+            const isVisible = dp.style.display === 'flex';
+            
+            if (!isVisible) {
+                dp.innerHTML = '';
+                // Render list accounts under channel
+                const accounts = channelsData[activeConv.channel] || [];
+                accounts.forEach(acc => {
+                    const item = document.createElement('div');
+                    item.className = `assignee-item ${activeConv.channelAccount === acc ? 'selected' : ''}`;
+                    item.innerText = acc;
+                    item.onclick = () => {
+                        activeConv.channelAccount = acc;
+                        document.getElementById('chat-active-account-name').innerText = activeConv.customerInfo.ho ? `${activeConv.customerInfo.ho} ${activeConv.customerInfo.ten} (${acc})` : `${activeConv.customerInfo.ten} (${acc})`;
+                        dp.style.display = 'none';
+                        showToast(`Chuyển tài khoản nhận tin sang: ${acc}`);
+                    };
+                    dp.appendChild(item);
+                });
+                dp.style.display = 'flex';
+            } else {
+                dp.style.display = 'none';
+            }
+        }
+
+        function toggleAssigneeDropdown(event) {
+            event.stopPropagation();
+            const dp = document.getElementById('active-assignee-dropdown');
+            const isVisible = dp.style.display === 'flex';
+            dp.style.display = isVisible ? 'none' : 'flex';
+            if (!isVisible) {
+                document.getElementById('assignee-search-input').value = '';
+                filterAssigneeList();
+            }
+        }
+
+        function renderAssigneeDropdown() {
+            const container = document.getElementById('assignee-list-container');
+            if (!container) return;
+            container.innerHTML = '';
+
+            // Group by Team
+            teamsList.forEach(team => {
+                const title = document.createElement('div');
+                title.className = 'assignee-group-title';
+                title.innerText = `${team.name} (${team.agents.length})`;
+                container.appendChild(title);
+
+                team.agents.forEach(agentUsername => {
+                    const agent = agentsList.find(a => a.username === agentUsername);
+                    if (!agent) return;
+
+                    const item = document.createElement('div');
+                    item.className = 'assignee-item';
+                    item.setAttribute('data-name', agent.fullName.toLowerCase());
+                    item.setAttribute('data-username', agent.username);
+                    item.innerHTML = `
+                        <span>${agent.fullName}</span>
+                        <span style="font-size: 10px; color: var(--text-muted);">${agent.role}</span>
+                    `;
+                    
+                    item.onclick = () => {
+                        assignConversation(agent.username);
+                        document.getElementById('active-assignee-dropdown').style.display = 'none';
+                    };
+
+                    container.appendChild(item);
+                });
+            });
+        }
+
+        function filterAssigneeList() {
+            const query = document.getElementById('assignee-search-input').value.toLowerCase().trim();
+            const items = document.querySelectorAll('#assignee-list-container .assignee-item');
+            const titles = document.querySelectorAll('#assignee-list-container .assignee-group-title');
+
+            items.forEach(item => {
+                const name = item.getAttribute('data-name');
+                const username = item.getAttribute('data-username');
+                if (name.includes(query) || username.includes(query)) {
+                    item.style.display = 'flex';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+
+            // Hide/Show titles
+            titles.forEach(title => {
+                let next = title.nextElementSibling;
+                let hasVisibleAgent = false;
+                while (next && !next.classList.contains('assignee-group-title')) {
+                    if (next.style.display !== 'none') {
+                        hasVisibleAgent = true;
+                    }
+                    next = next.nextElementSibling;
+                }
+                title.style.display = hasVisibleAgent ? 'block' : 'none';
+            });
+        }
+
+        function assignConversation(username) {
+            const conv = conversationsList.find(c => c.id === activeConvId);
+            if (!conv) return;
+
+            const agent = agentsList.find(a => a.username === username);
+            if (!agent) return;
+
+            const oldAssignee = conv.assignee;
+            conv.assignee = username;
+
+            // Log event message
+            const now = new Date();
+            const timeStr = getFormattedDateTime(now);
+            const timeHour = getFormattedTime(now);
+
+            // Update UI
+            document.getElementById('active-assignee-name').innerText = agent.fullName;
+            
+            // Add system logs
+            let logMsg = '';
+            if (oldAssignee) {
+                const oldAgent = agentsList.find(a => a.username === oldAssignee);
+                logMsg = `Cuộc trò chuyện được ${oldAgent ? oldAgent.fullName : oldAssignee} chỉ định đến ${agent.fullName} lúc ${timeHour}`;
+            } else {
+                logMsg = `Cuộc trò chuyện được chỉ định thủ công cho ${agent.fullName} lúc ${timeHour}`;
+            }
+            
+            messagesDatabase[activeConvId].push({
+                id: 'sys_' + Date.now(),
+                senderType: 'system',
+                content: logMsg,
+                sentTime: timeStr
+            });
+
+            // Automatically override status to "In Progress" if Open
+            if (conv.status === 'Open') {
+                conv.status = 'In Progress';
+                document.getElementById('btn-active-status').innerHTML = `
+                    <span class="status-dot status-progress"></span>
+                    <span>Đang xử lý</span>
+                `;
+            }
+
+            renderConversationsList();
+            renderChatTimeline(activeConvId);
+            showToast(`Đã chỉ định cuộc trò chuyện cho ${agent.fullName}`);
+        }
+
+        function unassignCurrentConversation() {
+            const conv = conversationsList.find(c => c.id === activeConvId);
+            if (!conv) return;
+
+            const oldAssignee = conv.assignee;
+            if (!oldAssignee) return;
+
+            conv.assignee = null;
+
+            const now = new Date();
+            const timeStr = getFormattedDateTime(now);
+            const timeHour = getFormattedTime(now);
+
+            document.getElementById('active-assignee-name').innerText = 'Chưa chỉ định';
+            document.getElementById('active-assignee-dropdown').style.display = 'none';
+
+            const oldAgent = agentsList.find(a => a.username === oldAssignee);
+            messagesDatabase[activeConvId].push({
+                id: 'sys_' + Date.now(),
+                senderType: 'system',
+                content: `${oldAgent ? oldAgent.fullName : oldAssignee} không còn phụ trách cuộc hội thoại này.`,
+                sentTime: timeStr
+            });
+
+            renderConversationsList();
+            renderChatTimeline(activeConvId);
+            showToast('Đã gỡ nhân viên phụ trách');
+        }
+
+        function toggleStatusDropdown(event) {
+            event.stopPropagation();
+            const dp = document.getElementById('active-status-dropdown');
+            const isVisible = dp.style.display === 'flex';
+            dp.style.display = isVisible ? 'none' : 'flex';
+        }
+
+        function changeActiveStatus(status) {
+            const conv = conversationsList.find(c => c.id === activeConvId);
+            if (!conv) return;
+
+            const oldStatus = conv.status;
+            conv.status = status;
+
+            const now = new Date();
+            const timeStr = getFormattedDateTime(now);
+            const timeHour = getFormattedTime(now);
+
+            // Update UI status button
+            const statusDot = document.getElementById('active-status-dot');
+            const statusText = document.getElementById('active-status-text');
+
+            if (status === 'Open') {
+                statusDot.className = 'status-dot status-open';
+                statusText.innerText = 'Mới (Open)';
+            } else if (status === 'In Progress') {
+                statusDot.className = 'status-dot status-progress';
+                statusText.innerText = 'Đang xử lý';
+            } else {
+                statusDot.className = 'status-dot status-closed';
+                statusText.innerText = 'Đã đóng';
+            }
+
+            document.getElementById('active-status-dropdown').style.display = 'none';
+
+            // Add Event log message
+            let statusTextVie = status === 'Open' ? 'mở lại' : (status === 'In Progress' ? 'chuyển sang Đang xử lý' : 'đóng');
+            messagesDatabase[activeConvId].push({
+                id: 'sys_' + Date.now(),
+                senderType: 'system',
+                content: `phuongntt đã ${statusTextVie} cuộc trò chuyện này lúc ${timeHour}`,
+                sentTime: timeStr
+            });
+
+            renderConversationsList();
+            renderChatTimeline(activeConvId);
+            showToast(`Đã chuyển trạng thái hội thoại sang: ${statusTextVie.toUpperCase()}`);
+        }
+
+        function selectConversation(convId) {
+            activeConvId = convId;
+            
+            // Mark as read
+            const conv = conversationsList.find(c => c.id === convId);
+            if (conv) {
+                conv.unreadCount = 0;
+                conv.isRead = true;
+            }
+
+            renderConversationsList();
+
+            document.getElementById('chat-empty-view').style.display = 'none';
+            document.getElementById('chat-active-view').style.display = 'flex';
+
+            // Load header info
+            if (conv) {
+                const avatarDiv = document.getElementById('chat-active-avatar');
+                avatarDiv.innerText = conv.avatar;
+                avatarDiv.style.backgroundColor = conv.avatarColor;
+
+                document.getElementById('chat-active-title').innerText = `${conv.customerName} > ${conv.channelAccount}`;
+                document.getElementById('chat-active-account-name').innerText = conv.customerInfo.ho ? `${conv.customerInfo.ho} ${conv.customerInfo.ten}` : `${conv.customerInfo.ten}`;
+
+                // Status
+                const statusDot = document.getElementById('active-status-dot');
+                const statusText = document.getElementById('active-status-text');
+                if (conv.status === 'Open') {
+                    statusDot.className = 'status-dot status-open';
+                    statusText.innerText = 'Mới (Open)';
+                } else if (conv.status === 'In Progress') {
+                    statusDot.className = 'status-dot status-progress';
+                    statusText.innerText = 'Đang xử lý';
+                } else {
+                    statusDot.className = 'status-dot status-closed';
+                    statusText.innerText = 'Đã đóng';
+                }
+
+                // Assignee
+                const assigneeNameSpan = document.getElementById('active-assignee-name');
+                if (conv.assignee) {
+                    const agent = agentsList.find(a => a.username === conv.assignee);
+                    assigneeNameSpan.innerText = agent ? agent.fullName : conv.assignee;
+                } else {
+                    assigneeNameSpan.innerText = 'Chưa chỉ định';
+                }
+
+                // Update highlight in assignee list
+                document.querySelectorAll('#assignee-list-container .assignee-item').forEach(item => {
+                    const username = item.getAttribute('data-username');
+                    item.classList.toggle('selected', conv.assignee === username);
+                });
+
+                // Load Right Column details
+                document.getElementById('chat-info-avatar-circle').innerText = conv.avatar;
+                document.getElementById('chat-info-avatar-circle').style.backgroundColor = conv.avatarColor;
+                document.getElementById('chat-info-fullname').innerText = conv.customerName;
+
+                document.getElementById('cust-ho').value = conv.customerInfo.ho || '';
+                document.getElementById('cust-ten').value = conv.customerInfo.ten || '';
+                document.getElementById('cust-phone').value = conv.customerInfo.phone || '';
+                document.getElementById('cust-email').value = conv.customerInfo.email || '';
+                document.getElementById('cust-dob').value = conv.customerInfo.dob || '';
+                document.getElementById('cust-address').value = conv.customerInfo.address || '';
+                document.getElementById('cust-notes').value = conv.customerInfo.notes || '';
+
+                // Load active tags list
+                renderActiveTagsList();
+
+                // Load related tickets sidebar list
+                renderRelatedTicketsSidebar();
+
+                // Validate form initially
+                validateCustomerForm();
+            }
+
+            // Render Timeline messages
+            renderChatTimeline(convId);
+            scrollToBottomActiveChat();
+        }
+
+        function renderActiveTagsList() {
+            const list = document.getElementById('chat-info-tags-list');
+            if (!list) return;
+
+            list.innerHTML = '';
+            const conv = conversationsList.find(c => c.id === activeConvId);
+            if (!conv) return;
+
+            conv.tags.forEach(tName => {
+                const tagObj = availableTagsList.find(tag => tag.name === tName);
+                const color = tagObj ? tagObj.color : '#6b7280';
+                
+                const tagPill = document.createElement('span');
+                tagPill.className = 'tag-pill';
+                tagPill.style.backgroundColor = color;
+                tagPill.innerHTML = `
+                    <span>${tName}</span>
+                    <span class="tag-pill-remove" onclick="removeTagFromActiveConversation('${tName}')">×</span>
+                `;
+                list.appendChild(tagPill);
+            });
+            
+            if (conv.tags.length === 0) {
+                list.innerHTML = '<span style="color:var(--text-muted); font-size:11px; padding: 2px 4px; font-style:italic;">Chưa được gán nhãn...</span>';
+            }
+        }
+
+        function renderChatTimeline(convId) {
+            const container = document.getElementById('chat-timeline-container');
+            if (!container) return;
+
+            container.innerHTML = '';
+            const msgs = messagesDatabase[convId] || [];
+
+            if (msgs.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 48px; color: var(--text-muted); font-size: 13px;">
+                        Chưa có tin nhắn nào trong cuộc trò chuyện này.
+                    </div>
+                `;
+                return;
+            }
+
+            // Parse list messages
+            msgs.forEach(msg => {
+                // If it is a system event message
+                if (msg.senderType === 'system') {
+                    const sysDiv = document.createElement('div');
+                    sysDiv.className = 'system-event-message';
+                    if (msg.isTicketLink) {
+                        const parts = msg.content.split(`Ticket #${msg.ticketId}`);
+                        sysDiv.innerHTML = `${parts[0]}<a href="#" onclick="openDetailTicketPopup(${msg.ticketId}); return false;" style="color: var(--primary-color); font-weight: 600; text-decoration: underline;">Ticket #${msg.ticketId}</a>${parts[1] || ''}`;
+                    } else {
+                        sysDiv.innerText = msg.content;
+                    }
+                    container.appendChild(sysDiv);
+                    return;
+                }
+
+                // Normal message
+                const wrapper = document.createElement('div');
+                wrapper.className = `msg-container ${msg.senderType}`;
+                
+                // Build avatar if customer
+                let avatarHtml = '';
+                if (msg.senderType === 'customer') {
+                    const conv = conversationsList.find(c => c.id === convId);
+                    const avColor = conv ? conv.avatarColor : '#6b7280';
+                    const avText = conv ? conv.avatar : 'KH';
+                    avatarHtml = `
+                        <div class="msg-avatar" style="background-color: ${avColor}">
+                            ${avText}
+                        </div>
+                    `;
+                }
+
+                // Render content based on messageType
+                let contentHtml = '';
+                if (!msg.messageType || msg.messageType === 'text') {
+                    // Safe Hyperlink check for URL
+                    let content = msg.content || '';
+                    content = scanAndSanitizeLinks(content);
+                    contentHtml = `<div class="msg-bubble">${content}</div>`;
+                } else if (msg.messageType === 'photo') {
+                    contentHtml = `
+                        <div class="msg-bubble" style="padding: 6px;">
+                            <div class="attachment-photo">
+                                <img src="${msg.mediaUrl}" alt="Photo file">
+                                <div class="attachment-actions">
+                                    <button class="btn-attachment-action" onclick="showToast('Xem ảnh kích thước lớn')">Xem ảnh</button>
+                                    <button class="btn-attachment-action" onclick="showToast('Đang tải tệp ảnh xuống...')">Tải về</button>
+                                </div>
+                            </div>
+                            <div style="font-size: 11px; margin-top:4px; padding: 0 4px; font-weight:500;">${msg.content || ''}</div>
+                        </div>
+                    `;
+                } else if (msg.messageType === 'audio') {
+                    contentHtml = `
+                        <div class="msg-bubble" style="padding: 10px;">
+                            <div>File âm thanh: <strong>${msg.content || 'audio.mp3'}</strong></div>
+                            <div class="attachment-audio-player">
+                                <button class="btn-audio-play" onclick="showToast('Phát tệp âm thanh')">▶</button>
+                                <div class="audio-progress-bar">
+                                    <div class="audio-progress"></div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                } else if (msg.messageType === 'voice') {
+                    contentHtml = `
+                        <div class="msg-bubble" style="padding: 8px 12px;">
+                            <div class="attachment-voice">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="22"></line></svg>
+                                <span>Tin nhắn thoại (45s)</span>
+                                <button class="btn-audio-play" style="width:20px; height:20px; font-size:9px;" onclick="showToast('Phát tin nhắn thoại')">▶</button>
+                            </div>
+                        </div>
+                    `;
+                } else if (msg.messageType === 'sticker') {
+                    contentHtml = `
+                        <div class="attachment-sticker">
+                            <img src="${msg.mediaUrl}" alt="Sticker">
+                        </div>
+                    `;
+                } else if (msg.messageType === 'gif') {
+                    contentHtml = `
+                        <div class="msg-bubble" style="padding:6px;">
+                            <div class="attachment-photo">
+                                <img src="${msg.mediaUrl}" alt="GIF animation" style="max-height:150px;">
+                            </div>
+                        </div>
+                    `;
+                }
+
+                // Check for send failures / errors (custom mock failed messages)
+                let errorHtml = '';
+                if (msg.error) {
+                    errorHtml = `
+                        <div class="msg-error-container">
+                            <span class="msg-error-icon">⚠️</span>
+                            <span>Gửi tin nhắn không thành công: ${msg.error}</span>
+                        </div>
+                    `;
+                }
+
+                // Sender Display Tag
+                let senderTagHtml = '';
+                if (msg.senderType === 'bot') {
+                    senderTagHtml = `
+                        <div class="msg-bot-tag">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a10 10 0 0 1 10 10v8a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-8A10 10 0 0 1 12 2Z"></path><circle cx="12" cy="13" r="3"></circle><line x1="12" y1="8" x2="12" y2="10"></line></svg>
+                            Bot GAPIT
+                        </div>
+                    `;
+                } else if (msg.senderType === 'staff') {
+                    const agent = agentsList.find(a => a.username === (msg.assignee || 'phuongntt'));
+                    senderTagHtml = `<div class="msg-sender-name">${agent ? agent.fullName : 'Nhân viên'}</div>`;
+                }
+
+                wrapper.innerHTML = `
+                    ${avatarHtml}
+                    <div class="msg-content-wrapper">
+                        ${senderTagHtml}
+                        ${contentHtml}
+                        ${errorHtml}
+                        <span class="msg-time">${msg.sentTime.split(' ')[1] || msg.sentTime}</span>
+                    </div>
+                `;
+                
+                container.appendChild(wrapper);
+            });
+        }
+
+        // Safe browsing checker logic
+        function scanAndSanitizeLinks(text) {
+            // Regex to find hyperlinks
+            const urlRegex = /(https?:\/\/[^\s]+)/gi;
+            return text.replace(urlRegex, function(url) {
+                const lowerUrl = url.toLowerCase();
+                if (lowerUrl.includes('unsafe') || lowerUrl.includes('evil') || lowerUrl.includes('malicious')) {
+                    return `<span class="link-danger-alert" title="${url}">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                        Phát hiện rủi ro liên kết độc hại.
+                    </span>`;
+                } else {
+                    return `<a href="${url}" target="_blank" style="text-decoration: underline; color: var(--text-link); font-weight: 600;">${url}</a>`;
+                }
+            });
+        }
+
+        function sendChatMessage() {
+            const input = document.getElementById('chat-message-input');
+            const content = input.value.trim();
+            if (!content) return;
+
+            const conv = conversationsList.find(c => c.id === activeConvId);
+            if (!conv) return;
+
+            const now = new Date();
+            const timeStr = getFormattedDateTime(now);
+            const timeHour = getFormattedTime(now);
+
+            // Staff reply rules: if Open status, automatically transition to In Progress
+            let isFirstReply = false;
+            if (conv.status === 'Open') {
+                conv.status = 'In Progress';
+                isFirstReply = true;
+                
+                // Update UI status dropdown immediately
+                const statusDot = document.getElementById('active-status-dot');
+                const statusText = document.getElementById('active-status-text');
+                statusDot.className = 'status-dot status-progress';
+                statusText.innerText = 'Đang xử lý';
+
+                messagesDatabase[activeConvId].push({
+                    id: 'sys_' + Date.now(),
+                    senderType: 'system',
+                    content: `phuongntt bắt đầu phản hồi lúc ${timeHour}`,
+                    sentTime: timeStr
+                });
+            }
+
+            // Create new message object
+            const newMsg = {
+                id: 'm_' + Date.now(),
+                senderType: 'staff',
+                assignee: 'phuongntt',
+                content: content,
+                sentTime: timeStr,
+                messageType: 'text'
+            };
+
+            // Error modeling trigger criteria:
+            if (content.toLowerCase().includes('error 403') || content.toLowerCase().includes('block')) {
+                newMsg.error = 'Người nhận chưa cho phép nhận tin nhắn từ bot. (Mã lỗi: TG002)';
+            } else if (content.toLowerCase().includes('error 400')) {
+                newMsg.error = 'Không tìm thấy cuộc trò chuyện. (Mã lỗi: TG003)';
+            } else if (content.length > 2000) {
+                newMsg.error = 'Tin nhắn vượt quá giới hạn kí tự. (Mã lỗi: TG004)';
+            } else if (content.toLowerCase().includes('error 500')) {
+                newMsg.error = 'Hệ thống Telegram đang bận. Vui lòng thử lại sau. (Mã lỗi: TG008)';
+            }
+
+            messagesDatabase[activeConvId].push(newMsg);
+            
+            // Update preview text
+            conv.lastMessageText = content.length > 40 ? content.substring(0, 40) + '...' : content;
+            conv.lastMessageTime = now.getDate().toString().padStart(2,'0') + '/' + (now.getMonth()+1).toString().padStart(2,'0');
+
+            input.value = '';
+            
+            renderConversationsList();
+            renderChatTimeline(activeConvId);
+            scrollToBottomActiveChat();
+
+            if (isFirstReply) {
+                showToast('Hội thoại chuyển sang trạng thái: ĐANG XỬ LÝ');
+            }
+        }
+
+        function handleChatInputKeyDown(event) {
+            if (event.key === 'Enter' && !event.shiftKey) {
+                event.preventDefault();
+                sendChatMessage();
+            }
+        }
+
+        function scrollToBottomActiveChat() {
+            setTimeout(() => {
+                const container = document.getElementById('chat-timeline-container');
+                if (container) {
+                    container.scrollTop = container.scrollHeight;
+                }
+            }, 50);
+        }
+
+        function handleTimelineScroll() {
+            const container = document.getElementById('chat-timeline-container');
+            const btn = document.getElementById('chat-scroll-bottom-btn');
+            if (!container || !btn) return;
+            
+            // If scrolled up more than 150px from bottom, show button
+            const isScrolledUp = container.scrollHeight - container.clientHeight - container.scrollTop > 150;
+            btn.style.display = isScrolledUp ? 'flex' : 'none';
+        }
+
+        function toggleRightSidebar() {
+            const sidebarRight = document.getElementById('chat-info-sidebar');
+            const btn = document.getElementById('btn-toggle-right-sidebar');
+            if (!sidebarRight) return;
+
+            isRightSidebarCollapsed = !isRightSidebarCollapsed;
+            sidebarRight.classList.toggle('collapsed', isRightSidebarCollapsed);
+            
+            // Adjust middle column sizing toggle
+            if (btn) {
+                btn.style.color = isRightSidebarCollapsed ? 'var(--text-muted)' : 'var(--primary-color)';
+            }
+        }
+
+        // Customer details form validation
+        function validateCustomerForm() {
+            const ho = document.getElementById('cust-ho').value.trim();
+            const ten = document.getElementById('cust-ten').value.trim();
+            const phone = document.getElementById('cust-phone').value.trim();
+            const email = document.getElementById('cust-email').value.trim();
+            const btnSave = document.getElementById('btn-save-customer');
+
+            let isValid = true;
+
+            // Name required
+            if (!ten) isValid = false;
+
+            // Phone required and must be 10-11 digits
+            const phoneRegex = /^[0-9]{10,11}$/;
+            if (!phone || !phoneRegex.test(phone)) {
+                isValid = false;
+            }
+
+            // Email syntax check if filled
+            if (email) {
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(email)) {
+                    isValid = false;
+                }
+            }
+
+            if (btnSave) {
+                btnSave.disabled = !isValid;
+                btnSave.style.opacity = isValid ? '1' : '0.5';
+                btnSave.style.cursor = isValid ? 'pointer' : 'not-allowed';
+            }
+        }
+
+        function saveCustomerInfo() {
+            const ho = document.getElementById('cust-ho').value.trim();
+            const ten = document.getElementById('cust-ten').value.trim();
+            const phone = document.getElementById('cust-phone').value.trim();
+            const email = document.getElementById('cust-email').value.trim();
+            const dob = document.getElementById('cust-dob').value;
+            const address = document.getElementById('cust-address').value.trim();
+            const notes = document.getElementById('cust-notes').value.trim();
+
+            const conv = conversationsList.find(c => c.id === activeConvId);
+            if (!conv) return;
+
+            // Save to database
+            conv.customerInfo = { ho, ten, phone, email, dob, address, notes };
+            conv.customerName = ho ? `${ho} ${ten}` : ten;
+            conv.avatar = ten.substring(0, 2).toUpperCase();
+
+            // Re-render
+            document.getElementById('chat-active-account-name').innerText = conv.customerName;
+            document.getElementById('chat-info-fullname').innerText = conv.customerName;
+            document.getElementById('chat-info-avatar-circle').innerText = conv.avatar;
+
+            renderConversationsList();
+            showToast('Lưu thông tin khách hàng thành công!');
+        }
+
+        function cancelCustomerEdit() {
+            const conv = conversationsList.find(c => c.id === activeConvId);
+            if (!conv) return;
+
+            // Restore form values
+            document.getElementById('cust-ho').value = conv.customerInfo.ho || '';
+            document.getElementById('cust-ten').value = conv.customerInfo.ten || '';
+            document.getElementById('cust-phone').value = conv.customerInfo.phone || '';
+            document.getElementById('cust-email').value = conv.customerInfo.email || '';
+            document.getElementById('cust-dob').value = conv.customerInfo.dob || '';
+            document.getElementById('cust-address').value = conv.customerInfo.address || '';
+            document.getElementById('cust-notes').value = conv.customerInfo.notes || '';
+
+            validateCustomerForm();
+            showToast('Đã hủy các thay đổi trên form');
+        }
+
+        function addTagToActiveConversation(tagName) {
+            if (!tagName) return;
+            const conv = conversationsList.find(c => c.id === activeConvId);
+            if (!conv) return;
+
+            if (!conv.tags.includes(tagName)) {
+                conv.tags.push(tagName);
+                
+                // Add event log message
+                const now = new Date();
+                const timeStr = getFormattedDateTime(now);
+                messagesDatabase[activeConvId].push({
+                    id: 'sys_' + Date.now(),
+                    senderType: 'system',
+                    content: `Đã gắn nhãn dán [${tagName}] vào cuộc hội thoại.`,
+                    sentTime: timeStr
+                });
+
+                renderConversationsList();
+                renderActiveTagsList();
+                renderChatTimeline(activeConvId);
+                showToast(`Đã gắn nhãn dán: ${tagName}`);
+            }
+        }
+
+        function removeTagFromActiveConversation(tagName) {
+            const conv = conversationsList.find(c => c.id === activeConvId);
+            if (!conv) return;
+
+            conv.tags = conv.tags.filter(t => t !== tagName);
+            
+            // Add event log message
+            const now = new Date();
+            const timeStr = getFormattedDateTime(now);
+            messagesDatabase[activeConvId].push({
+                id: 'sys_' + Date.now(),
+                senderType: 'system',
+                content: `Đã gỡ nhãn dán [${tagName}] khỏi cuộc hội thoại.`,
+                sentTime: timeStr
+            });
+
+            renderConversationsList();
+            renderActiveTagsList();
+            renderChatTimeline(activeConvId);
+            showToast(`Đã gỡ nhãn dán: ${tagName}`);
+        }
+
+        // =========================================================================
+        // PROTOTYPE SIMULATION EVENTS (Round-Robin & Error logs)
+        // =========================================================================
+        function triggerNewConversationSimulation() {
+            const names = ['Nguyễn Hoàng Nam', 'Phạm Minh Tú', 'Trần Thu Trang', 'Đỗ Gia Bảo', 'Vũ Anh Tuấn'];
+            const avatars = ['NN', 'MT', 'TT', 'GB', 'AT'];
+            const colors = ['#f43f5e', '#10b981', '#3b82f6', '#8b5cf6', '#eab308'];
+            const randIdx = Math.floor(Math.random() * names.length);
+            
+            const newId = 'conv_' + Date.now();
+            const channels = ['Zalo', 'Telegram', 'Facebook'];
+            const randChannel = channels[Math.floor(Math.random() * channels.length)];
+            const logos = {
+                Zalo: 'https://img.icons8.com/color/48/zalo.png',
+                Telegram: 'https://img.icons8.com/color/48/telegram-app.png',
+                Facebook: 'https://img.icons8.com/color/48/facebook-new.png'
+            };
+
+            const now = new Date();
+            const timeStr = getFormattedDateTime(now);
+            const timeHour = getFormattedTime(now);
+            const dateStr = now.getDate().toString().padStart(2,'0') + '/' + (now.getMonth()+1).toString().padStart(2,'0');
+
+            // ROUND ROBIN Assignee selection
+            const assignees = agentsList.map(a => a.username);
+            const nextAssignee = assignees[roundRobinIndex];
+            roundRobinIndex = (roundRobinIndex + 1) % assignees.length;
+
+            const agent = agentsList.find(a => a.username === nextAssignee);
+
+            const newConv = {
+                id: newId,
+                customerName: names[randIdx],
+                avatar: avatars[randIdx],
+                avatarColor: colors[randIdx],
+                channel: randChannel,
+                channelLogo: logos[randChannel],
+                channelAccount: channelsData[randChannel][0],
+                lastMessageTime: dateStr,
+                lastMessageText: 'Tin nhắn chào đầu tiên từ hệ thống',
+                unreadCount: 1,
+                isRead: false,
+                tags: [],
+                status: 'Open',
+                assignee: nextAssignee, // assigned automatically
+                customerInfo: {
+                    ho: names[randIdx].split(' ')[0],
+                    ten: names[randIdx].substring(names[randIdx].indexOf(' ') + 1),
+                    phone: '098' + Math.floor(1000000 + Math.random() * 9000000),
+                    email: 'cust' + Date.now() + '@gmail.com',
+                    dob: '1996-08-15',
+                    address: 'Hà Nội',
+                    notes: 'Hội thoại được gán tự động qua round-robin.'
+                }
+            };
+
+            conversationsList.unshift(newConv);
+            
+            // Push mock history messages
+            messagesDatabase[newId] = [
+                { id: 'm_' + Date.now() + '_sys1', senderType: 'system', content: `Cuộc trò chuyện mới được tạo lúc ${timeHour}`, sentTime: timeStr },
+                { id: 'm_' + Date.now() + '_sys2', senderType: 'system', content: `Cuộc trò chuyện này đã chỉ định tự động đến ${agent ? agent.fullName : nextAssignee} lúc ${timeHour}`, sentTime: timeStr },
+                { id: 'm_' + Date.now() + '_c', senderType: 'customer', content: 'Tôi cần hỗ trợ kỹ thuật gấp!', sentTime: timeStr, messageType: 'text' }
+            ];
+
+            // Render UI lists
+            renderConversationsList();
+            showToast(`Khách hàng mới: ${names[randIdx]} nhắn tin. Đã gán cho ${agent ? agent.fullName : nextAssignee} theo cơ chế Round-robin!`);
+
+            // Auto select
+            selectConversation(newId);
+            showConversationView();
+        }
+
+        // =========================================================================
+        // TICKET MANAGEMENT & CREATION MODULE LOGIC (SRS Ticket Management & Create Ticket)
+        // =========================================================================
+        function showTicketsView() {
+            // Hide other panels
+            viewUsers.style.display = 'none';
+            viewNotifSettings.style.display = 'none';
+            viewChannels.style.display = 'none';
+            const viewConv = document.getElementById('view-conversation');
+            if (viewConv) viewConv.style.display = 'none';
+            
+            // Show tickets panel
+            const viewTickets = document.getElementById('view-tickets');
+            if (viewTickets) viewTickets.style.display = 'flex';
+            
+            // Update breadcrumbs
+            const parentBreadcrumb = document.getElementById('breadcrumb-parent-view');
+            if (parentBreadcrumb) parentBreadcrumb.innerText = 'Ticket';
+            breadcrumbCurrentView.innerText = 'Danh sách';
+            
+            // Highlight sidebar menu
+            document.querySelectorAll('.menu-item').forEach(item => {
+                const text = item.innerText.trim();
+                if (text === 'Ticket') {
+                    item.classList.add('active');
+                } else {
+                    item.classList.remove('active');
+                }
+            });
+
+            // Populate assignee filter if needed
+            const selectFilterAssignee = document.getElementById('ticket-filter-assignee');
+            if (selectFilterAssignee && selectFilterAssignee.options.length <= 2) {
+                agentsList.forEach(a => {
+                    const opt = document.createElement('option');
+                    opt.value = a.username;
+                    opt.innerText = a.fullName;
+                    selectFilterAssignee.appendChild(opt);
+                });
+            }
+
+            // Render table
+            renderTicketsTable();
+        }
+
+        function focusCustomerConversation(convId) {
+            // Find sidebar menu item for "Hội thoại"
+            const navItems = document.querySelectorAll('.menu-item');
+            let chatMenu = null;
+            navItems.forEach(item => {
+                if (item.innerText.trim() === 'Hội thoại') {
+                    chatMenu = item;
+                }
+            });
+            if (chatMenu) {
+                selectMenu(chatMenu);
+                selectConversation(convId);
+            }
+        }
+
+        function renderTicketsTable() {
+            const tbody = document.getElementById('ticket-table-body');
+            if (!tbody) return;
+
+            tbody.innerHTML = '';
+
+            const searchVal = document.getElementById('ticket-search-input').value.toLowerCase().trim();
+            const statusFilter = document.getElementById('ticket-filter-status').value;
+            const priorityFilter = document.getElementById('ticket-filter-priority').value;
+            const assigneeFilter = document.getElementById('ticket-filter-assignee').value;
+
+            // Filter tickets list
+            const filtered = ticketsList.filter(t => {
+                // Status Filter
+                if (statusFilter === 'Active' && t.status === 'Closed') return false;
+                if (statusFilter !== 'Active' && statusFilter !== 'All' && t.status !== statusFilter) return false;
+
+                // Priority Filter
+                if (priorityFilter !== 'All' && t.priority !== priorityFilter) return false;
+
+                // Assignee Filter
+                if (assigneeFilter === 'Unassigned' && t.assignee_id !== null) return false;
+                if (assigneeFilter !== 'All' && assigneeFilter !== 'Unassigned' && t.assignee_id !== assigneeFilter) return false;
+
+                // Search query
+                if (searchVal) {
+                    const idMatch = t.ticket_id.toString().includes(searchVal);
+                    const titleMatch = t.title.toLowerCase().includes(searchVal);
+                    const custMatch = t.customerName.toLowerCase().includes(searchVal);
+                    
+                    // Phone match
+                    const conv = conversationsList.find(c => c.id === t.conversation_id);
+                    const phoneMatch = conv && conv.customerInfo.phone.includes(searchVal);
+
+                    return idMatch || titleMatch || custMatch || phoneMatch;
+                }
+
+                return true;
+            });
+
+            // Calculate Resolution Rate
+            // Formula: RT = (N_Resolved + N_Closed) / N_Total * 100%
+            const totalCount = ticketsList.length;
+            const resolvedCount = ticketsList.filter(t => t.status === 'Resolved' || t.status === 'Closed').length;
+            const rt = totalCount > 0 ? Math.round((resolvedCount / totalCount) * 100) : 0;
+            
+            // Update stats UI
+            document.getElementById('stat-total-tickets').innerText = totalCount;
+            document.getElementById('stat-pending-tickets').innerText = ticketsList.filter(t => t.status === 'In_Progress' || t.status === 'Open').length;
+            document.getElementById('stat-resolution-rate').innerText = `${rt}%`;
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="7" style="text-align: center; color: var(--text-muted); padding: 32px;">
+                            Không tìm thấy Ticket nào phù hợp.
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            // Render table rows
+            filtered.forEach(t => {
+                const tr = document.createElement('tr');
+                tr.setAttribute('data-id', t.ticket_id);
+
+                // Priority Badge with Dropdown inline
+                let priorityClass = t.priority.toLowerCase();
+                const prioritySelectHtml = `
+                    <select class="form-control" style="height:28px; font-size:11px; padding:2px; width:90px;" onchange="changeTicketPriority(${t.ticket_id}, this.value)">
+                        <option value="Low" ${t.priority === 'Low' ? 'selected' : ''}>Low</option>
+                        <option value="Medium" ${t.priority === 'Medium' ? 'selected' : ''}>Medium</option>
+                        <option value="High" ${t.priority === 'High' ? 'selected' : ''}>High</option>
+                        <option value="Urgent" ${t.priority === 'Urgent' ? 'selected' : ''}>Urgent</option>
+                    </select>
+                `;
+
+                // Status Badge with Dropdown inline
+                const statusSelectHtml = `
+                    <select class="form-control" style="height:28px; font-size:11px; padding:2px; width:110px;" onchange="changeTicketStatus(${t.ticket_id}, this.value)">
+                        <option value="Open" ${t.status === 'Open' ? 'selected' : ''}>Open</option>
+                        <option value="In_Progress" ${t.status === 'In_Progress' ? 'selected' : ''}>In Progress</option>
+                        <option value="Resolved" ${t.status === 'Resolved' ? 'selected' : ''}>Resolved</option>
+                        <option value="Closed" ${t.status === 'Closed' ? 'selected' : ''}>Closed</option>
+                    </select>
+                `;
+
+                // Assignee Dropdown inline
+                let assigneeOptions = `<option value="">-- Chưa gán --</option>`;
+                agentsList.forEach(a => {
+                    assigneeOptions += `<option value="${a.username}" ${t.assignee_id === a.username ? 'selected' : ''}>${a.fullName}</option>`;
+                });
+                const assigneeSelectHtml = `
+                    <select class="form-control" style="height:28px; font-size:11px; padding:2px; width:130px;" onchange="changeTicketAssignee(${t.ticket_id}, this.value)">
+                        ${assigneeOptions}
+                    </select>
+                `;
+
+                // Format Created date
+                const cDate = t.created_date;
+                const dateStr = `${String(cDate.getHours()).padStart(2,'0')}:${String(cDate.getMinutes()).padStart(2,'0')} ${String(cDate.getDate()).padStart(2,'0')}/${String(cDate.getMonth()+1).padStart(2,'0')}/${cDate.getFullYear()}`;
+
+                tr.innerHTML = `
+                    <td><a href="#" onclick="openDetailTicketPopup(${t.ticket_id}); return false;" style="font-weight: 700; color: var(--primary-color);">#${t.ticket_id}</a></td>
+                    <td style="max-width: 250px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${t.title}">${t.title}</td>
+                    <td><a href="#" onclick="focusCustomerConversation('${t.conversation_id}'); return false;" style="text-decoration: underline;">${t.customerName}</a></td>
+                    <td>
+                        <span class="badge-priority ${priorityClass}" style="margin-bottom: 4px;">${t.priority}</span>
+                        ${prioritySelectHtml}
+                    </td>
+                    <td>
+                        <span class="badge-ticket-status ${t.status.toLowerCase()}" style="margin-bottom: 4px;">${t.status.replace('_', ' ')}</span>
+                        ${statusSelectHtml}
+                    </td>
+                    <td>${assigneeSelectHtml}</td>
+                    <td>${dateStr}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function changeTicketPriority(ticketId, priority) {
+            const ticket = ticketsList.find(t => t.ticket_id === ticketId);
+            if (!ticket) return;
+
+            ticket.priority = priority;
+            renderTicketsTable();
+            showToast(`Cập nhật độ ưu tiên Ticket #${ticketId} thành: ${priority}`);
+        }
+
+        function changeTicketStatus(ticketId, status) {
+            const ticket = ticketsList.find(t => t.ticket_id === ticketId);
+            if (!ticket) return;
+
+            const oldStatus = ticket.status;
+            ticket.status = status;
+
+            if (status === 'Resolved') {
+                ticket.resolved_date = new Date();
+                
+                // Calculate T_xuly = resolved_date - created_date
+                const processTimeMs = ticket.resolved_date - ticket.created_date;
+                const hours = Math.round(processTimeMs / (1000 * 60 * 60) * 10) / 10;
+                
+                // SLA check for Urgent priority
+                if (ticket.priority === 'Urgent' && hours > 4) {
+                    triggerSLAViolationNotification(ticket.ticket_id, ticket.title, hours);
+                }
+
+                showToast(`Ticket #${ticketId} đã giải quyết. Thời gian xử lý: ${hours} giờ`);
+            } else {
+                // If moving away from Resolved back to In Progress, reset resolved_date
+                ticket.resolved_date = null;
+                showToast(`Cập nhật trạng thái Ticket #${ticketId} thành: ${status.replace('_', ' ')}`);
+            }
+
+            renderTicketsTable();
+            renderRelatedTicketsSidebar();
+        }
+
+        function changeTicketAssignee(ticketId, assigneeId) {
+            const ticket = ticketsList.find(t => t.ticket_id === ticketId);
+            if (!ticket) return;
+
+            ticket.assignee_id = assigneeId || null;
+            renderTicketsTable();
+
+            if (assigneeId) {
+                sendTicketAssignNotification(ticketId, ticket.title, assigneeId);
+            } else {
+                showToast(`Gỡ phân công Ticket #${ticketId}`);
+            }
+        }
+
+        function sendTicketAssignNotification(ticketId, title, assigneeId) {
+            const agent = agentsList.find(a => a.username === assigneeId);
+            const msg = `Bạn được phân công xử lý Ticket #${ticketId} - ${title}`;
+
+            // Push notification to bell list
+            const newNotif = {
+                id: 't_assign_' + Date.now(),
+                eventType: 'ASSIGNMENT',
+                module: 'Ticket',
+                title: 'Phân công Ticket mới',
+                body: msg,
+                isRead: false,
+                createdAt: new Date()
+            };
+
+            prototypeState.notifications.push(newNotif);
+            renderNotifications();
+
+            // Display toast to active screen (if it is phuongntt)
+            if (assigneeId === 'phuongntt') {
+                showNotificationToast(newNotif);
+            } else {
+                showToast(`Đã phân công xử lý Ticket #${ticketId} cho ${agent ? agent.fullName : assigneeId}`);
+            }
+        }
+
+        function triggerSLAViolationNotification(ticketId, title, hours) {
+            const msg = `Ticket Urgent #${ticketId} - "${title}" quá hạn giải quyết (Thời gian: ${hours}h > 4h)`;
+
+            const newNotif = {
+                id: 't_sla_' + Date.now(),
+                eventType: 'SLA_ALERT',
+                module: 'Ticket',
+                title: 'Cảnh báo SLA quá hạn',
+                body: msg,
+                isRead: false,
+                createdAt: new Date()
+            };
+
+            prototypeState.notifications.push(newNotif);
+            renderNotifications();
+            showNotificationToast(newNotif);
+        }
+
+        function openCreateTicketPopup() {
+            const conv = conversationsList.find(c => c.id === activeConvId);
+            if (!conv) {
+                showToast('Không có cuộc hội thoại nào đang mở.');
+                return;
+            }
+
+            // BR-CRE-01: Agent only allowed to create ticket if assigned to them and in progress
+            if (conv.status !== 'In Progress' || conv.assignee !== 'phuongntt') {
+                showToast('Bạn chỉ được tạo Ticket khi cuộc hội thoại ở trạng thái Đang xử lý và được gán cho chính bạn! (BR-CRE-01)');
+                return;
+            }
+
+            document.getElementById('ticket-form-cust-name').value = `${conv.customerName} - ${conv.customerInfo.phone || 'N/A'}`;
+            document.getElementById('ticket-form-conv-id').value = conv.id;
+            
+            document.getElementById('ticket-form-title').value = '';
+            document.getElementById('ticket-form-desc').value = '';
+            document.getElementById('ticket-form-priority').value = 'Medium';
+            
+            // Populate assignee dropdown inside modal
+            const assigneeSelect = document.getElementById('ticket-form-assignee');
+            assigneeSelect.innerHTML = '<option value="">-- Chưa phân công --</option>';
+            agentsList.forEach(a => {
+                const opt = document.createElement('option');
+                opt.value = a.username;
+                opt.innerText = a.fullName;
+                assigneeSelect.appendChild(opt);
+            });
+
+            document.getElementById('create-ticket-modal').classList.add('open');
+            validateTicketForm();
+        }
+
+        function closeCreateTicketPopup() {
+            document.getElementById('create-ticket-modal').classList.remove('open');
+        }
+
+        function validateTicketForm() {
+            const titleInput = document.getElementById('ticket-form-title');
+            const title = titleInput.value.trim();
+            const error = document.getElementById('ticket-form-title-error');
+            const btnSubmit = document.getElementById('btn-submit-ticket');
+
+            let isValid = true;
+
+            if (!title || title.length > 255) {
+                isValid = false;
+                if (title.length > 255) {
+                    error.style.display = 'block';
+                } else {
+                    error.style.display = 'none';
+                }
+            } else {
+                error.style.display = 'none';
+            }
+
+            if (btnSubmit) {
+                btnSubmit.disabled = !isValid;
+                btnSubmit.style.opacity = isValid ? '1' : '0.5';
+                btnSubmit.style.cursor = isValid ? 'pointer' : 'not-allowed';
+            }
+        }
+
+        function submitCreateTicketForm() {
+            const conv = conversationsList.find(c => c.id === activeConvId);
+            if (!conv) return;
+
+            const title = document.getElementById('ticket-form-title').value.trim();
+            const desc = document.getElementById('ticket-form-desc').value.trim();
+            const priority = document.getElementById('ticket-form-priority').value;
+            const assignee = document.getElementById('ticket-form-assignee').value || null;
+
+            if (!title) return;
+
+            const ticketId = 100 + ticketsList.length + 1;
+            const newTicket = {
+                ticket_id: ticketId,
+                title: title,
+                description: desc,
+                contact_id: conv.id,
+                customerName: conv.customerName,
+                conversation_id: conv.id,
+                status: 'Open',
+                priority: priority,
+                assignee_id: assignee,
+                creator_id: 'phuongntt',
+                created_date: new Date(),
+                resolved_date: null
+            };
+
+            ticketsList.push(newTicket);
+
+            // Log event to conversation timeline
+            const now = new Date();
+            const timeStr = getFormattedDateTime(now);
+            const timeHour = getFormattedTime(now);
+
+            messagesDatabase[conv.id].push({
+                id: 'sys_ticket_' + Date.now(),
+                senderType: 'system',
+                content: `Ticket #${ticketId} - ${title} được tạo bởi Nguyen Phuong lúc ${timeHour}`,
+                sentTime: timeStr,
+                isTicketLink: true,
+                ticketId: ticketId
+            });
+
+            // If assignee is set, notify assignee
+            if (assignee) {
+                sendTicketAssignNotification(ticketId, title, assignee);
+            }
+
+            closeCreateTicketPopup();
+            
+            // Re-render conversation views
+            renderChatTimeline(conv.id);
+            renderRelatedTicketsSidebar();
+            
+            showToast(`Tạo Ticket #${ticketId} thành công!`);
+        }
+
+        let activeDetailTicketId = null;
+
+        function openDetailTicketPopup(ticketId) {
+            const ticket = ticketsList.find(t => t.ticket_id === ticketId);
+            if (!ticket) return;
+
+            activeDetailTicketId = ticketId;
+
+            document.getElementById('ticket-detail-header').innerText = `Chi tiết Ticket #${ticket.ticket_id}`;
+            document.getElementById('ticket-detail-title').innerText = ticket.title;
+            
+            // Description
+            document.getElementById('ticket-detail-desc').innerText = ticket.description || '(Không có nội dung mô tả)';
+            
+            // Priority
+            const priorityBadge = document.getElementById('ticket-detail-priority-badge');
+            priorityBadge.className = `badge-priority ${ticket.priority.toLowerCase()}`;
+            priorityBadge.innerText = ticket.priority;
+
+            // Status
+            const statusBadge = document.getElementById('ticket-detail-status-badge');
+            statusBadge.className = `badge-ticket-status ${ticket.status.toLowerCase()}`;
+            statusBadge.innerText = ticket.status.replace('_', ' ');
+
+            // Customer
+            document.getElementById('ticket-detail-cust').innerText = ticket.customerName;
+
+            // Conv
+            document.getElementById('ticket-detail-conv').innerText = ticket.conversation_id || 'Không liên kết';
+
+            // Assignee
+            const agent = agentsList.find(a => a.username === ticket.assignee_id);
+            document.getElementById('ticket-detail-assignee').innerText = agent ? agent.fullName : 'Chưa chỉ định';
+
+            // Creator
+            const creator = agentsList.find(a => a.username === ticket.creator_id);
+            document.getElementById('ticket-detail-creator').innerText = creator ? creator.fullName : ticket.creator_id;
+
+            // Dates
+            document.getElementById('ticket-detail-created').innerText = ticket.created_date.toLocaleString('vi-VN');
+            document.getElementById('ticket-detail-resolved').innerText = ticket.resolved_date ? ticket.resolved_date.toLocaleString('vi-VN') : '--';
+
+            // SLA box
+            const slaBox = document.getElementById('ticket-detail-sla-status');
+            
+            // Calculate elapsed or total processing time
+            const now = new Date();
+            const endPoint = ticket.resolved_date || now;
+            const elapsedHours = Math.round((endPoint - ticket.created_date) / (1000 * 60 * 60) * 10) / 10;
+
+            if (ticket.status === 'Resolved' || ticket.status === 'Closed') {
+                slaBox.style.backgroundColor = 'rgba(16, 185, 129, 0.1)';
+                slaBox.style.color = '#10b981';
+                slaBox.innerText = `Đã giải quyết sau ${elapsedHours} giờ.`;
+            } else {
+                if (ticket.priority === 'Urgent') {
+                    if (elapsedHours > 4) {
+                        slaBox.style.backgroundColor = 'rgba(239, 68, 68, 0.1)';
+                        slaBox.style.color = '#ef4444';
+                        slaBox.innerText = `Quá hạn SLA 4 giờ! Đang xử lý: ${elapsedHours} giờ.`;
+                    } else {
+                        slaBox.style.backgroundColor = 'rgba(245, 158, 11, 0.1)';
+                        slaBox.style.color = '#f59e0b';
+                        slaBox.innerText = `Ưu tiên khẩn cấp (SLA 4h). Đã xử lý: ${elapsedHours} giờ.`;
+                    }
+                } else {
+                    slaBox.style.backgroundColor = 'var(--bg-hover)';
+                    slaBox.style.color = 'var(--text-muted)';
+                    slaBox.innerText = `Thời gian trôi qua: ${elapsedHours} giờ.`;
+                }
+            }
+
+            // BR-DEL-01: Only allow deletion if ticket status is Closed
+            const deleteBtn = document.getElementById('btn-delete-ticket');
+            if (deleteBtn) {
+                if (ticket.status === 'Closed') {
+                    deleteBtn.style.display = 'inline-block';
+                } else {
+                    deleteBtn.style.display = 'none';
+                }
+            }
+
+            document.getElementById('detail-ticket-modal').classList.add('open');
+        }
+
+        function closeDetailTicketPopup() {
+            document.getElementById('detail-ticket-modal').classList.remove('open');
+            activeDetailTicketId = null;
+        }
+
+        function deleteActiveTicket() {
+            if (!activeDetailTicketId) return;
+
+            const ticket = ticketsList.find(t => t.ticket_id === activeDetailTicketId);
+            if (!ticket) return;
+
+            // Double check rule BR-DEL-01
+            if (ticket.status !== 'Closed') {
+                alert('Chỉ cho phép xóa Ticket khi trạng thái đã chuyển sang Closed! (AC3.3 / BR-DEL-01)');
+                return;
+            }
+
+            if (confirm(`Bạn có chắc muốn xóa Ticket #${activeDetailTicketId}? Hành động này sẽ không thể hoàn tác.`)) {
+                ticketsList = ticketsList.filter(t => t.ticket_id !== activeDetailTicketId);
+                closeDetailTicketPopup();
+                renderTicketsTable();
+                renderRelatedTicketsSidebar();
+                showToast(`Đã xóa Ticket #${activeDetailTicketId} thành công.`);
+            }
+        }
+
+        function renderRelatedTicketsSidebar() {
+            const list = document.getElementById('sidebar-related-tickets-list');
+            if (!list) return;
+
+            list.innerHTML = '';
+            const conv = conversationsList.find(c => c.id === activeConvId);
+            if (!conv) return;
+
+            // Filter tickets for this client (using conv.id)
+            const related = ticketsList.filter(t => t.contact_id === conv.id);
+
+            // Display up to 5 tickets
+            const limit = related.slice(-5).reverse();
+
+            limit.forEach(t => {
+                const item = document.createElement('div');
+                item.className = 'sidebar-ticket-item';
+                item.onclick = () => openDetailTicketPopup(t.ticket_id);
+
+                let priorityClass = t.priority.toLowerCase();
+                let statusClass = t.status.toLowerCase();
+
+                item.innerHTML = `
+                    <div style="font-weight: 600; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; max-width: 140px;">
+                        #${t.ticket_id} - ${t.title}
+                    </div>
+                    <span class="badge-ticket-status ${statusClass}" style="font-size:10px; padding: 1px 6px;">
+                        ${t.status.replace('_', ' ')}
+                    </span>
+                `;
+                list.appendChild(item);
+            });
+
+            if (related.length === 0) {
+                list.innerHTML = '<span style="color:var(--text-muted); font-size:11px; padding: 2px 4px; font-style:italic;">Chưa có ticket nào...</span>';
+            } else {
+                // Add a "Xem tất cả" button to go to the ticket management page
+                const allBtn = document.createElement('button');
+                allBtn.className = 'btn btn-secondary';
+                allBtn.style = 'width: 100%; font-size: 11px; padding: 4px; margin-top: 6px;';
+                allBtn.innerText = 'Xem tất cả';
+                allBtn.onclick = (e) => {
+                    e.stopPropagation();
+                    // Navigate to Tickets tab and pre-fill search filter
+                    showTicketsView();
+                    document.getElementById('ticket-search-input').value = conv.customerName;
+                    renderTicketsTable();
+                };
+                list.appendChild(allBtn);
+            }
+        }
+
+        // Periodically scan for SLA violations on Urgent tickets (checks every 30 seconds)
+        setInterval(() => {
+            const now = new Date();
+            ticketsList.forEach(t => {
+                if (t.priority === 'Urgent' && t.status !== 'Resolved' && t.status !== 'Closed') {
+                    const elapsedHours = (now - t.created_date) / (1000 * 60 * 60);
+                    if (elapsedHours > 4) {
+                        if (!t.slaAlertTriggered) {
+                            t.slaAlertTriggered = true;
+                            triggerSLAViolationNotification(t.ticket_id, t.title, Math.round(elapsedHours * 10) / 10);
+                        }
+                    }
+                }
+            });
+        }, 30000);
+
+        // Restored showToast helper function
         let toastTimeout;
         function showToast(message) {
             clearTimeout(toastTimeout);
@@ -5964,12 +9691,15 @@
             }, 3000);
         }
 
+
         // Close modal on escape key
         window.addEventListener('keydown', function (event) {
             if (event.key === 'Escape') {
                 closeEditModal();
                 closeMockEmailClient();
                 closeHolidayDatePicker();
+                closeCreateTicketPopup();
+                closeDetailTicketPopup();
             }
         });
     </script>

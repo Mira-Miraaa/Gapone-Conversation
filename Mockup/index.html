@@ -4444,6 +4444,8 @@
 
                 </div>
 
+            </div>
+
                 <!-- VIEW 4: CONVERSATION PANEL -->
                 <div id="view-conversation" class="view-panel" style="display: none;">
                     <div class="conversation-layout">
@@ -4773,7 +4775,6 @@
 
             </div>
 
-    </div>
     </main>
     </div>
 
@@ -8040,6 +8041,8 @@
             viewUsers.style.display = 'none';
             viewNotifSettings.style.display = 'none';
             viewChannels.style.display = 'none';
+            const viewTickets = document.getElementById('view-tickets');
+            if (viewTickets) viewTickets.style.display = 'none';
             
             // Show conversation panel
             const viewConv = document.getElementById('view-conversation');

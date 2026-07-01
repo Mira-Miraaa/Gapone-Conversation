@@ -1,15 +1,16 @@
 ---
 title: AI Chatbot Module Index
-version: 1.0.4
+version: 1.0.5
 status: Active
 related_code: F:/Gapone Conversation/Docs/AI_Chatbot
-last_updated: 2026-06-26
+last_updated: 2026-07-01
 ---
 
 # Nhật ký thay đổi (Revision History)
 
 | Phiên bản | Ngày | Người cập nhật | Vị trí thay đổi | Lý do chi tiết |
 | :--- | :--- | :--- | :--- | :--- |
+| 1.0.5 | 2026-07-01 | Mira-Miraaa | Bản đồ tài liệu, Biểu đồ Mermaid | Bổ sung tài liệu PRD AI Conversation Memory (prd-conversation-memory.md) vào chỉ mục |
 | 1.0.4 | 2026-06-26 | Mira-Miraaa | Bản đồ tài liệu, Biểu đồ Mermaid | Bổ sung tài liệu PRD Tự động tóm tắt phiên hội thoại (prd-conversation-summary.md) vào chỉ mục |
 | 1.0.3 | 2026-06-26 | Mira-Miraaa | Bản đồ tài liệu, Biểu đồ Mermaid | Chuẩn hóa tên file PRD thành định dạng prd- theo đúng nội dung và đồng bộ liên kết |
 | 1.0.2 | 2026-06-26 | Mira-Miraaa | Bản đồ tài liệu, Biểu đồ Mermaid | Cập nhật tên các file .md sau khi đổi tên theo chuẩn rõ ràng và bổ sung các tài liệu PRD phân rã |
@@ -45,6 +46,7 @@ graph TD
     PRD --> PRD_File["prd-file-processing.md (Đọc/Xử lý file)"]
     PRD --> PRD_Tool["prd-tool-calling-architecture.md (Kiến trúc Tool Calling)"]
     PRD --> PRD_Sum_P["prd-conversation-summary.md (Tóm tắt hội thoại)"]
+    PRD --> PRD_Mem_P["prd-conversation-memory.md (Bộ nhớ hội thoại)"]
 
     SRS_Core --> SRS_AI["srs-ai-settings.md (Thiết lập & Cấu hình)"]
     SRS_Core --> SRS_Auto["srs-chatbot-scenarios.md (Kịch bản & Phản hồi)"]
@@ -68,11 +70,12 @@ graph TD
 | 5 | **PRD File Processing** | Đặc tả kiến trúc xử lý tài liệu (PDF, Word, Excel/CSV) của LLM. | [prd-file-processing.md](file:///F:/Gapone%20Conversation/Docs/AI_Chatbot/prd-file-processing.md) |
 | 6 | **PRD Tool Calling Architecture** | Đặc tả kiến trúc Tool Calling và chi tiết các tool MVP. | [prd-tool-calling-architecture.md](file:///F:/Gapone%20Conversation/Docs/AI_Chatbot/prd-tool-calling-architecture.md) |
 | 7 | **PRD Conversation Summary** | Tài liệu PRD đặc tả tính năng tự động tóm tắt phiên hội thoại bằng AI. | [prd-conversation-summary.md](file:///F:/Gapone%20Conversation/Docs/AI_Chatbot/prd-conversation-summary.md) |
-| 8 | **SRS AI Integration** | Đặc tả tích hợp AI vào hệ thống, quản lý thiết lập AI và tích hợp nhà cung cấp mô hình. | [srs-ai-settings.md](file:///F:/Gapone%20Conversation/Docs/AI_Chatbot/srs-ai-settings.md) |
-| 9 | **SRS Automation** | Đặc tả chatbot tự động trong các kịch bản tự động phản hồi. | [srs-chatbot-scenarios.md](file:///F:/Gapone%20Conversation/Docs/AI_Chatbot/srs-chatbot-scenarios.md) |
-| 10 | **SRS Knowledge Base** | Đặc tả cơ sở tri thức phục vụ cho RAG để Chatbot trả lời FAQ chính xác. | [srs-knowledge-base.md](file:///F:/Gapone%20Conversation/Docs/AI_Chatbot/srs-knowledge-base.md) |
-| 11 | **SRS Conversation Memory** | Đặc tả lưu trữ và quản lý bộ nhớ hội thoại giúp giữ ngữ cảnh trao đổi. | [srs-conversation-memory.md](file:///F:/Gapone%20Conversation/Docs/AI_Chatbot/srs-conversation-memory.md) |
-| 12 | **SRS Conversation Summary** | Đặc tả tóm tắt hội thoại nhằm tối ưu hóa token và bàn giao cho agent người. | [srs-conversation-summary.md](file:///F:/Gapone%20Conversation/Docs/AI_Chatbot/srs-conversation-summary.md) |
+| 8 | **PRD Conversation Memory** | Tài liệu PRD đặc tả tính năng AI ghi nhớ 5 phiên hội thoại gần nhất. | [prd-conversation-memory.md](file:///F:/Gapone%20Conversation/Docs/AI_Chatbot/prd-conversation-memory.md) |
+| 9 | **SRS AI Integration** | Đặc tả tích hợp AI vào hệ thống, quản lý thiết lập AI và tích hợp nhà cung cấp mô hình. | [srs-ai-settings.md](file:///F:/Gapone%20Conversation/Docs/AI_Chatbot/srs-ai-settings.md) |
+| 10 | **SRS Automation** | Đặc tả chatbot tự động trong các kịch bản tự động phản hồi. | [srs-chatbot-scenarios.md](file:///F:/Gapone%20Conversation/Docs/AI_Chatbot/srs-chatbot-scenarios.md) |
+| 11 | **SRS Knowledge Base** | Đặc tả cơ sở tri thức phục vụ cho RAG để Chatbot trả lời FAQ chính xác. | [srs-knowledge-base.md](file:///F:/Gapone%20Conversation/Docs/AI_Chatbot/srs-knowledge-base.md) |
+| 12 | **SRS Conversation Memory** | Đặc tả lưu trữ và quản lý bộ nhớ hội thoại giúp giữ ngữ cảnh trao đổi. | [srs-conversation-memory.md](file:///F:/Gapone%20Conversation/Docs/AI_Chatbot/srs-conversation-memory.md) |
+| 13 | **SRS Conversation Summary** | Đặc tả tóm tắt hội thoại nhằm tối ưu hóa token và bàn giao cho agent người. | [srs-conversation-summary.md](file:///F:/Gapone%20Conversation/Docs/AI_Chatbot/srs-conversation-summary.md) |
 
 > [!NOTE]
 > Các file gốc `.docx` tương ứng đã được lưu trữ (archive) trong thư mục ẩn `.archive_docx/` để phục vụ sao lưu và không tham gia vào quá trình đọc/quét tự động của AI Agent.

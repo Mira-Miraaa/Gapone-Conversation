@@ -4361,19 +4361,172 @@
                             onclick="switchChannelMainTab(this, 'channels-timeout')">Thời gian chờ</button>
                     </div>
 
-                    <!-- Main Tab Content: Channels List (Mockup) -->
-                    <div id="tab-channels-list-content" class="settings-card"
-                        style="display: block; text-align: center; padding: 48px; color: var(--text-muted);">
-                        <svg width="48" height="48" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                            style="margin-bottom: 12px; opacity: 0.5;">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 100-6 3 3 0 000 6z">
-                            </path>
-                        </svg>
-                        <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 4px; color: var(--text-main);">Tính
-                            năng kết nối Kênh liên lạc</h3>
-                        <p style="font-size: 13px;">Giao diện quản lý các kênh kết nối Zalo OA, Facebook Page, Webchat,
-                            Viber...</p>
+                    <!-- Main Tab Content: Channels List (Accordion & Connection) -->
+                    <div id="tab-channels-list-content" style="display: block;">
+                        
+                        <!-- VIEW A: MAIN LIST (Telegram, Zalo, Messenger, Website) -->
+                        <div id="channels-main-list-view" style="display: flex; flex-direction: column; gap: 16px;">
+                            <!-- Header Row: Search & Connect Button -->
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                                <div class="search-box-wrapper" style="width: 320px; position: relative;">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="position: absolute; left: 12px; top: 10px; width: 16px; height: 16px; color: var(--text-muted);"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                                    <input type="text" placeholder="Nhập tên tài khoản hoặc tên BOT" class="form-control" style="padding-left: 36px; height: 38px; width: 100%;">
+                                </div>
+                                <button class="btn btn-primary" onclick="showChooseChannelView()" style="background-color: var(--primary-color); border: none; font-weight: 600; padding: 10px 24px; border-radius: 6px; cursor: pointer; color: white;">Kết nối</button>
+                            </div>
+
+                            <!-- ACCORDION SECTIONS -->
+                            <!-- Section 1: Telegram -->
+                            <div class="accordion-item" style="border: 1px solid var(--border-color); border-radius: 8px; background-color: var(--bg-card); overflow: hidden;">
+                                <div class="accordion-header" onclick="toggleAccordion('telegram')" style="padding: 16px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; user-select: none;">
+                                    <div style="display: flex; align-items: center; gap: 12px;">
+                                        <svg class="chevron-accordion" id="chevron-telegram" viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" style="transform: rotate(0deg); transition: transform 0.2s; color: var(--text-main);"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                                        <span style="font-weight: 600; font-size: 15px; color: var(--text-main);">Telegram</span>
+                                    </div>
+                                    <span style="font-size: 12px; color: var(--text-muted); background-color: var(--bg-hover); padding: 2px 8px; border-radius: 12px;">1 đã kết nối</span>
+                                </div>
+                                <div class="accordion-content" id="content-telegram" style="display: none; padding: 0 16px 16px 16px; border-top: 1px solid var(--border-color); background-color: var(--bg-main);">
+                                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px dashed var(--border-color);">
+                                        <div style="display: flex; align-items: center; gap: 10px;">
+                                            <div style="background-color: #0088cc; color: white; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 14px;">TG</div>
+                                            <div>
+                                                <div style="font-weight: 500; color: var(--text-main);">Gapone Customer Care Bot</div>
+                                                <div style="font-size: 12px; color: var(--text-muted);">@gapone_cc_bot</div>
+                                            </div>
+                                        </div>
+                                        <span style="font-size: 12px; color: #10b981; font-weight: 500;">Đang hoạt động</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Section 2: Zalo -->
+                            <div class="accordion-item" style="border: 1px solid var(--border-color); border-radius: 8px; background-color: var(--bg-card); overflow: hidden;">
+                                <div class="accordion-header" onclick="toggleAccordion('zalo')" style="padding: 16px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; user-select: none;">
+                                    <div style="display: flex; align-items: center; gap: 12px;">
+                                        <svg class="chevron-accordion" id="chevron-zalo" viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" style="transform: rotate(0deg); transition: transform 0.2s; color: var(--text-main);"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                                        <span style="font-weight: 600; font-size: 15px; color: var(--text-main);">Zalo</span>
+                                    </div>
+                                    <span style="font-size: 12px; color: var(--text-muted); background-color: var(--bg-hover); padding: 2px 8px; border-radius: 12px;">1 đã kết nối</span>
+                                </div>
+                                <div class="accordion-content" id="content-zalo" style="display: none; padding: 0 16px 16px 16px; border-top: 1px solid var(--border-color); background-color: var(--bg-main);">
+                                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px dashed var(--border-color);">
+                                        <div style="display: flex; align-items: center; gap: 10px;">
+                                            <div style="background-color: #0068ff; color: white; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 14px;">Z</div>
+                                            <div>
+                                                <div style="font-weight: 500; color: var(--text-main);">GapOne Official Store</div>
+                                                <div style="font-size: 12px; color: var(--text-muted);">ID: 2901239829381</div>
+                                            </div>
+                                        </div>
+                                        <span style="font-size: 12px; color: #10b981; font-weight: 500;">Đang hoạt động</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Section 3: Messenger -->
+                            <div class="accordion-item" style="border: 1px solid var(--border-color); border-radius: 8px; background-color: var(--bg-card); overflow: hidden;">
+                                <div class="accordion-header" onclick="toggleAccordion('messenger')" style="padding: 16px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; user-select: none;">
+                                    <div style="display: flex; align-items: center; gap: 12px;">
+                                        <svg class="chevron-accordion" id="chevron-messenger" viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" style="transform: rotate(0deg); transition: transform 0.2s; color: var(--text-main);"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                                        <span style="font-weight: 600; font-size: 15px; color: var(--text-main);">Messenger</span>
+                                    </div>
+                                    <span style="font-size: 12px; color: var(--text-muted); background-color: var(--bg-hover); padding: 2px 8px; border-radius: 12px;">0 đã kết nối</span>
+                                </div>
+                                <div class="accordion-content" id="content-messenger" style="display: none; padding: 16px; border-top: 1px solid var(--border-color); background-color: var(--bg-main); text-align: center; color: var(--text-muted); font-style: italic; font-size: 13px;">
+                                    Chưa kết nối Fanpage Facebook nào...
+                                </div>
+                            </div>
+
+                            <!-- Section 4: Website (Collapsible Accordion) -->
+                            <div class="accordion-item" style="border: 1px solid var(--border-color); border-radius: 8px; background-color: var(--bg-card); overflow: hidden;">
+                                <div class="accordion-header" onclick="toggleAccordion('website')" style="padding: 16px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; user-select: none;">
+                                    <div style="display: flex; align-items: center; gap: 12px;">
+                                        <svg class="chevron-accordion" id="chevron-website" viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" style="transform: rotate(180deg); transition: transform 0.2s; color: var(--text-main);"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                                        <span style="font-weight: 600; font-size: 15px; color: var(--text-main);">Website</span>
+                                    </div>
+                                    <span id="badge-website-count" style="font-size: 12px; color: var(--text-muted); background-color: var(--bg-hover); padding: 2px 8px; border-radius: 12px;">8 đã kết nối</span>
+                                </div>
+                                <div class="accordion-content" id="content-website" style="display: block; padding: 0 16px 16px 16px; border-top: 1px solid var(--border-color); background-color: var(--bg-main);">
+                                    
+                                    <!-- Website Table -->
+                                    <div class="table-card" style="border: 1px solid var(--border-color); border-radius: 8px; overflow: hidden; box-shadow: var(--shadow-sm); background-color: var(--bg-card); margin-top: 16px;">
+                                        <div class="table-responsive">
+                                            <table id="website-channel-table" style="width: 100%; border-collapse: collapse; text-align: left; font-size: 14px;">
+                                                <thead>
+                                                    <tr style="background-color: var(--bg-table-header); border-bottom: 1px solid var(--border-color); color: var(--text-main);">
+                                                        <th style="padding: 12px 16px; font-weight: 600; width: 80px; text-align: center;">STT</th>
+                                                        <th style="padding: 12px 16px; font-weight: 600; text-align: center;">Website</th>
+                                                        <th style="padding: 12px 16px; font-weight: 600; text-align: center;">Ngày kết nối</th>
+                                                        <th style="padding: 12px 16px; font-weight: 600; width: 60px; text-align: center;"></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="website-channel-tbody">
+                                                    <!-- Rows populated dynamically -->
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- VIEW B: CHOOSE CONNECTION CHANNEL (Chọn kênh kết nối, Screenshot 2 style) -->
+                        <div id="channels-choose-type-view" style="display: none; padding: 24px; text-align: center;">
+                            <h2 style="font-size: 20px; font-weight: 700; margin-bottom: 8px; color: var(--text-main);">Chọn kênh kết nối</h2>
+                            <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 32px;">Để bắt đầu tạo mới, hãy chọn kênh phù hợp để kết nối</p>
+                            
+                            <!-- Grid of Connection Cards -->
+                            <div style="display: flex; gap: 24px; justify-content: center; align-items: center; flex-wrap: wrap; margin-bottom: 48px;">
+                                <!-- Card 1: Telegram -->
+                                <div class="connect-channel-card" onclick="selectChannelToConnect('Telegram')" onmouseover="this.style.borderColor='var(--primary-color)'; this.style.boxShadow='var(--shadow-md)';" onmouseout="this.style.borderColor='var(--border-color)'; this.style.boxShadow='none';" style="width: 130px; height: 130px; border: 1px solid var(--border-color); border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; cursor: pointer; transition: all 0.2s; background-color: var(--bg-card);">
+                                    <div style="background-color: #e0f2fe; width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #0284c7;">
+                                        <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69.01-.03.01-.14-.07-.2-.08-.06-.19-.04-.27-.02-.12.02-1.95 1.24-5.51 3.65-.52.36-.99.54-1.41.53-.46-.01-1.35-.26-2.01-.48-.81-.27-1.46-.42-1.4-.88.03-.24.37-.49 1.02-.74 3.99-1.74 6.66-2.88 8-3.44 3.82-1.58 4.61-1.86 5.13-1.87.11 0 .37.03.54.17.14.11.18.27.2.38-.01.08.01.24 0 .38z"/></svg>
+                                    </div>
+                                    <span style="font-weight: 600; font-size: 13px; color: var(--text-main);">Telegram</span>
+                                </div>
+                                <!-- Card 2: Zalo -->
+                                <div class="connect-channel-card" onclick="selectChannelToConnect('Zalo')" onmouseover="this.style.borderColor='var(--primary-color)'; this.style.boxShadow='var(--shadow-md)';" onmouseout="this.style.borderColor='var(--border-color)'; this.style.boxShadow='none';" style="width: 130px; height: 130px; border: 1px solid var(--border-color); border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; cursor: pointer; transition: all 0.2s; background-color: var(--bg-card);">
+                                    <div style="background-color: #eff6ff; width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #2563eb; font-weight: bold; font-size: 18px; font-family: sans-serif;">Zalo</div>
+                                    <span style="font-weight: 600; font-size: 13px; color: var(--text-main);">Zalo</span>
+                                </div>
+                                <!-- Card 3: Messenger -->
+                                <div class="connect-channel-card" onclick="selectChannelToConnect('Messenger')" onmouseover="this.style.borderColor='var(--primary-color)'; this.style.boxShadow='var(--shadow-md)';" onmouseout="this.style.borderColor='var(--border-color)'; this.style.boxShadow='none';" style="width: 130px; height: 130px; border: 1px solid var(--border-color); border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; cursor: pointer; transition: all 0.2s; background-color: var(--bg-card);">
+                                    <div style="background-color: #fdf2f8; width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #db2777;">
+                                        <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12c0 2.81 1.17 5.35 3.08 7.18V22l2.67-1.46c1.33.37 2.74.58 4.25.58 5.48 0 10-4.48 10-10S17.48 2 12 2zm1.05 11.75l-2.45-2.62-4.78 2.62 5.26-5.58 2.45 2.62 4.77-2.62-5.25 5.58z"/></svg>
+                                    </div>
+                                    <span style="font-weight: 600; font-size: 13px; color: var(--text-main);">Messenger</span>
+                                </div>
+                                <!-- Card 4: Website -->
+                                <div class="connect-channel-card" onclick="selectChannelToConnect('Website')" onmouseover="this.style.borderColor='var(--primary-color)'; this.style.boxShadow='var(--shadow-md)';" onmouseout="this.style.borderColor='var(--border-color)'; this.style.boxShadow='none';" style="width: 130px; height: 130px; border: 1px solid var(--border-color); border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; cursor: pointer; transition: all 0.2s; background-color: var(--bg-card);">
+                                    <div style="background-color: #f0fdf4; width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #16a34a;">
+                                        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                                    </div>
+                                    <span style="font-weight: 600; font-size: 13px; color: var(--text-main);">Website</span>
+                                </div>
+                            </div>
+
+                            <!-- Cancel Button Footer -->
+                            <div style="display: flex; justify-content: flex-end;">
+                                <button class="btn btn-secondary" onclick="hideChooseChannelView()" style="background-color: #94a3b8; color: white; border: none; font-weight: 600; padding: 10px 24px; border-radius: 6px; cursor: pointer;">Hủy</button>
+                            </div>
+                        </div>
+
+                        <!-- VIEW C: WEBSITE DOMAIN INPUT FORM (Nhập domain) -->
+                        <div id="channels-website-form-view" style="display: none; padding: 24px; max-width: 600px; margin: 0 auto;">
+                            <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 24px; color: var(--text-main); text-align: center;">Kết nối Kênh Website</h3>
+                            
+                            <div class="form-group" style="margin-bottom: 20px;">
+                                <label class="form-label" style="font-weight: 600; margin-bottom: 8px; display: block; color: var(--text-main);">Tên miền *</label>
+                                <input type="text" id="input-website-domain-new" placeholder="Nhập vào tên miền" class="form-control" style="width: 100%; height: 38px; padding-left: 12px; border: 1px solid var(--border-heavy); border-radius: 6px; background-color: var(--bg-input); color: var(--text-main);">
+                                <span style="font-size: 12px; color: var(--text-muted); display: block; margin-top: 6px;">Ví dụ: app.gapone.vn, myshop.com (Không bao gồm http:// hoặc https://)</span>
+                            </div>
+
+                            <div style="display: flex; gap: 12px; justify-content: flex-end; margin-top: 32px;">
+                                <button class="btn btn-secondary" onclick="goBackToChooseChannel()" style="padding: 10px 24px;">Quay lại</button>
+                                <button class="btn btn-primary" onclick="addWebsiteChannelNew()" style="background-color: var(--primary-color); border: none; padding: 10px 24px; color: white; font-weight: 600; border-radius: 6px; cursor: pointer;">Kết nối</button>
+                            </div>
+                        </div>
+
                     </div>
 
                     <!-- Main Tab Content: Channels Groups (Mockup) -->
@@ -4503,9 +4656,6 @@
                                 </button>
                             </div>
 
-                            <!-- Cards Stack -->
-                            <div class="rules-cards-stack" id="rules-cards-container">
-                                <!-- Cards filled dynamically -->
                             </div>
                     </div>
 
@@ -5170,11 +5320,50 @@
                         <p>Chọn một email bên trái để xem nội dung chi tiết</p>
                     </div>
                 </div>
+        </div>
+    </div>
+
+    <!-- SDK Embed Code Modal -->
+    <div class="modal-overlay" id="website-code-modal">
+        <div class="modal-card" style="max-width: 600px; padding: 24px; background-color: var(--bg-card);">
+            <div class="modal-header" style="border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center;">
+                <h3 class="modal-title" style="font-size: 16px; font-weight: 700; color: var(--text-main);">Mã nhúng SDK Chatbot</h3>
+                <button class="modal-close" onclick="closeWebsiteCodeModal()" style="background: none; border: none; cursor: pointer; color: var(--text-muted);">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 12px; line-height: 1.5;">
+                    Sao chép mã nhúng dưới đây và dán vào phần thẻ <code>&lt;head&gt;</code> hoặc trước thẻ đóng <code>&lt;/body&gt;</code> trên website của bạn để kích hoạt AI Chatbot:
+                </p>
+                <div style="position: relative; margin-bottom: 20px;">
+                    <textarea id="website-sdk-code" readonly style="width: 100%; height: 160px; font-family: monospace; font-size: 12px; padding: 12px; border: 1px solid var(--border-heavy); border-radius: 6px; background-color: var(--bg-hover); color: var(--text-main); resize: none;"></textarea>
+                    <button class="btn btn-primary" onclick="copyWebsiteSDKCode()" style="position: absolute; right: 12px; bottom: 12px; font-size: 12px; padding: 6px 12px; background-color: #0052cc; color: white; border: none; border-radius: 4px; cursor: pointer;">Sao chép mã</button>
+                </div>
+            </div>
+            <div class="modal-footer" style="display: flex; justify-content: flex-end;">
+                <button class="btn btn-secondary" onclick="closeWebsiteCodeModal()" style="padding: 8px 16px; cursor: pointer;">Đóng</button>
             </div>
         </div>
     </div>
 
-
+    <!-- Confirm Disconnect/Delete Modal -->
+    <div class="modal-overlay" id="website-delete-modal" style="z-index: 2200;">
+        <div class="modal-card" style="max-width: 400px; padding: 24px; text-align: center; background-color: var(--bg-card);">
+            <div style="font-size: 40px; color: #ff4d4f; margin-bottom: 12px;">⚠️</div>
+            <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 8px; color: var(--text-main);">Ngắt kết nối Website</h3>
+            <p id="website-delete-message" style="font-size: 13px; color: var(--text-muted); margin-bottom: 24px; line-height: 1.6;">
+                Bạn có chắc chắn muốn ngắt kết nối tên miền này? Chatbot sẽ ngừng hoạt động trên website ngay lập tức.
+            </p>
+            <div style="display: flex; gap: 12px; justify-content: center;">
+                <button class="btn btn-secondary" style="padding: 8px 16px; flex: 1; cursor: pointer;" onclick="closeWebsiteDeleteModal()">Hủy</button>
+                <button class="btn btn-primary" style="padding: 8px 16px; flex: 1; background-color: #ff4d4f; color: white; border: none; border-radius: 4px; cursor: pointer;" onclick="confirmDeleteWebsiteChannel()">Xác nhận</button>
+            </div>
+        </div>
+    </div>
 
     <div class="dev-panel" id="dev-panel" style="display: none;">
         <div class="dev-panel-header">
@@ -5784,6 +5973,13 @@
                 const btnActiveSub = document.getElementById('chat-active-sub');
                 if (accountsDropdown && accountsDropdown.style.display === 'flex' && btnActiveSub && !btnActiveSub.contains(e.target) && !accountsDropdown.contains(e.target)) {
                     accountsDropdown.style.display = 'none';
+                }
+
+                // Close website dropdowns when clicking outside
+                if (!e.target.closest('.btn-more-options') && !e.target.closest('.website-actions-dropdown')) {
+                    document.querySelectorAll('.website-actions-dropdown').forEach(d => {
+                        d.style.display = 'none';
+                    });
                 }
             });
         });
@@ -8027,6 +8223,7 @@
             if (tabName === 'channels-list') {
                 document.getElementById('tab-channels-list-content').style.display = 'block';
                 showToast('Chuyển đến tab Kênh liên lạc');
+                renderWebsitesTable();
             } else if (tabName === 'channels-groups') {
                 document.getElementById('tab-channels-groups-content').style.display = 'block';
                 showToast('Chuyển đến tab Nhóm kênh');
@@ -10022,6 +10219,211 @@
         }
 
 
+        // Website Channel Connection Mockup logic
+        let websiteChannels = [
+            { id: 1, domain: 'app.gapone.vn', date: '13/03/2026 13:34:28' },
+            { id: 2, domain: 'hl5.zalo.vn', date: '05/06/2023 09:09:26' },
+            { id: 3, domain: 'haravanhanoi.myharavan.com', date: '08/07/2022 11:37:14' },
+            { id: 4, domain: 'chock.myharavan.com', date: '20/06/2022 09:55:26' },
+            { id: 5, domain: 'gapit.myharavan.com', date: '11/05/2022 17:48:57' },
+            { id: 6, domain: 'gapitapp.myharavan.com', date: '29/04/2022 13:48:55' },
+            { id: 7, domain: 'barbich-1.myharavan.com', date: '28/04/2022 16:05:55' },
+            { id: 8, domain: 'gapit12.com.vn', date: '03/12/2021 11:45:36' }
+        ];
+
+        function renderWebsitesTable() {
+            const tbody = document.getElementById('website-channel-tbody');
+            if (!tbody) return;
+            tbody.innerHTML = '';
+            websiteChannels.forEach((item, index) => {
+                const tr = document.createElement('tr');
+                tr.style.borderBottom = '1px solid var(--border-color)';
+                tr.innerHTML = `
+                    <td style="padding: 12px 16px; text-align: center; color: var(--text-main);">${index + 1}</td>
+                    <td style="padding: 12px 16px; text-align: center; color: #0052cc; font-weight: 500; cursor: pointer;" onclick="openWebsiteCodeModal('${item.domain}')" title="Xem mã nhúng SDK">${item.domain}</td>
+                    <td style="padding: 12px 16px; text-align: center; color: var(--text-muted);">${item.date}</td>
+                    <td style="padding: 12px 16px; text-align: center; position: relative;">
+                        <button class="btn-more-options" onclick="toggleWebsiteActionsDropdown(event, ${item.id})" style="background: none; border: none; cursor: pointer; padding: 4px; display: inline-flex; align-items: center; justify-content: center; color: var(--text-muted);">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="1.5"></circle>
+                                <circle cx="12" cy="5" r="1.5"></circle>
+                                <circle cx="12" cy="19" r="1.5"></circle>
+                            </svg>
+                        </button>
+                        <div id="website-actions-dropdown-${item.id}" class="website-actions-dropdown" style="display: none; position: absolute; right: 16px; top: 38px; background-color: var(--bg-card); border: 1px solid var(--border-color); border-radius: 6px; box-shadow: var(--shadow-md); z-index: 100; min-width: 80px; padding: 4px 0;">
+                            <div onclick="triggerDeleteWebsite(event, ${item.id}, '${item.domain}')" style="padding: 8px 12px; font-size: 13px; color: #ff4d4f; cursor: pointer; text-align: left; transition: background-color 0.2s;" onmouseover="this.style.backgroundColor='var(--bg-hover)';" onmouseout="this.style.backgroundColor='transparent';">
+                                Xóa
+                            </div>
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function toggleAccordion(channel) {
+            const content = document.getElementById(`content-${channel}`);
+            const chevron = document.getElementById(`chevron-${channel}`);
+            if (!content || !chevron) return;
+            const isHidden = content.style.display === 'none';
+            content.style.display = isHidden ? 'block' : 'none';
+            chevron.style.transform = isHidden ? 'rotate(180deg)' : 'rotate(0deg)';
+        }
+
+        function toggleWebsiteActionsDropdown(event, id) {
+            event.stopPropagation();
+            const dropdown = document.getElementById(`website-actions-dropdown-${id}`);
+            if (!dropdown) return;
+            const isShown = dropdown.style.display === 'block';
+            
+            // Close all website dropdowns first
+            document.querySelectorAll('.website-actions-dropdown').forEach(d => d.style.display = 'none');
+            
+            if (!isShown) {
+                dropdown.style.display = 'block';
+            }
+        }
+
+        function triggerDeleteWebsite(event, id, domain) {
+            event.stopPropagation();
+            // Close dropdown
+            const dropdown = document.getElementById(`website-actions-dropdown-${id}`);
+            if (dropdown) dropdown.style.display = 'none';
+            
+            deleteWebsiteChannel(id, domain);
+        }
+
+        function showChooseChannelView() {
+            document.getElementById('channels-main-list-view').style.display = 'none';
+            document.getElementById('channels-choose-type-view').style.display = 'block';
+            document.getElementById('channels-website-form-view').style.display = 'none';
+            showToast('Chọn kênh để bắt đầu kết nối');
+        }
+
+        function hideChooseChannelView() {
+            document.getElementById('channels-main-list-view').style.display = 'flex';
+            document.getElementById('channels-choose-type-view').style.display = 'none';
+            document.getElementById('channels-website-form-view').style.display = 'none';
+        }
+
+        function selectChannelToConnect(type) {
+            if (type === 'Website') {
+                document.getElementById('channels-choose-type-view').style.display = 'none';
+                document.getElementById('channels-website-form-view').style.display = 'block';
+                showToast('Nhập tên miền Website cần kết nối');
+            } else {
+                showToast(`Kết nối kênh ${type} đang được phát triển.`);
+            }
+        }
+
+        function goBackToChooseChannel() {
+            document.getElementById('channels-choose-type-view').style.display = 'block';
+            document.getElementById('channels-website-form-view').style.display = 'none';
+        }
+
+        function addWebsiteChannelNew() {
+            const input = document.getElementById('input-website-domain-new');
+            const domain = input.value.trim().toLowerCase();
+            if (!domain) {
+                showToast('Tên miền không được để trống!');
+                return;
+            }
+            // Domain validation regex
+            const regex = /^[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(\.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+$/;
+            if (!regex.test(domain)) {
+                showToast('Tên miền không hợp lệ! Vui lòng kiểm tra lại (Ví dụ: gapone.vn).');
+                return;
+            }
+            if (websiteChannels.some(w => w.domain === domain)) {
+                showToast('Tên miền này đã được kết nối rồi!');
+                return;
+            }
+
+            // Mock connecting state
+            showToast('Đang kết nối tên miền...');
+            const connectButton = document.querySelector('button[onclick="addWebsiteChannelNew()"]');
+            const originalText = connectButton.innerText;
+            connectButton.disabled = true;
+            connectButton.innerText = 'Đang kết nối...';
+
+            setTimeout(() => {
+                const now = new Date();
+                const day = String(now.getDate()).padStart(2, '0');
+                const month = String(now.getMonth() + 1).padStart(2, '0');
+                const year = now.getFullYear();
+                const hours = String(now.getHours()).padStart(2, '0');
+                const minutes = String(now.getMinutes()).padStart(2, '0');
+                const seconds = String(now.getSeconds()).padStart(2, '0');
+                const dateStr = `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
+
+                const nextId = websiteChannels.length > 0 ? Math.max(...websiteChannels.map(w => w.id)) + 1 : 1;
+                websiteChannels.push({ id: nextId, domain: domain, date: dateStr });
+                
+                // Re-render and update counts
+                renderWebsitesTable();
+                const countBadge = document.getElementById('badge-website-count');
+                if (countBadge) countBadge.innerText = `${websiteChannels.length} đã kết nối`;
+
+                connectButton.disabled = false;
+                connectButton.innerText = originalText;
+                input.value = '';
+                
+                // Return to main list and expand website accordion
+                hideChooseChannelView();
+                const websiteContent = document.getElementById('content-website');
+                const websiteChevron = document.getElementById('chevron-website');
+                if (websiteContent) websiteContent.style.display = 'block';
+                if (websiteChevron) websiteChevron.style.transform = 'rotate(180deg)';
+
+                showToast(`Kết nối thành công tên miền: ${domain}`);
+                openWebsiteCodeModal(domain);
+            }, 1200);
+        }
+
+        let activeCodeDomain = '';
+        function openWebsiteCodeModal(domain) {
+            activeCodeDomain = domain;
+            const scriptSnippet = `<!-- Gapone AI Chatbot SDK Embed Code for ${domain} -->\n<script>\n  (function(g,a,p,o,n,e){\n    g['GaponeChatbot']=n;g[n]=g[n]||function(){\n    (g[n].q=g[n].q||[]).push(arguments)},g[n].l=1*new Date();\n    e=a.createElement(p),o=a.getElementsByTagName(p)[0];\n    e.async=1;e.src='https://gapone.vn/sdk/chatbot.js?domain=${domain}';\n    o.parentNode.insertBefore(e,o);\n  })(window,document,'script','gapone_chatbot');\n  gapone_chatbot('init', 'GP-W-10293');\n<\/script>`;
+            document.getElementById('website-sdk-code').value = scriptSnippet;
+            document.getElementById('website-code-modal').classList.add('open');
+        }
+
+        function closeWebsiteCodeModal() {
+            document.getElementById('website-code-modal').classList.remove('open');
+        }
+
+        function copyWebsiteSDKCode() {
+            const textarea = document.getElementById('website-sdk-code');
+            textarea.select();
+            document.execCommand('copy');
+            showToast('Đã sao chép mã nhúng SDK vào bộ nhớ tạm!');
+        }
+
+        let activeDeleteId = null;
+        let activeDeleteDomain = '';
+        function deleteWebsiteChannel(id, domain) {
+            activeDeleteId = id;
+            activeDeleteDomain = domain;
+            document.getElementById('website-delete-message').innerText = `Bạn có chắc chắn muốn ngắt kết nối Website "${domain}" khỏi hệ thống AI Chatbot?`;
+            document.getElementById('website-delete-modal').classList.add('open');
+        }
+
+        function closeWebsiteDeleteModal() {
+            document.getElementById('website-delete-modal').classList.remove('open');
+            activeDeleteId = null;
+            activeDeleteDomain = '';
+        }
+
+        function confirmDeleteWebsiteChannel() {
+            if (!activeDeleteId) return;
+            websiteChannels = websiteChannels.filter(w => w.id !== activeDeleteId);
+            renderWebsitesTable();
+            const countBadge = document.getElementById('badge-website-count');
+            if (countBadge) countBadge.innerText = `${websiteChannels.length} đã kết nối`;
+            closeWebsiteDeleteModal();
+            showToast(`Đã ngắt kết nối thành công Website: ${activeDeleteDomain}`);
+        }
+
         // Close modal on escape key
         window.addEventListener('keydown', function (event) {
             if (event.key === 'Escape') {
@@ -10030,6 +10432,8 @@
                 closeHolidayDatePicker();
                 closeCreateTicketPopup();
                 closeDetailTicketPopup();
+                closeWebsiteCodeModal();
+                closeWebsiteDeleteModal();
             }
         });
     </script>

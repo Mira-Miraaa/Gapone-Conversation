@@ -1,9 +1,9 @@
 ---
 title: SRS Ticket Management
-version: 1.0.0
-status: draft
-related_code: F:/Gapone Conversation/Docs/SRS Ticket Management.md
-last_updated: 2026-07-01
+version: 1.1.0
+status: active
+related_code: ["f:/Gapone Conversation/Mockup/index.html"]
+last_updated: 2026-07-02
 ---
 
 # BẢNG GHI NHẬN THAY ĐỔI TÀI LIỆU
@@ -11,6 +11,7 @@ last_updated: 2026-07-01
 | Phiên bản | Ngày | Người cập nhật | Vị trí thay đổi | Lý do chi tiết |
 | :--- | :--- | :--- | :--- | :--- |
 | 1.0.0 | 2026-07-01 | Mira-Miraaa | Toàn bộ tài liệu | Tạo mới tài liệu đặc tả tính năng Quản lý danh sách Ticket |
+| 1.1.0 | 2026-07-02 | Mira-Miraaa | Toàn bộ tài liệu | Cập nhật chi tiết giao diện Dashboard, các bộ lọc, Data Table, cơ chế chỉnh sửa nhanh (Inline Edit), chi tiết popup SLA, kiểm tra SLA định kỳ (SLA Violation) và phân công việc (Assignment notification) dựa trên mockup thực tế. |
 
 ---
 
@@ -18,7 +19,7 @@ last_updated: 2026-07-01
 
 | Giai đoạn | Thời gian | Phần mục | Phiên bản áp dụng |
 | :--- | :--- | :--- | :--- |
-| Sprint 5 | 01/07/2026 - ... | Xây dựng màn hình danh sách Ticket, bộ lọc, chi tiết Ticket và cơ chế cập nhật trạng thái | V1.0 |
+| Sprint 5 | 01/07/2026 - ... | Xây dựng màn hình danh sách Ticket, bộ lọc, chi tiết Ticket và cơ chế cập nhật trạng thái | V1.1 |
 
 ---
 
@@ -26,7 +27,7 @@ last_updated: 2026-07-01
 
 | STT | Tài liệu | Liên kết / Đường dẫn |
 | :--- | :--- | :--- |
-| 1 | SRS Conversation | [SRS Conversation](file:///F:/Gapone%20Conversation/Docs/SRS%20Conversation.md) |
+| 1 | SRS Conversation | [SRS Conversation](file:///f:/Gapone%20Conversation/Docs/SRS%20Conversation.md) |
 
 ---
 
@@ -54,7 +55,7 @@ Xây dựng tính năng **Quản lý danh sách Ticket** nhằm:
 | Vai trò | Quyền hạn trên phân hệ Ticket | Ghi chú |
 | :--- | :--- | :--- |
 | **Admin / Manager** | - Toàn quyền Xem, Tạo mới, Chỉnh sửa, Phân công, Xóa Ticket.<br>- Cấu hình các thiết lập chung của Ticket (mức độ ưu tiên, danh mục loại ticket). | Phục vụ giám sát hệ thống và phân phối công việc. |
-| **Agent** | - Xem danh sách Ticket được phân công cho mình hoặc cho Team của mình.<br>- Cập nhật trạng thái, ghi chú xử lý đối với Ticket phụ trách.<br>- Tạo mới Ticket khi hỗ trợ khách hàng. | Không có quyền xóa Ticket hoặc cấu hình hệ thống. |
+| **Agent** | - Xem danh sách Ticket được phân công cho mình hoặc cho Team của mình.<br>- Cập nhật trạng thái, ghi chú xử lý đối với Ticket phụ trách.<br>- Tạo mới Ticket khi hỗ trợ khách hàng. | Không có quyền xóa Ticket (ngoại trừ Ticket đã Closed và được xác nhận) hoặc cấu hình hệ thống. |
 
 ### 2.2. Bảng định nghĩa đối tượng (Ticket Entity Schema)
 
@@ -92,53 +93,108 @@ stateDiagram-v2
 
 ### 3.1. Xem danh sách Ticket tổng quan
 
-#### Mô tả chức năng
-Màn hình danh sách hiển thị tất cả các Ticket dưới dạng bảng (Data table) có phân trang, bộ lọc đa dạng và thanh tìm kiếm hỗ trợ tra cứu nhanh.
+#### 3.1.1. Dashboard chỉ số hiệu suất
+Tại phần đầu của màn hình quản lý (Panel ID: `view-tickets`), hiển thị 3 thẻ thông tin thống kê chính (Stats Cards Grid):
+1.  **Tổng số Ticket** (ID Component: `stat-total-tickets`): Tổng số lượng ticket tồn tại trên hệ thống.
+2.  **Đang xử lý** (ID Component: `stat-pending-tickets`): Số lượng ticket có trạng thái là `Open` hoặc `In_Progress` (hiển thị màu vàng cam `#f59e0b`).
+3.  **Tỷ lệ Giải quyết (RT)** (ID Component: `stat-resolution-rate`): Thống kê tỷ lệ phần trăm giải quyết thành công của toàn hệ thống (hiển thị màu xanh lá `#10b981`), tính theo công thức:
+    $$RT = \frac{N_{\text{Resolved}} + N_{\text{Closed}}}{N_{\text{Total}}} \times 100\%$$
 
-#### Giao diện & Các bộ lọc
-*   **Thanh tìm kiếm**: Cho phép gõ tìm kiếm gần đúng (LIKE) theo Mã Ticket, Tiêu đề Ticket, Tên khách hàng hoặc Số điện thoại khách hàng.
-*   **Bộ lọc trạng thái (Status Filter)**: Cho phép chọn nhiều trạng thái cùng lúc (Open, In Progress, Resolved, Closed). Mặc định hiển thị tất cả trừ các Ticket đã `Closed`.
-*   **Bộ lọc độ ưu tiên (Priority Filter)**: Droplist chọn các mức độ ưu tiên (Low, Medium, High, Urgent).
-*   **Bộ lọc người phụ trách (Assignee Filter)**: Cho phép lọc theo Agent cụ thể hoặc lọc "Chưa phân công".
-*   **Bộ lọc khoảng thời gian**: Lọc các Ticket được tạo trong khoảng `Từ ngày - Đến ngày`.
+#### 3.1.2. Bộ lọc đa dạng (Filter Bar)
+Thanh công cụ lọc (Filter Bar) hỗ trợ Agent và Manager tra cứu nhanh:
+*   **Thanh tìm kiếm** (ID: `ticket-search-input`): Ô nhập văn bản hỗ trợ tìm gần đúng (LIKE) theo Mã Ticket, Tiêu đề, Tên khách hàng, hoặc Số điện thoại của khách hàng. Sự kiện `oninput` sẽ trigger tự động vẽ lại bảng (`renderTicketsTable()`).
+*   **Bộ lọc trạng thái** (ID: `ticket-filter-status`): Dropdown chọn trạng thái cần lọc gồm:
+    *   `Active` (Tất cả trừ Closed) - *Tùy chọn mặc định khi mở màn hình*.
+    *   `All` (Tất cả trạng thái)
+    *   `Open` (Mới)
+    *   `In_Progress` (Đang xử lý)
+    *   `Resolved` (Đã giải quyết)
+    *   `Closed` (Đã đóng)
+*   **Bộ lọc độ ưu tiên** (ID: `ticket-filter-priority`): Dropdown chọn mức độ ưu tiên gồm: `All` (Tất cả), `Low`, `Medium`, `High`, `Urgent`.
+*   **Bộ lọc người phụ trách** (ID: `ticket-filter-assignee`): Dropdown chọn Agent gồm: `All` (Tất cả), `Unassigned` (Chưa phân công), hoặc chọn Agent cụ thể được tải động từ danh sách `agentsList`.
 
-#### Trường dữ liệu trên bảng danh sách
+#### 3.1.3. Bảng dữ liệu Ticket (Table ID: `ticket-table-body`)
+Danh sách Ticket hiển thị dưới dạng bảng dữ liệu có các cột thông tin chi tiết:
 
 | STT | Tên cột | Hiển thị dữ liệu | Hành vi tương tác |
 | :--- | :--- | :--- | :--- |
-| 1 | Mã Ticket | `#ID` (Ví dụ: `#1024`) | Click vào ID mở màn hình chi tiết Ticket |
-| 2 | Tiêu đề | Chuỗi văn bản tiêu đề ngắn | Rút gọn dấu `...` nếu dài quá 50 ký tự |
-| 3 | Khách hàng | Tên khách hàng + SĐT kèm icon kênh phát sinh (nếu có) | Click vào tên chuyển hướng sang Hồ sơ khách hàng |
-| 4 | Độ ưu tiên | Nhãn màu tương ứng mức độ:<br>- Urgent: Đỏ<br>- High: Cam<br>- Medium: Xanh dương<br>- Low: Xám | Cho phép click đổi nhanh độ ưu tiên qua Dropdown |
-| 5 | Trạng thái | Nhãn màu trạng thái hiện tại | Cho phép click đổi nhanh trạng thái |
-| 6 | Người phụ trách | Tên Agent xử lý | Click hiển thị Droplist Agent để gán lại nhanh |
-| 7 | Ngày tạo | Định dạng `hh:mm dd/mm/yyyy` | Sắp xếp tăng/giảm dần theo thời gian tạo |
+| 1 | Mã Ticket | `#ID` (Ví dụ: `#1024`) | Link text màu xanh (`var(--primary-color)`), in đậm. Click gọi hàm `openDetailTicketPopup(ticket_id)` để mở Popup xem chi tiết. |
+| 2 | Tiêu đề | Chuỗi văn bản tiêu đề ngắn | Sử dụng thuộc tính tooltip `title` để hiển thị đầy đủ tiêu đề. Rút gọn bằng dấu `...` nếu vượt quá 50 ký tự (`text-overflow: ellipsis`). |
+| 3 | Khách hàng | Tên khách hàng | Hiển thị link văn bản có gạch chân. Click gọi hàm `focusCustomerConversation(conversation_id)` để tự động chuyển sang phân hệ Hội thoại và mở đúng cuộc chat của khách hàng này. |
+| 4 | Độ ưu tiên | Badge màu tương ứng + Dropdown chọn nhanh | Badge màu chuẩn theo mức độ. Dropdown chọn nhanh gọi hàm `changeTicketPriority(ticket_id, priority)`. |
+| 5 | Trạng thái | Badge màu trạng thái + Dropdown chọn nhanh | Badge màu chuẩn theo trạng thái. Dropdown chọn nhanh gọi hàm `changeTicketStatus(ticket_id, status)`. |
+| 6 | Người phụ trách | Dropdown chứa danh sách Agent | Dropdown chứa tên Agent và tùy chọn `-- Chưa gán --`. Thay đổi tùy chọn gọi hàm `changeTicketAssignee(ticket_id, assignee_id)`. |
+| 7 | Ngày tạo | Định dạng `hh:mm dd/mm/yyyy` | Thời điểm tạo Ticket trong hệ thống. |
+
+> [!NOTE]
+> Khi không tìm thấy bất kỳ Ticket nào thỏa mãn các điều kiện lọc, bảng sẽ hiển thị một dòng thông báo duy nhất: *"Không tìm thấy Ticket nào phù hợp."* (căn giữa, màu chữ muted).
 
 ---
 
-### 3.2. Cập nhật trạng thái & Đo lường hiệu suất xử lý (SLA)
+### 3.2. Cơ chế chỉnh sửa nhanh trực tiếp (Inline Edit) & Trạng thái SLA
 
-#### Cập nhật trạng thái
-*   Khi chuyển trạng thái Ticket sang `Resolved`:
-    *   Hệ thống tự động điền thời gian hiện tại vào trường `resolved_date`.
-    *   Tính toán thời gian xử lý thực tế $T_{\text{xử lý}}$ của Ticket:
-        $$T_{\text{xử lý}} = \text{resolved\_date} - \text{created\_date}$$
-*   Nếu chuyển trạng thái từ `Resolved` quay ngược lại `In_Progress` (do phát sinh vấn đề chưa triệt để), trường `resolved_date` sẽ được reset về `NULL`.
+#### 3.2.1. Thay đổi Độ ưu tiên
+Khi thay đổi độ ưu tiên qua Dropdown trên dòng, hệ thống cập nhật trường `priority` tương ứng và hiển thị Toast thông báo:
+*"Cập nhật độ ưu tiên Ticket #[Mã Ticket] thành: [Mức độ ưu tiên mới]"*.
 
-#### Đo lường chỉ số giải quyết Ticket (Resolution Rate)
-Để báo cáo hiệu suất của bộ phận hỗ trợ khách hàng, hệ thống tính toán tỷ lệ giải quyết thành công ($RT$) theo công thức sau:
-$$RT = \frac{N_{\text{Resolved}} + N_{\text{Closed}}}{N_{\text{Total}}} \times 100\%$$
-*Trong đó:*
-*   \(N_{\text{Resolved}}\): Số lượng Ticket chuyển sang trạng thái `Resolved` trong kỳ báo cáo.
-*   \(N_{\text{Closed}}\): Số lượng Ticket chuyển sang trạng thái `Closed` trong kỳ báo cáo.
-*   \(N_{\text{Total}}\): Tổng số lượng Ticket phát sinh mới trong kỳ báo cáo.
+#### 3.2.2. Thay đổi Trạng thái & Tính toán SLA
+Khi thay đổi trạng thái qua Dropdown trên dòng, hệ thống thực hiện hàm `changeTicketStatus()`:
+*   Nếu chuyển trạng thái sang `Resolved`:
+    *   Hệ thống ghi nhận thời điểm hiện tại vào trường `resolved_date`.
+    *   Tính toán thời gian xử lý thực tế $T_{\text{xử lý}}$ (đơn vị: giờ, làm tròn 1 chữ số thập phân):
+        $$T_{\text{xử lý}} = \frac{\text{resolved\_date} - \text{created\_date}}{3600 \times 1000}$$
+    *   Nếu mức độ ưu tiên là `Urgent` và thời gian xử lý $T_{\text{xử lý}} > 4\text{ giờ}$, hệ thống lập tức kích hoạt thông báo vi phạm SLA quá hạn gửi tới Manager.
+    *   Hiển thị Toast: *"Ticket #[Mã Ticket] đã giải quyết. Thời gian xử lý: [Số giờ] giờ"*.
+*   Nếu chuyển trạng thái từ `Resolved` ngược về các trạng thái trước đó (ví dụ: `In_Progress` để xử lý lại), hệ thống sẽ reset trường `resolved_date` về `NULL` và hiển thị Toast trạng thái tương ứng.
+
+#### 3.2.3. Thay đổi Người phụ trách & Thông báo phân công (Event Assignment)
+Khi thay đổi người phụ trách qua Dropdown trên dòng:
+*   Nếu được gán cho một Agent (khác trống), hệ thống ghi nhận `assignee_id` và tự động gửi thông báo in-app (Event Type: `ASSIGNMENT`, Module: `Ticket`):
+    *   Nội dung thông báo: *"Bạn được phân công xử lý Ticket #[Mã Ticket] - [Tiêu đề Ticket]"*.
+    *   Nếu Agent nhận việc chính là Agent đang đăng nhập (`phuongntt`), hệ thống hiển thị Toast Notification in-app. Ngược lại, hiển thị Toast chung: *"Đã phân công xử lý Ticket #[Mã Ticket] cho [Tên Agent nhận]"*.
+*   Nếu gỡ phân công (chọn `-- Chưa gán --`), cập nhật `assignee_id = null` và hiển thị Toast: *"Gỡ phân công Ticket #[Mã Ticket]"*.
+
+---
+
+### 3.3. Quy trình Cảnh báo vi phạm SLA định kỳ (SLA Violation Checker)
+
+Hệ thống tích hợp tiến trình kiểm tra ngầm định kỳ mỗi 30 giây (`setInterval`):
+1.  Hệ thống lọc tất cả các Ticket có mức độ ưu tiên là **Urgent** và trạng thái **khác** `Resolved` và `Closed`.
+2.  Với mỗi Ticket thỏa mãn, tính toán thời gian trôi qua thực tế:
+    $$T_{\text{trôi qua}} = \frac{\text{Thời điểm hiện tại} - \text{created\_date}}{3600 \times 1000}$$
+3.  Nếu $T_{\text{trôi qua}} > 4 \text{ giờ}$ và chưa được cảnh báo trước đó (`slaAlertTriggered === false`):
+    *   Đánh dấu `slaAlertTriggered = true` trên Ticket để tránh gửi lặp lại.
+    *   Gửi một thông báo cảnh báo in-app (Event Type: `SLA_ALERT`, Module: `Ticket`) với tiêu đề *"Cảnh báo SLA quá hạn"* và nội dung chi tiết:
+        *"Ticket Urgent #[Mã Ticket] - \"[Tiêu đề Ticket]\" quá hạn giải quyết (Thời gian: [Số giờ]h > 4h)"*.
+    *   Đẩy thông báo vào Bell Notification List và hiển thị Popup Toast thông báo khẩn cấp trên màn hình.
+
+---
+
+### 3.4. Popup Chi tiết Ticket (Modal ID: `detail-ticket-modal`)
+
+Popup hiển thị thông tin chi tiết đầy đủ khi người dùng click vào liên kết `#ID` trên bảng hoặc liên kết trên timeline trò chuyện (chiều rộng tối đa 550px):
+*   **Tiêu đề Modal**: `Chi tiết Ticket #[Mã Ticket]` (ID: `ticket-detail-header`).
+*   **Tiêu đề chính**: Tiêu đề Ticket dạng chữ lớn (ID: `ticket-detail-title`).
+*   **Badge**: Hiển thị song song badge Độ ưu tiên (ID: `ticket-detail-priority-badge`) và badge Trạng thái (ID: `ticket-detail-status-badge`).
+*   **Hộp mô tả**: Thẻ div hiển thị nội dung (ID: `ticket-detail-desc`), có màu nền `var(--bg-hover)` và đường viền mỏng. Áp dụng style `white-space: pre-wrap` để bảo toàn định dạng văn bản xuống dòng do Agent nhập.
+*   **Chi tiết hồ sơ nguồn**: Hiển thị Tên khách hàng (ID: `ticket-detail-cust`) và Mã cuộc hội thoại nguồn (ID: `ticket-detail-conv`).
+*   **Thông tin gán việc**: Hiển thị tên đầy đủ của Người phụ trách (ID: `ticket-detail-assignee`) và Người tạo (ID: `ticket-detail-creator`).
+*   **Mốc thời gian**: Hiển thị Ngày tạo (ID: `ticket-detail-created`) và Thời điểm giải quyết (ID: `ticket-detail-resolved`).
+*   **Hộp trạng thái SLA động** (ID: `ticket-detail-sla-status`): Hiển thị thông tin thời gian xử lý thay đổi màu nền và màu chữ động:
+    *   *Đã Resolved hoặc Closed*: Nền xanh mờ, chữ xanh lá `#10b981`. Nội dung: *"Đã giải quyết sau [Số giờ] giờ."*
+    *   *Đang xử lý / Mới (Mức Urgent)*:
+        *   Nếu quá 4 giờ: Nền đỏ mờ, chữ đỏ `#ef4444`. Nội dung: *"Quá hạn SLA 4 giờ! Đang xử lý: [Số giờ] giờ."*
+        *   Nếu trong vòng 4 giờ: Nền cam mờ, chữ cam `#f59e0b`. Nội dung: *"Ưu tiên khẩn cấp (SLA 4h). Đã xử lý: [Số giờ] giờ."*
+    *   *Đang xử lý / Mới (Các mức ưu tiên khác)*: Nền xám mờ, chữ xám `var(--text-muted)`. Nội dung: *"Thời gian trôi qua: [Số giờ] giờ."*
 
 > [!WARNING]
-> Đối với các Ticket có độ ưu tiên là `Urgent`, nếu thời gian xử lý thực tế $T_{\text{xử lý}} > 4 \text{ giờ}$ mà chưa chuyển sang trạng thái `Resolved`, hệ thống phải kích hoạt gửi cảnh báo quá hạn xử lý (SLA Violation) trực tiếp tới Quản lý qua Bell Icon.
+> **Quy tắc Xóa Ticket (BR-DEL-01):**
+> Nút "Xóa Ticket" (ID: `btn-delete-ticket`, màu nền đỏ `#ef4444`) tại chân Popup **chỉ hiển thị** khi Ticket đang ở trạng thái **Closed**. Nếu ở các trạng thái khác, nút này sẽ bị ẩn (`display: none`). 
+> Khi click nút xóa, hệ thống yêu cầu xác nhận: *"Bạn có chắc muốn xóa Ticket #[Mã Ticket]? Hành động này sẽ không thể hoàn tác."*. Khi xác nhận OK, hệ thống tiến hành xóa bỏ hoàn toàn dữ liệu Ticket khỏi danh sách.
 
 ---
 
-### 3.3. Ràng buộc hệ thống & Các lỗi ngoại lệ
+### 3.5. Ràng buộc hệ thống & Các lỗi ngoại lệ
 
 *   **Ràng buộc gán việc (Assignment notification)**: Mỗi khi trường `assignee_id` thay đổi (Ticket được gán cho Agent mới), hệ thống phải tự động tạo một thông báo in-app gửi tới Agent nhận việc với nội dung: *"Bạn được phân công xử lý Ticket #[ID] - [Tiêu đề]"*.
 *   **Ràng buộc xóa Ticket**: Chỉ cho phép xóa Ticket khi trạng thái đã chuyển sang `Closed` để tránh mất mát dữ liệu lịch sử phản hồi khách hàng khi đang xử lý.

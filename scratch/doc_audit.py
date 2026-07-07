@@ -5,7 +5,7 @@ import sys
 # Adjust stdout to handle UTF-8 printing
 sys.stdout.reconfigure(encoding='utf-8')
 
-root_dir = r"F:\Gapone Conversation\Docs\AI_Chatbot"
+root_dir = sys.argv[1] if len(sys.argv) > 1 else r"F:\Gapone Conversation\Docs"
 
 def audit_file(file_path):
     issues = []

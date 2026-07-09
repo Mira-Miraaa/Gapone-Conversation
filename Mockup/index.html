@@ -4878,7 +4878,46 @@
                                     </div>
                                 </div>
 
-                                <!-- 3. Ghi chú (collapsed by default) -->
+                                <!-- 3. Tóm tắt phiên hội thoại bởi AI (collapsed by default) -->
+                                <div class="accordion-section" id="section-ai-summary">
+                                    <div class="accordion-header" onclick="toggleAccordion('ai-summary')">
+                                        <div style="display:flex; align-items:center; gap:8px;">
+                                            <svg class="chevron-icon" id="chevron-ai-summary" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                                            <span class="accordion-title" style="display:flex; align-items:center; gap:6px;">
+                                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--primary-color)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 0 1 10 10v8a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-8A10 10 0 0 1 12 2Z"></path><circle cx="12" cy="13" r="3"></circle><line x1="12" y1="8" x2="12" y2="10"></line></svg>
+                                                T&#243;m t&#7855;t phi&#234;n h&#7897;i tho&#7841;i b&#7903;i AI
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="accordion-content" id="content-ai-summary" style="display: none;">
+                                        <div style="display: flex; flex-direction: column; gap: 10px; padding: 4px 0; font-size: 12px;">
+                                            <!-- Y dinh -->
+                                            <div>
+                                                <div style="font-size: 10px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;">&#221; &#273;&#7883;nh (Intent)</div>
+                                                <div id="ai-summary-intent" style="color: var(--text-main); background-color: var(--bg-hover); border: 1px solid var(--border-color); border-radius: 6px; padding: 6px 8px; font-size: 12px; line-height: 1.5;">H&#7887;i gi&#225; d&#7883;ch v&#7909; SMS Brandname</div>
+                                            </div>
+                                            <!-- Trang thai -->
+                                            <div>
+                                                <div style="font-size: 10px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;">Tr&#7841;ng th&#225;i (Resolution Status)</div>
+                                                <div id="ai-summary-status">
+                                                    <span style="display: inline-flex; align-items: center; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 600; background-color: rgba(245, 158, 11, 0.15); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.25);">Escalated_to_Human</span>
+                                                </div>
+                                            </div>
+                                            <!-- Noi dung tom tat -->
+                                            <div>
+                                                <div style="font-size: 10px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;">N&#7897;i dung t&#243;m t&#7855;t (Summary)</div>
+                                                <div id="ai-summary-content" style="color: var(--text-main); background-color: var(--bg-hover); border: 1px solid var(--border-color); border-radius: 6px; padding: 6px 8px; font-size: 12px; line-height: 1.6; white-space: pre-wrap;">Kh&#225;ch h&#224;ng h&#7887;i b&#225;o gi&#225; SMS Brandname. Bot ph&#7843;n h&#7891;i m&#7913;c gi&#225; t&#7915; 350&#273;/tin v&#224; &#273;&#7873; ngh&#7883; &#273;&#7875; l&#7841;i SĐT. Kh&#225;ch cung c&#7845;p 0987654321, y&#234;u c&#7847;u t&#432; v&#7845;n g&#7845;p. Cu&#7897;c h&#7897;i tho&#7841;i &#273;&#432;&#7907;c chuy&#7875;n sang nh&#226;n vi&#234;n x&#7917; l&#253;.</div>
+                                            </div>
+                                            <!-- Hanh dong tiep theo -->
+                                            <div>
+                                                <div style="font-size: 10px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;">H&#224;nh &#273;&#7897;ng ti&#7871;p theo (Next Steps)</div>
+                                                <div id="ai-summary-nextsteps" style="color: var(--text-main); background-color: var(--bg-hover); border: 1px solid var(--border-color); border-radius: 6px; padding: 6px 8px; font-size: 12px; line-height: 1.5;">Li&#234;n h&#7879; l&#7841;i kh&#225;ch h&#224;ng qua SĐT 0987654321 &#273;&#7875; t&#432; v&#7845;n b&#225;o gi&#225; chi ti&#7871;t v&#224; k&#253; h&#7907;p &#273;&#7891;ng.</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- 4. Ghi chú (collapsed by default) -->
                                 <div class="accordion-section" id="section-notes">
                                     <div class="accordion-header" onclick="toggleAccordion('notes')">
                                         <div style="display:flex; align-items:center; gap:8px;">
@@ -4892,7 +4931,7 @@
                                     </div>
                                 </div>
 
-                                <!-- 4. Thông tin khách hàng (collapsed by default) -->
+                                <!-- 5. Thông tin khách hàng (collapsed by default) -->
                                 <div class="accordion-section" id="section-profile">
                                     <div class="accordion-header" onclick="toggleAccordion('profile')">
                                         <div style="display:flex; align-items:center; gap:8px;">
@@ -8291,6 +8330,11 @@
             document.getElementById('content-tickets').style.display = 'block';
             document.querySelector('#section-tickets .accordion-header').classList.add('expanded');
             document.getElementById('chevron-tickets').classList.add('rotated');
+
+            // Tóm tắt phiên hội thoại bởi AI (ai-summary) -> closed
+            document.getElementById('content-ai-summary').style.display = 'none';
+            document.querySelector('#section-ai-summary .accordion-header').classList.remove('expanded');
+            document.getElementById('chevron-ai-summary').classList.remove('rotated');
 
             // Ghi chú (notes) -> closed
             document.getElementById('content-notes').style.display = 'none';

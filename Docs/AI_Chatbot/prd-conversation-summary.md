@@ -1,9 +1,9 @@
 ---
 title: PRD - AI Conversation Summary
-version: 2.0.0
+version: 2.1.0
 status: Active
 related_code: F:/Gapone Conversation/Docs/AI_Chatbot/prd-conversation-summary.md
-last_updated: 2026-07-08
+last_updated: 2026-07-09
 ---
 # Nhật ký thay đổi (Revision History)
 
@@ -11,6 +11,7 @@ last_updated: 2026-07-08
 | :---------- | :--------- | :----------------- | :------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | 1.0.0       | 2026-06-26 | Mira-Miraaa        | Toàn bộ tài liệu | Tạo mới tài liệu PRD đặc tả tính năng tự động tóm tắt phiên hội thoại bằng AI                                                                         |
 | 2.0.0       | 2026-07-08 | Mira-Miraaa        | Toàn bộ tài liệu | Cải tiến kiến trúc tóm tắt: Tách biệt logic phản hồi, bổ sung cơ chế cuốn chiếu ngầm 10 tin và tóm tắt tổng kết đóng phiên bằng Archiver Agent |
+| 2.1.0       | 2026-07-09 | Mira-Miraaa        | Mục 3.3 (mới)    | Bổ sung mô tả chi tiết các case thường và case đặc biệt để diễn giải logic kế thừa tóm tắt giữa các phiên                                      |
 
 ---
 
@@ -92,6 +93,201 @@ flowchart TD
   1. Bản tóm tắt gần nhất `last_summary` trong DB.
   2. Toàn bộ các tin nhắn dư lẻ còn sót lại từ sau `last_summarized_message_id` đến cuối phiên.
 * **Kết quả**: Archiver Agent tổng hợp hai nguồn thông tin trên thành bản tóm tắt cuối cùng toàn diện và lưu vào bảng lưu trữ cố định (`session_summaries`).
+
+### 3.3. Diễn Giải Logic Kế Thừa Tóm Tắt Giữa Các Phiên (Cross-Session Inheritance Logic)
+
+Khi một khách hàng quay lại và mở phiên mới, hệ thống cần xác định **điểm khởi đầu ngữ cảnh** (`initial_context`) cho Chat Agent và Summary Service của phiên đó. Mục này mô tả toàn bộ các kịch bản có thể xảy ra.
+
+> [!IMPORTANT]
+> **Nguyên tắc cốt lõi:** Tóm tắt chỉ được kế thừa từ phiên liền trước (phiên cuối cùng đã đóng thành công của cùng khách hàng). Không gộp tóm tắt từ nhiều phiên lịch sử xa hơn. Điều này đảm bảo ngữ cảnh luôn gọn, có độ liên quan cao và không vượt quá giới hạn token.
+
+---
+
+#### 3.3.1. Các Case Thường (Happy Path)
+
+##### Case T1 – Phiên Đầu Tiên Của Khách Hàng (Cold Start)
+
+> **Điều kiện:** Khách hàng liên hệ lần đầu, không có lịch sử phiên nào trong DB.
+
+* **Dữ liệu kế thừa:** Không có. `last_summary = NULL`, `last_summarized_message_id = NULL`.
+* **Hành vi:**
+  * Chat Agent khởi động với **ngữ cảnh trống** — chỉ dùng System Prompt mặc định.
+  * Summary Service bắt đầu đếm từ tin nhắn đầu tiên của phiên.
+* **Kết quả khi đóng phiên:** Archiver Agent tạo bản tóm tắt đầy đủ và lưu vào `session_summaries`. Đây là bản tóm tắt gốc, không có tiền tố kế thừa.
+
+```mermaid
+sequenceDiagram
+    participant KH as Khách hàng
+    participant Chat as Chat Agent
+    participant SS as Summary Service
+    participant DB as Database
+
+    KH->>Chat: Gửi tin nhắn đầu tiên
+    Chat->>DB: Kiểm tra last_summary của KH
+    DB-->>Chat: NULL (không có lịch sử)
+    Chat->>Chat: Khởi động với System Prompt mặc định
+    Note over SS,DB: Sau mỗi 10 tin → Rolling Summary
+    Chat->>KH: Phản hồi bình thường
+```
+
+---
+
+##### Case T2 – Khách Hàng Quay Lại, Phiên Trước Đã Đóng Hoàn Chỉnh
+
+> **Điều kiện:** Khách hàng đã có ít nhất một phiên trước được đóng thành công, đã có bản tóm tắt cuối phiên trong `session_summaries`.
+
+* **Dữ liệu kế thừa:** Lấy `final_summary` của phiên liền trước (phiên mới nhất có trạng thái `Closed` của cùng `customer_id`).
+* **Hành vi:**
+  * Hệ thống nạp `final_summary` của phiên cũ vào `last_summary` của phiên mới ngay khi phiên mới được tạo.
+  * Chat Agent nhận được ngữ cảnh tóm tắt đã có sẵn, phản hồi ngay mà không cần đọc lại toàn bộ lịch sử.
+  * Summary Service bắt đầu đếm từ tin nhắn **đầu tiên của phiên mới** (không kế thừa `last_summarized_message_id` của phiên cũ).
+* **Kết quả:** Agent phục vụ khách hàng quay lại nhanh hơn nhờ ngữ cảnh phiên trước. Góp phần đạt mục tiêu giảm $AHT \ge 30\%$.
+
+```mermaid
+sequenceDiagram
+    participant KH as Khách hàng
+    participant Sys as Hệ thống
+    participant Chat as Chat Agent
+    participant DB as Database
+
+    KH->>Sys: Mở phiên mới
+    Sys->>DB: Truy vấn final_summary của phiên Closed gần nhất
+    DB-->>Sys: {intent, status, summary, next_steps} (phiên N-1)
+    Sys->>Chat: Khởi tạo phiên mới với last_summary = final_summary(N-1)
+    Chat->>KH: Phản hồi với ngữ cảnh đầy đủ từ phiên trước
+```
+
+---
+
+##### Case T3 – Phiên Nhiều Tin Nhắn, Tóm Tắt Cuốn Chiếu Kích Hoạt Nhiều Lần
+
+> **Điều kiện:** Phiên có trên 30 tin nhắn, tóm tắt cuốn chiếu đã chạy nhiều lần trong phiên.
+
+* **Hành vi:**
+  * Mỗi lần đủ 10 tin mới: `Summary Service` gọi LLM để cập nhật `last_summary` và `last_summarized_message_id`.
+  * Sau nhiều vòng, `last_summary` là kết quả tóm tắt tích lũy của toàn bộ phần đã xử lý.
+  * Khi phiên đóng: `Archiver Agent` chỉ cần xử lý thêm phần **tin nhắn dư lẻ** còn sót lại (thường dưới 10 tin), gộp với `last_summary` cuối cùng để ra bản tóm tắt hoàn chỉnh.
+* **Hiệu quả:** Chi phí xử lý tại bước đóng phiên được tối thiểu hóa — Archiver không phải đọc lại toàn bộ hội thoại dài.
+
+  $$
+  Summary_{\text{final}} = \text{LLM}(Summary_{\text{last\_rolling}} + \text{tin nhắn dư lẻ})
+  $$
+
+---
+
+##### Case T4 – Phiên Ít Tin Nhắn (Dưới 10 Tin), Không Có Tóm Tắt Cuốn Chiếu
+
+> **Điều kiện:** Phiên kết thúc sớm trước khi đủ 10 tin nhắn.
+
+* **Hành vi:**
+  * Summary Service không kích hoạt lần nào trong phiên (chưa đủ điều kiện trigger).
+  * `last_summary` và `last_summarized_message_id` vẫn mang giá trị kế thừa từ phiên trước (hoặc `NULL` nếu là phiên đầu tiên).
+  * Khi phiên đóng: `Archiver Agent` lấy toàn bộ tin nhắn của phiên (dư lẻ 100%) và gộp với `last_summary` kế thừa để tạo bản tóm tắt cuối.
+* **Lưu ý:** Archiver luôn được kích hoạt khi đóng phiên, bất kể số lượng tin nhắn có đủ 10 hay không.
+
+---
+
+#### 3.3.2. Các Case Đặc Biệt (Edge Cases)
+
+##### Case E1 – Chuyển Giao AI → Nhân Viên (Human Handover) Trong Cùng Phiên
+
+> **Điều kiện:** Agent AI đang phục vụ, gặp yêu cầu phức tạp, chuyển giao cho nhân viên người thật tiếp tục trong cùng session.
+
+* **Vấn đề cũ (đã khắc phục):** Hệ thống cũ dừng tóm tắt vì trigger gắn với sự kiện AI phản hồi.
+* **Hành vi mới:**
+  * Trigger của Summary Service là **sự kiện thêm tin nhắn vào DB** (độc lập với tác nhân gửi — KH, AI hay Nhân viên).
+  * Sau khi chuyển giao, nhân viên tiếp tục chat → các tin nhắn vẫn được đếm tích lũy.
+  * Khi đủ 10 tin mới kể từ `last_summarized_message_id`, Summary Service vẫn kích hoạt bình thường.
+* **Kết quả:** Phần hội thoại do nhân viên xử lý **không bị mất** trong bản tóm tắt cuối.
+
+```mermaid
+sequenceDiagram
+    participant KH as Khách hàng
+    participant AI as Chat Agent (AI)
+    participant NV as Nhân viên
+    participant SS as Summary Service
+
+    AI->>KH: Phản hồi (tin 1–7)
+    AI->>NV: Chuyển giao phiên
+    NV->>KH: Tiếp tục hỗ trợ (tin 8–10)
+    SS->>SS: Đếm đủ 10 tin → Kích hoạt Rolling Summary
+    Note over SS: Gộp cả tin AI lẫn tin Nhân viên
+    NV->>KH: Tiếp tục (tin 11–...)
+```
+
+---
+
+##### Case E2 – Phiên Bị Timeout / Tự Động Đóng Bởi Hệ Thống
+
+> **Điều kiện:** Phiên không có hoạt động sau khoảng thời gian cấu hình (ví dụ: 30 phút không có tin nhắn mới), hệ thống tự động chuyển trạng thái sang `Closed`.
+
+* **Hành vi:** Sự kiện đóng phiên (dù từ hệ thống hay nhân viên) đều kích hoạt `Archiver Agent` theo cùng một luồng.
+* **Trường hợp con:**
+  * Nếu có `last_summary` và có tin dư lẻ → Archiver gộp và lưu.
+  * Nếu có `last_summary` nhưng không có tin dư lẻ → Archiver dùng `last_summary` trực tiếp làm bản tóm tắt cuối.
+  * Nếu cả hai đều `NULL` (phiên không có tin nhắn nào, ví dụ bot greeting bị timeout) → Archiver bỏ qua, không tạo bản tóm tắt, phiên được đánh dấu `status = Abandoned`.
+
+> [!NOTE]
+> Phiên `Abandoned` sẽ không được kế thừa làm ngữ cảnh cho phiên tiếp theo. Hệ thống sẽ tìm lùi lại phiên `Closed` gần nhất có bản tóm tắt hợp lệ.
+
+---
+
+##### Case E3 – Phiên Được Mở Lại Sau Khi Đã Đóng (Reopen)
+
+> **Điều kiện:** Phiên đã đóng nhưng được nhân viên hoặc hệ thống mở lại (trạng thái chuyển từ `Closed` → `Open`).
+
+* **Hành vi:**
+  * Bản tóm tắt cuối cùng đã lưu trong `session_summaries` **không bị xóa**.
+  * Phiên mở lại được coi như một **phiên tiếp nối** — hệ thống nạp lại `final_summary` của lần đóng trước vào `last_summary` của phiên đang hoạt động.
+  * `last_summarized_message_id` được reset về giá trị tương ứng với lần đóng trước (tin nhắn cuối cùng đã được Archiver xử lý).
+  * Các tin nhắn phát sinh sau khi reopen được đếm từ đầu theo cơ chế cuốn chiếu bình thường.
+  * Khi phiên đóng lại: Archiver tạo bản tóm tắt mới, ghi đè (hoặc thêm version mới) vào `session_summaries`.
+
+> [!WARNING]
+> Cần xác định rõ chiến lược lưu trữ khi reopen: **Ghi đè** bản tóm tắt cũ hay **thêm version mới** vào `session_summaries`. Quyết định này ảnh hưởng đến khả năng truy vết lịch sử và cần được PO xác nhận trước khi implement.
+
+---
+
+##### Case E4 – Archiver Agent Gặp Lỗi Khi Đóng Phiên
+
+> **Điều kiện:** LLM hoặc hệ thống gặp lỗi trong quá trình Archiver Agent xử lý (timeout API, lỗi mạng, v.v.).
+
+* **Hành vi (Retry & Fallback):**
+  * Hệ thống tự động thử lại (`retry`) tối đa **3 lần** với khoảng cách lũy tiến (exponential backoff: 5s, 15s, 45s).
+  * Nếu cả 3 lần đều thất bại: Phiên được đánh dấu `summary_status = Failed`. Bản tóm tắt cuốn chiếu cuối (`last_summary`) vẫn được giữ nguyên trong bảng `sessions` như là dữ liệu dự phòng.
+  * Hệ thống sinh cảnh báo (alert) cho đội vận hành để xử lý thủ công nếu cần.
+* **Kế thừa phiên sau:** Nếu phiên kế tiếp của KH được mở trong khi `summary_status = Failed`, hệ thống dùng `last_summary` (bản cuốn chiếu cuối) thay thế cho `final_summary` (bản Archiver) để làm ngữ cảnh kế thừa, kèm flag `context_source = rolling` để theo dõi.
+
+  $$
+  \text{context\_source} = \begin{cases} \text{final\_summary} & \text{nếu } summary\_status = \text{Success} \\ \text{last\_summary (rolling)} & \text{nếu } summary\_status = \text{Failed} \\ \text{NULL (cold start)} & \text{nếu không có phiên trước hợp lệ} \end{cases}
+  $$
+
+---
+
+##### Case E5 – Phiên Mới Kế Thừa Từ Phiên Trước Có `summary_status = Failed`
+
+> **Điều kiện:** Khách hàng quay lại, nhưng phiên cũ nhất gần nhất bị lỗi Archiver, không có `final_summary`.
+
+* **Chiến lược ưu tiên kế thừa (theo thứ tự):**
+  1. **Ưu tiên 1:** Dùng `final_summary` của phiên `Closed` gần nhất có `summary_status = Success`.
+  2. **Ưu tiên 2:** Nếu không tìm được, dùng `last_summary` (rolling) của phiên `Closed` gần nhất (dù status là `Failed`).
+  3. **Ưu tiên 3:** Nếu cả hai đều không có, khởi động Cold Start (không kế thừa).
+
+---
+
+#### 3.3.3. Bảng Tổng Hợp Các Case
+
+| Case | Tên | Phiên trước | Hành vi kế thừa | Trigger Archiver? |
+| :--- | :--- | :--- | :--- | :---: |
+| **T1** | Cold Start | Không có | `last_summary = NULL` | ✅ |
+| **T2** | Khách quay lại (bình thường) | Closed + Success | Nạp `final_summary` của phiên N-1 | ✅ |
+| **T3** | Phiên dài, Rolling nhiều lần | Bất kỳ | Rolling chạy nhiều vòng, Archiver chỉ xử lý phần dư | ✅ |
+| **T4** | Phiên ngắn < 10 tin | Bất kỳ | Rolling không chạy, Archiver xử lý 100% tin nhắn | ✅ |
+| **E1** | Chuyển giao AI → Nhân viên | Bất kỳ | Trigger không bị gián đoạn, đếm tiếp bình thường | ✅ |
+| **E2** | Timeout / Hệ thống tự đóng | Bất kỳ | Archiver chạy như bình thường; nếu 0 tin → `Abandoned` | ⚠️ Điều kiện |
+| **E3** | Reopen phiên đã đóng | Closed | Nạp lại `final_summary`, reset `last_summarized_message_id` | ✅ (lần đóng mới) |
+| **E4** | Archiver lỗi khi đóng phiên | Bất kỳ | Retry 3 lần, fallback dùng `last_summary` (rolling) | ❌ Thất bại |
+| **E5** | Kế thừa từ phiên Failed | Failed | Ưu tiên: `final_summary (Success)` > `last_summary` > Cold Start | ✅ |
 
 ---
 

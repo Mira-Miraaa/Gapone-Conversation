@@ -1,16 +1,17 @@
 ---
 title: PRD - AI Conversation Memory
-version: 1.0.0
+version: 1.1.0
 status: Active
 related_code: F:/Gapone Conversation/Docs/AI_Chatbot/prd-conversation-memory.md
-last_updated: 2026-07-01
+last_updated: 2026-07-11
 ---
 
 # Nhật ký thay đổi (Revision History)
 
-| Phiên bản | Ngày | Người cập nhật | Vị trí thay đổi | Lý do chi tiết |
-| :--- | :--- | :--- | :--- | :--- |
-| 1.0.0 | 2026-07-01 | Mira-Miraaa | Toàn bộ tài liệu | Tạo mới tài liệu PRD đặc tả tính năng AI ghi nhớ 5 phiên hội thoại gần nhất |
+| Phiên bản | Ngày       | Người cập nhật | Vị trí thay đổi | Lý do chi tiết |
+| :-------- | :--------- | :------------- | :-------------- | :------------- |
+| 1.0.0     | 2026-07-01 | Mira-Miraaa    | Toàn bộ tài liệu| Tạo mới tài liệu PRD đặc tả tính năng AI ghi nhớ 5 phiên hội thoại gần nhất |
+| 1.1.0     | 2026-07-11 | Phương Nguyễn  | Mục 3.2, 5      | Cập nhật cấu trúc Prompt nhúng lịch sử 5 phiên để đồng bộ với schema mới của bản tóm tắt (bổ sung danh sách sản phẩm quan tâm/không thích và hành động tiếp theo). |
 
 ---
 
@@ -72,14 +73,17 @@ graph TD
 *   Mặc định hệ thống sẽ lấy 5 phiên gần nhất để đảm bảo đủ bối cảnh mà không làm loãng Prompt.
 
 #### FR-3: Nhúng ngữ cảnh lịch sử vào Prompt (Prompt Injection)
-Hệ thống tự động biên dịch dữ liệu tóm tắt thành khối Markdown và chèn vào System Prompt theo mẫu:
+Hệ thống tự động biên dịch dữ liệu tóm tắt 5 phiên (được định dạng từ JSON của bảng `session_summaries`) thành khối Markdown và chèn vào System Prompt theo mẫu chi tiết sau, để đảm bảo AI nắm bắt được đầy đủ thông tin nhất:
 ```markdown
 [BẮT ĐẦU LỊCH SỬ TƯƠNG TÁC CŨ]
 - Phiên #1 (Gần nhất):
   + Kênh: Zalo OA | Thời gian: [Thời gian đóng]
   + Ý định: [Ý định của khách]
+  + Kết quả: [Trạng thái kết quả giải quyết]
   + Tóm tắt: [Nội dung tóm tắt phiên]
-  + Kết quả: [Trạng thái kết quả]
+  + Sản phẩm quan tâm: [Danh sách sản phẩm quan tâm kèm thông tin chi tiết]
+  + Sản phẩm không thích: [Danh sách sản phẩm không thích]
+  + Hành động tiếp theo: [Gợi ý hành động tiếp theo]
 ...
 [KẾT THÚC LỊCH SỬ TƯƠNG TÁC CŨ]
 ```
@@ -115,7 +119,7 @@ Hệ thống tự động biên dịch dữ liệu tóm tắt thành khối Mark
 | **AC-01** | Bật/tắt & Cấu hình số lượng phiên | Admin có thể bật tính năng, lưu cấu hình số phiên cần nhớ là `3` và hệ thống áp dụng chính xác giới hạn này khi query. |
 | **AC-02** | Giới hạn tối đa 5 phiên gần nhất | Khách hàng có 7 phiên cũ đã đóng. Khi bắt đầu phiên thứ 8, hệ thống chỉ lấy thông tin tóm tắt của đúng 5 phiên gần nhất (phiên 7, 6, 5, 4, 3) đưa vào Prompt. |
 | **AC-03** | Tự động cắt giảm Token quá hạn | Khi tổng dung lượng 5 bản tóm tắt vượt quá 1500 tokens, hệ thống tự động loại bỏ bản tóm tắt của phiên xa nhất để đảm bảo an toàn token. |
-| **AC-04** | Cá nhân hóa theo giỏ hàng bỏ quên | Khách hàng thêm sản phẩm vào giỏ ở phiên cũ rồi im lặng. Khi khách chat lại ở phiên mới, AI Bot chủ động hỏi khách có muốn mua tiếp sản phẩm đó không. |
+| **AC-04** | Cá nhân hóa theo lịch sử tương tác sản phẩm | Khách hàng thêm sản phẩm vào giỏ ở phiên cũ rồi im lặng, hoặc đã bày tỏ không thích sản phẩm Y. Khi khách chat lại ở phiên mới, AI Bot chủ động nhắc về sản phẩm cũ đang quan tâm và tuyệt đối tránh gợi ý lại sản phẩm Y. |
 
 ---
 

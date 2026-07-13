@@ -1,17 +1,21 @@
 ---
 title: PRD - AI Conversation Summary
-version: 2.1.0
+version: 2.5.0
 status: Active
 related_code: F:/Gapone Conversation/Docs/AI_Chatbot/prd-conversation-summary.md
-last_updated: 2026-07-09
+last_updated: 2026-07-11
 ---
 # Nhật ký thay đổi (Revision History)
 
-| Phiên bản | Ngày      | Người cập nhật | Vị trí thay đổi  | Lý do chi tiết                                                                                                                                                        |
-| :---------- | :--------- | :----------------- | :------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 1.0.0       | 2026-06-26 | Mira-Miraaa        | Toàn bộ tài liệu | Tạo mới tài liệu PRD đặc tả tính năng tự động tóm tắt phiên hội thoại bằng AI                                                                         |
-| 2.0.0       | 2026-07-08 | Mira-Miraaa        | Toàn bộ tài liệu | Cải tiến kiến trúc tóm tắt: Tách biệt logic phản hồi, bổ sung cơ chế cuốn chiếu ngầm 10 tin và tóm tắt tổng kết đóng phiên bằng Archiver Agent |
-| 2.1.0       | 2026-07-09 | Mira-Miraaa        | Mục 3.3 (mới)    | Bổ sung mô tả chi tiết các case thường và case đặc biệt để diễn giải logic kế thừa tóm tắt giữa các phiên                                      |
+| Phiên bản | Ngày       | Người cập nhật | Vị trí thay đổi   | Lý do chi tiết                                                                                                                                                                          |
+| :-------- | :--------- | :------------- | :---------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1.0.0     | 2026-06-26 | Mira-Miraaa    | Toàn bộ tài liệu  | Tạo mới tài liệu PRD đặc tả tính năng tự động tóm tắt phiên hội thoại bằng AI                                                                                                           |
+| 2.0.0     | 2026-07-08 | Mira-Miraaa    | Toàn bộ tài liệu  | Cải tiến kiến trúc tóm tắt: Tách biệt logic phản hồi, bổ sung cơ chế cuốn chiếu ngầm 10 tin và tóm tắt tổng kết đóng phiên bằng Archiver Agent                                          |
+| 2.1.0     | 2026-07-09 | Mira-Miraaa    | Mục 3.3 (mới)     | Bổ sung mô tả chi tiết các case thường và case đặc biệt để diễn giải logic kế thừa tóm tắt giữa các phiên                                                                               |
+| 2.2.0     | 2026-07-11 | Phương Nguyễn  | Mục 3.3, 4.1      | Cập nhật cơ chế kế thừa hội thoại: Lưu memory mỗi phiên vào DB và thay đổi thiết kế đọc 5 memory của 5 phiên gần nhất làm ngữ cảnh thay vì chỉ đọc phiên liền trước để AI hiểu khách hàng |
+| 2.3.0     | 2026-07-11 | Phương Nguyễn  | Mục 3.3.1, 3.3.2  | Gộp case E3 (Reopen) vào T2 (Khách quay lại) do hệ thống luôn tạo phiên mới (Trạng thái New) khi khách nhắn tin lại sau khi phiên cũ đã đóng (bao gồm cả đóng tự động do timeout).       |
+| 2.4.0     | 2026-07-11 | Phương Nguyễn  | Mục 3.1, 4.2      | Bổ sung thiết kế bảng `session_summaries` và làm rõ cấu trúc JSON của nội dung tóm tắt.                                                                                 |
+| 2.5.0     | 2026-07-11 | Phương Nguyễn  | Mục 3.1           | Định dạng lại thiết kế các bảng CSDL (`sessions`, `session_summaries`) sang dạng bảng biểu mô tả chi tiết.                                                                              |
 
 ---
 
@@ -51,10 +55,28 @@ Hệ thống áp dụng kiến trúc **Hướng sự kiện (Event-Driven)** k�
 
 ### 3.1. Thiết Kế Cơ Sở Dữ Liệu (Database Schema)
 
-Bảng Quản lý Phiên (`sessions`) cần được bổ sung/cập nhật các trường dữ liệu sau để hỗ trợ tiến trình chạy ngầm:
+#### 3.1.1. Bảng Quản lý Phiên (`sessions`)
+Cần bổ sung/cập nhật các trường dữ liệu sau vào bảng `sessions` hiện tại để hỗ trợ tiến trình chạy ngầm:
 
-* `last_summary`: Lưu đoạn văn/cấu trúc tóm tắt gần nhất (Dạng TEXT hoặc JSON định dạng).
-* `last_summarized_message_id`: Lưu ID của tin nhắn cuối cùng được đưa vào bản tóm tắt trước đó. Các tin nhắn có ID lớn hơn giá trị này được coi là *"tin nhắn mới/tin nhắn dư lẻ"* chưa qua xử lý.
+| Tên trường | Kiểu dữ liệu | Mô tả |
+| :--- | :--- | :--- |
+| `last_summary` | `TEXT` / `JSON` | Lưu đoạn văn hoặc cấu trúc JSON tóm tắt cuốn chiếu gần nhất của phiên đang diễn ra. |
+| `last_summarized_message_id` | `VARCHAR` | Lưu ID của tin nhắn cuối cùng được đưa vào bản tóm tắt cuốn chiếu trước đó. Các tin nhắn có ID lớn hơn giá trị này được coi là *"tin nhắn mới/tin nhắn dư lẻ"* chưa qua xử lý. |
+
+#### 3.1.2. Bảng Lưu Trữ Memory (`session_summaries`)
+Bảng mới được tạo để lưu trữ độc lập memory (tóm tắt cuối cùng) của từng phiên hội thoại sau khi đóng. Bảng này đóng vai trò quan trọng trong việc cung cấp lịch sử 5 phiên gần nhất.
+
+| Tên trường | Kiểu dữ liệu | Ràng buộc | Mô tả |
+| :--- | :--- | :--- | :--- |
+| `id` | `BIGINT` | `PK`, Auto-increment | ID tự tăng của bản ghi memory. |
+| `session_id` | `VARCHAR` | `FK` | Liên kết với ID của phiên hội thoại tương ứng trong bảng `sessions`. |
+| `customer_id` | `VARCHAR` | `FK`, Index | Liên kết với ID khách hàng (dùng để truy vấn 5 phiên gần nhất). |
+| `intent` | `VARCHAR(150)` | Nullable | Ý định chính của khách hàng trong phiên này. |
+| `resolution_status` | `VARCHAR(50)` | Nullable | Trạng thái giải quyết của phiên (VD: `Order_Created`, `Abandoned`,...). |
+| `summary` | `TEXT` | Nullable | Đoạn văn tóm tắt nội dung chính của phiên hội thoại (định dạng Markdown). |
+| `next_steps` | `VARCHAR(255)` | Nullable | Các hành động đề xuất tiếp theo sau phiên chat. |
+| `raw_json` | `JSON` | Nullable | Lưu trữ toàn bộ cấu trúc JSON thô được sinh ra từ LLM để phục vụ đối soát, debug. |
+| `created_at` | `TIMESTAMP` | Default `NOW()` | Thời gian bản ghi memory được tạo (khi đóng phiên). |
 
 ### 3.2. Quy Trình Xử Lý Gồm 2 Giai Đoạn (Dual-Phase Workflow)
 
@@ -99,7 +121,7 @@ flowchart TD
 Khi một khách hàng quay lại và mở phiên mới, hệ thống cần xác định **điểm khởi đầu ngữ cảnh** (`initial_context`) cho Chat Agent và Summary Service của phiên đó. Mục này mô tả toàn bộ các kịch bản có thể xảy ra.
 
 > [!IMPORTANT]
-> **Nguyên tắc cốt lõi:** Tóm tắt chỉ được kế thừa từ phiên liền trước (phiên cuối cùng đã đóng thành công của cùng khách hàng). Không gộp tóm tắt từ nhiều phiên lịch sử xa hơn. Điều này đảm bảo ngữ cảnh luôn gọn, có độ liên quan cao và không vượt quá giới hạn token.
+> **Nguyên tắc cốt lõi:** Tóm tắt (memory) của mỗi phiên sau khi đóng sẽ được lưu trữ độc lập vào Database (`session_summaries`). Khi khởi tạo phiên mới, hệ thống sẽ truy xuất **5 memory của 5 phiên gần nhất** đã đóng thành công của cùng khách hàng để làm ngữ cảnh. Điều này giúp AI có cái nhìn toàn diện về lịch sử tương tác và hiểu khách hàng hơn.
 
 ---
 
@@ -113,7 +135,7 @@ Khi một khách hàng quay lại và mở phiên mới, hệ thống cần xác
 * **Hành vi:**
   * Chat Agent khởi động với **ngữ cảnh trống** — chỉ dùng System Prompt mặc định.
   * Summary Service bắt đầu đếm từ tin nhắn đầu tiên của phiên.
-* **Kết quả khi đóng phiên:** Archiver Agent tạo bản tóm tắt đầy đủ và lưu vào `session_summaries`. Đây là bản tóm tắt gốc, không có tiền tố kế thừa.
+* **Kết quả khi đóng phiên:** Archiver Agent tạo bản tóm tắt đầy đủ (memory) và lưu vào `session_summaries`. Đây là bản tóm tắt gốc, không có tiền tố kế thừa.
 
 ```mermaid
 sequenceDiagram
@@ -123,7 +145,7 @@ sequenceDiagram
     participant DB as Database
 
     KH->>Chat: Gửi tin nhắn đầu tiên
-    Chat->>DB: Kiểm tra last_summary của KH
+    Chat->>DB: Kiểm tra memory của KH trong 5 phiên gần nhất
     DB-->>Chat: NULL (không có lịch sử)
     Chat->>Chat: Khởi động với System Prompt mặc định
     Note over SS,DB: Sau mỗi 10 tin → Rolling Summary
@@ -132,16 +154,16 @@ sequenceDiagram
 
 ---
 
-##### Case T2 – Khách Hàng Quay Lại, Phiên Trước Đã Đóng Hoàn Chỉnh
+##### Case T2 – Khách Hàng Quay Lại (Mở Phiên Mới), Đã Có Lịch Sử Giao Dịch Trước Đó
 
-> **Điều kiện:** Khách hàng đã có ít nhất một phiên trước được đóng thành công, đã có bản tóm tắt cuối phiên trong `session_summaries`.
+> **Điều kiện:** Khách hàng đã có ít nhất một phiên trước được đóng (dù đóng thủ công hoàn chỉnh hay hệ thống tự động đóng do timeout). Lần này khách nhắn tin lại, hệ thống sẽ tạo một phiên hoàn toàn mới với trạng thái **New (Open)** từ đầu. Không có khái niệm "Reopen" phiên cũ.
 
-* **Dữ liệu kế thừa:** Lấy `final_summary` của phiên liền trước (phiên mới nhất có trạng thái `Closed` của cùng `customer_id`).
+* **Dữ liệu kế thừa:** Lấy danh sách **tối đa 5 `final_summary` (memories)** của các phiên gần nhất có trạng thái `Closed` của cùng `customer_id`.
 * **Hành vi:**
-  * Hệ thống nạp `final_summary` của phiên cũ vào `last_summary` của phiên mới ngay khi phiên mới được tạo.
-  * Chat Agent nhận được ngữ cảnh tóm tắt đã có sẵn, phản hồi ngay mà không cần đọc lại toàn bộ lịch sử.
-  * Summary Service bắt đầu đếm từ tin nhắn **đầu tiên của phiên mới** (không kế thừa `last_summarized_message_id` của phiên cũ).
-* **Kết quả:** Agent phục vụ khách hàng quay lại nhanh hơn nhờ ngữ cảnh phiên trước. Góp phần đạt mục tiêu giảm $AHT \ge 30\%$.
+  * Hệ thống truy xuất và tổng hợp 5 memory gần nhất, nạp vào làm ngữ cảnh khởi tạo (context) cho phiên mới.
+  * Chat Agent nhận được ngữ cảnh đa phiên, giúp hiểu sâu hơn về khách hàng và phản hồi chính xác mà không cần khách hàng lặp lại thông tin.
+  * Summary Service đếm từ tin nhắn **đầu tiên của phiên mới**. Tóm tắt cuốn chiếu `last_summary` và memory của phiên mới này sẽ được hoạt động độc lập, không ghi đè vào các memory của phiên trước.
+* **Kết quả:** Agent phục vụ khách hàng quay lại nhanh hơn nhờ ngữ cảnh phong phú từ nhiều phiên trước. Góp phần đạt mục tiêu giảm $AHT \ge 30\%$.
 
 ```mermaid
 sequenceDiagram
@@ -150,11 +172,11 @@ sequenceDiagram
     participant Chat as Chat Agent
     participant DB as Database
 
-    KH->>Sys: Mở phiên mới
-    Sys->>DB: Truy vấn final_summary của phiên Closed gần nhất
-    DB-->>Sys: {intent, status, summary, next_steps} (phiên N-1)
-    Sys->>Chat: Khởi tạo phiên mới với last_summary = final_summary(N-1)
-    Chat->>KH: Phản hồi với ngữ cảnh đầy đủ từ phiên trước
+    KH->>Sys: Nhắn tin lại -> Mở phiên mới (New/Open)
+    Sys->>DB: Truy vấn tối đa 5 final_summary của các phiên Closed gần nhất
+    DB-->>Sys: Mảng [Memory 1, Memory 2, ..., Memory 5]
+    Sys->>Chat: Khởi tạo phiên mới với context = [Memory 1..5]
+    Chat->>KH: Phản hồi với ngữ cảnh sâu chuỗi từ các phiên trước
 ```
 
 ---
@@ -181,8 +203,8 @@ sequenceDiagram
 
 * **Hành vi:**
   * Summary Service không kích hoạt lần nào trong phiên (chưa đủ điều kiện trigger).
-  * `last_summary` và `last_summarized_message_id` vẫn mang giá trị kế thừa từ phiên trước (hoặc `NULL` nếu là phiên đầu tiên).
-  * Khi phiên đóng: `Archiver Agent` lấy toàn bộ tin nhắn của phiên (dư lẻ 100%) và gộp với `last_summary` kế thừa để tạo bản tóm tắt cuối.
+  * `last_summary` (của riêng phiên này) ban đầu là `NULL`.
+  * Khi phiên đóng: `Archiver Agent` lấy toàn bộ tin nhắn của phiên (dư lẻ 100%) để tạo bản tóm tắt cuối và lưu thành một memory mới (không gộp đè lên memory cũ).
 * **Lưu ý:** Archiver luôn được kích hoạt khi đóng phiên, bất kể số lượng tin nhắn có đủ 10 hay không.
 
 ---
@@ -223,32 +245,16 @@ sequenceDiagram
 
 * **Hành vi:** Sự kiện đóng phiên (dù từ hệ thống hay nhân viên) đều kích hoạt `Archiver Agent` theo cùng một luồng.
 * **Trường hợp con:**
-  * Nếu có `last_summary` và có tin dư lẻ → Archiver gộp và lưu.
+  * Nếu có `last_summary` (cuốn chiếu của phiên hiện tại) và có tin dư lẻ → Archiver gộp và lưu.
   * Nếu có `last_summary` nhưng không có tin dư lẻ → Archiver dùng `last_summary` trực tiếp làm bản tóm tắt cuối.
-  * Nếu cả hai đều `NULL` (phiên không có tin nhắn nào, ví dụ bot greeting bị timeout) → Archiver bỏ qua, không tạo bản tóm tắt, phiên được đánh dấu `status = Abandoned`.
+  * Nếu cả hai đều `NULL` (phiên không có tin nhắn nào, ví dụ bot greeting bị timeout) → Archiver bỏ qua, không tạo bản tóm tắt (memory), phiên được đánh dấu `status = Abandoned`.
 
 > [!NOTE]
-> Phiên `Abandoned` sẽ không được kế thừa làm ngữ cảnh cho phiên tiếp theo. Hệ thống sẽ tìm lùi lại phiên `Closed` gần nhất có bản tóm tắt hợp lệ.
+> Phiên `Abandoned` sẽ không được lưu memory. Hệ thống vẫn chỉ truy xuất 5 memory của 5 phiên `Closed` hợp lệ gần nhất.
 
 ---
 
-##### Case E3 – Phiên Được Mở Lại Sau Khi Đã Đóng (Reopen)
-
-> **Điều kiện:** Phiên đã đóng nhưng được nhân viên hoặc hệ thống mở lại (trạng thái chuyển từ `Closed` → `Open`).
-
-* **Hành vi:**
-  * Bản tóm tắt cuối cùng đã lưu trong `session_summaries` **không bị xóa**.
-  * Phiên mở lại được coi như một **phiên tiếp nối** — hệ thống nạp lại `final_summary` của lần đóng trước vào `last_summary` của phiên đang hoạt động.
-  * `last_summarized_message_id` được reset về giá trị tương ứng với lần đóng trước (tin nhắn cuối cùng đã được Archiver xử lý).
-  * Các tin nhắn phát sinh sau khi reopen được đếm từ đầu theo cơ chế cuốn chiếu bình thường.
-  * Khi phiên đóng lại: Archiver tạo bản tóm tắt mới, ghi đè (hoặc thêm version mới) vào `session_summaries`.
-
-> [!WARNING]
-> Cần xác định rõ chiến lược lưu trữ khi reopen: **Ghi đè** bản tóm tắt cũ hay **thêm version mới** vào `session_summaries`. Quyết định này ảnh hưởng đến khả năng truy vết lịch sử và cần được PO xác nhận trước khi implement.
-
----
-
-##### Case E4 – Archiver Agent Gặp Lỗi Khi Đóng Phiên
+##### Case E3 – Archiver Agent Gặp Lỗi Khi Đóng Phiên
 
 > **Điều kiện:** LLM hoặc hệ thống gặp lỗi trong quá trình Archiver Agent xử lý (timeout API, lỗi mạng, v.v.).
 
@@ -264,14 +270,13 @@ sequenceDiagram
 
 ---
 
-##### Case E5 – Phiên Mới Kế Thừa Từ Phiên Trước Có `summary_status = Failed`
+##### Case E4 – Phiên Mới Kế Thừa Từ Lịch Sử Có Phiên Lỗi `summary_status = Failed`
 
-> **Điều kiện:** Khách hàng quay lại, nhưng phiên cũ nhất gần nhất bị lỗi Archiver, không có `final_summary`.
+> **Điều kiện:** Khách hàng quay lại, hệ thống truy xuất 5 phiên gần nhất nhưng có phiên bị lỗi Archiver, không có `final_summary` hoàn chỉnh.
 
-* **Chiến lược ưu tiên kế thừa (theo thứ tự):**
-  1. **Ưu tiên 1:** Dùng `final_summary` của phiên `Closed` gần nhất có `summary_status = Success`.
-  2. **Ưu tiên 2:** Nếu không tìm được, dùng `last_summary` (rolling) của phiên `Closed` gần nhất (dù status là `Failed`).
-  3. **Ưu tiên 3:** Nếu cả hai đều không có, khởi động Cold Start (không kế thừa).
+* **Chiến lược lấy memory cho phiên bị lỗi trong danh sách 5 phiên:**
+  1. **Ưu tiên 1:** Dùng `last_summary` (bản rolling cuối cùng) của phiên đó nếu có, ghi chú nguồn là `rolling`.
+  2. **Ưu tiên 2:** Nếu không có dữ liệu nào từ phiên đó, bỏ qua phiên đó và tiếp tục lấy các phiên cũ hơn để đủ số lượng 5 (nếu có).
 
 ---
 
@@ -279,15 +284,14 @@ sequenceDiagram
 
 | Case | Tên | Phiên trước | Hành vi kế thừa | Trigger Archiver? |
 | :--- | :--- | :--- | :--- | :---: |
-| **T1** | Cold Start | Không có | `last_summary = NULL` | ✅ |
-| **T2** | Khách quay lại (bình thường) | Closed + Success | Nạp `final_summary` của phiên N-1 | ✅ |
+| **T1** | Cold Start | Không có | Context rỗng | ✅ |
+| **T2** | Khách quay lại (Mở phiên mới) | Có phiên Closed (Thủ công hoặc Timeout) | Nạp mảng tối đa 5 `final_summary` (memories) gần nhất | ✅ |
 | **T3** | Phiên dài, Rolling nhiều lần | Bất kỳ | Rolling chạy nhiều vòng, Archiver chỉ xử lý phần dư | ✅ |
-| **T4** | Phiên ngắn < 10 tin | Bất kỳ | Rolling không chạy, Archiver xử lý 100% tin nhắn | ✅ |
+| **T4** | Phiên ngắn < 10 tin | Bất kỳ | Rolling không chạy, Archiver xử lý 100% tin nhắn thành memory | ✅ |
 | **E1** | Chuyển giao AI → Nhân viên | Bất kỳ | Trigger không bị gián đoạn, đếm tiếp bình thường | ✅ |
-| **E2** | Timeout / Hệ thống tự đóng | Bất kỳ | Archiver chạy như bình thường; nếu 0 tin → `Abandoned` | ⚠️ Điều kiện |
-| **E3** | Reopen phiên đã đóng | Closed | Nạp lại `final_summary`, reset `last_summarized_message_id` | ✅ (lần đóng mới) |
-| **E4** | Archiver lỗi khi đóng phiên | Bất kỳ | Retry 3 lần, fallback dùng `last_summary` (rolling) | ❌ Thất bại |
-| **E5** | Kế thừa từ phiên Failed | Failed | Ưu tiên: `final_summary (Success)` > `last_summary` > Cold Start | ✅ |
+| **E2** | Timeout / Hệ thống tự đóng | Bất kỳ | Archiver chạy bình thường; nếu 0 tin → `Abandoned` (không lưu memory) | ⚠️ Điều kiện |
+| **E3** | Archiver lỗi khi đóng phiên | Bất kỳ | Retry 3 lần, fallback lưu `last_summary` (rolling) làm memory | ❌ Thất bại |
+| **E4** | Kế thừa khi có phiên Failed | Có phiên Failed | Dùng `last_summary` (rolling) cho phiên lỗi, hoặc bỏ qua lấy phiên cũ hơn | ✅ |
 
 ---
 
@@ -297,7 +301,7 @@ sequenceDiagram
 
 Để tối ưu hóa hiệu năng phản hồi và chi phí vận hành, hệ thống phân tách tác vụ cho hai nhóm model khác nhau:
 
-* **Chat Agent (Mô hình hội thoại)**: Sử dụng các Model thông minh bậc nhất, có độ trễ thấp và khả năng thấu cảm tốt (ví dụ: `gpt-4o`, `claude-3-5-sonnet`, `gemini-1.5-pro`). Mô hình này chỉ đọc `last_summary` để làm ngữ cảnh phản hồi, giúp giảm thiểu tối đa kích thước token đầu vào.
+* **Chat Agent (Mô hình hội thoại)**: Sử dụng các Model thông minh bậc nhất, có độ trễ thấp và khả năng thấu cảm tốt (ví dụ: `gpt-4o`, `claude-3-5-sonnet`, `gemini-1.5-pro`). Mô hình này **đọc 5 memory của 5 phiên gần nhất** cùng với hội thoại hiện tại để làm ngữ cảnh phản hồi, giúp cá nhân hóa và thấu hiểu sâu sắc nhu cầu khách hàng, tối ưu token bằng cách không gửi toàn bộ dữ liệu lịch sử thô.
 * **Summary Service & Archiver Agent (Mô hình tóm tắt)**: Sử dụng các Model tối ưu chi phí xử lý lượng token lớn (ví dụ: `gemini-1.5-flash`, `gpt-4o-mini`). Mô hình này chỉ làm nhiệm vụ ghi/cập nhật dữ liệu tóm tắt chạy ngầm.
 
 ### 4.2. Định Dạng Cấu Trúc Tóm Tắt (Structured Prompting)
@@ -306,10 +310,40 @@ sequenceDiagram
 
 #### Cấu trúc JSON Schema bắt buộc:
 
-1. **Ý định (Intent)**: Chuỗi ký tự (dưới 150 ký tự) mô tả mục đích chính (Ví dụ: "Hỏi giá quần Jean", "Khiếu nại giao chậm").
-2. **Trạng thái giải quyết (Resolution Status)**: Phân loại thuộc nhóm: `Order_Created`, `Escalated_to_Human`, `FAQ_Resolved`, `Abandoned`, `Other`.
-3. **Tóm tắt nội dung chính (Summary)**: Đoạn văn ngắn (không quá 500 ký tự, định dạng Markdown) tóm tắt diễn biến chính (sản phẩm quan tâm, thỏa thuận giao hàng, vấn đề của khách).
-4. **Hành động tiếp theo (Next Steps)**: Gợi ý các hành động cần làm (Ví dụ: "Gửi hàng bảo hành", "Không có").
+1. **Ý định (`intent`)**: Chuỗi ký tự (dưới 150 ký tự) mô tả mục đích chính (Ví dụ: "Hỏi giá quần Jean", "Khiếu nại giao chậm").
+2. **Trạng thái giải quyết (`resolution_status`)**: Phân loại thuộc nhóm: `Order_Created`, `Escalated_to_Human`, `FAQ_Resolved`, `Abandoned`, `Other`.
+3. **Tóm tắt nội dung chính (`summary`)**: Đoạn văn ngắn (không quá 800 ký tự, định dạng Markdown) tóm tắt diễn biến chính (sản phẩm quan tâm, vấn đề của khách, thỏa thuận xử lý, thỏa thuận giao hàng).
+4. **Sản phẩm quan tâm (`interested_products`)**: Danh sách các sản phẩm khách hàng quan tâm (mỗi sản phẩm có: Tên sản phẩm, mã sản phẩm, Size, Màu sắc, Link sản phẩm(nếu có)).
+5. **Sản phẩm không thích(`unliked_products`)**: Danh sách các sản phẩm khách hàng không thích (mỗi sản phẩm có: Tên sản phẩm, mã sản phẩm, Size, Màu sắc, Link sản phẩm(nếu có)).
+6. **Hành động tiếp theo (`next_steps`)**: Gợi ý các hành động cần làm (Ví dụ: "Gửi hàng bảo hành", "Không có").
+
+**Ví dụ JSON Output từ LLM:**
+```json
+{
+  "intent": "Hỏi thông tin và mua sản phẩm X",
+  "resolution_status": "Order_Created",
+  "summary": "Khách hàng quan tâm sản phẩm X size M màu đen. Đã tư vấn chính sách đổi trả. Khách chốt đơn và cung cấp địa chỉ nhận hàng.",
+  "interested_products": [
+    {
+      "product_name": "Sản phẩm X",
+      "product_id": "SPX001",
+      "size": "M",
+      "color": "Đen",
+      "link_product": "https://example.com/spx001"
+    }
+  ],
+  "unliked_products": [
+    {
+      "product_name": "Sản phẩm Y",
+      "product_id": "SPY001",
+      "size": "L",
+      "color": "Xanh",
+      "link_product": "https://example.com/spy001"
+    }
+  ],
+  "next_steps": "Gửi thông tin đơn hàng cho bộ phận kho để đóng gói và giao hàng."
+}
+```
 
 ---
 

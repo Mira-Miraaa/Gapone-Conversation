@@ -1,21 +1,23 @@
 ---
 title: PRD - AI Conversation Summary
-version: 2.5.0
+version: 3.0.0
 status: Active
 related_code: F:/Gapone Conversation/Docs/AI_Chatbot/prd-conversation-summary.md
-last_updated: 2026-07-11
+last_updated: 2026-07-15
 ---
 # Nhật ký thay đổi (Revision History)
 
-| Phiên bản | Ngày       | Người cập nhật | Vị trí thay đổi   | Lý do chi tiết                                                                                                                                                                          |
-| :-------- | :--------- | :------------- | :---------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 1.0.0     | 2026-06-26 | Mira-Miraaa    | Toàn bộ tài liệu  | Tạo mới tài liệu PRD đặc tả tính năng tự động tóm tắt phiên hội thoại bằng AI                                                                                                           |
-| 2.0.0     | 2026-07-08 | Mira-Miraaa    | Toàn bộ tài liệu  | Cải tiến kiến trúc tóm tắt: Tách biệt logic phản hồi, bổ sung cơ chế cuốn chiếu ngầm 10 tin và tóm tắt tổng kết đóng phiên bằng Archiver Agent                                          |
-| 2.1.0     | 2026-07-09 | Mira-Miraaa    | Mục 3.3 (mới)     | Bổ sung mô tả chi tiết các case thường và case đặc biệt để diễn giải logic kế thừa tóm tắt giữa các phiên                                                                               |
-| 2.2.0     | 2026-07-11 | Phương Nguyễn  | Mục 3.3, 4.1      | Cập nhật cơ chế kế thừa hội thoại: Lưu memory mỗi phiên vào DB và thay đổi thiết kế đọc 5 memory của 5 phiên gần nhất làm ngữ cảnh thay vì chỉ đọc phiên liền trước để AI hiểu khách hàng |
-| 2.3.0     | 2026-07-11 | Phương Nguyễn  | Mục 3.3.1, 3.3.2  | Gộp case E3 (Reopen) vào T2 (Khách quay lại) do hệ thống luôn tạo phiên mới (Trạng thái New) khi khách nhắn tin lại sau khi phiên cũ đã đóng (bao gồm cả đóng tự động do timeout).       |
-| 2.4.0     | 2026-07-11 | Phương Nguyễn  | Mục 3.1, 4.2      | Bổ sung thiết kế bảng `session_summaries` và làm rõ cấu trúc JSON của nội dung tóm tắt.                                                                                 |
-| 2.5.0     | 2026-07-11 | Phương Nguyễn  | Mục 3.1           | Định dạng lại thiết kế các bảng CSDL (`sessions`, `session_summaries`) sang dạng bảng biểu mô tả chi tiết.                                                                              |
+| Phiên bản | Ngày       | Người cập nhật | Vị trí thay đổi                      | Lý do chi tiết                                                                                                                                                                                                                                         |
+| :-------- | :--------- | :------------- | :----------------------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1.0.0     | 2026-06-26 | Mira-Miraaa    | Toàn bộ tài liệu                     | Tạo mới tài liệu PRD đặc tả tính năng tự động tóm tắt phiên hội thoại bằng AI                                                                                                                                                                          |
+| 2.0.0     | 2026-07-08 | Mira-Miraaa    | Toàn bộ tài liệu                     | Cải tiến kiến trúc tóm tắt: Tách biệt logic phản hồi, bổ sung cơ chế cuốn chiếu ngầm 10 tin và tóm tắt tổng kết đóng phiên bằng Archiver Agent                                                                                                         |
+| 2.1.0     | 2026-07-09 | Mira-Miraaa    | Mục 3.3 (mới)                        | Bổ sung mô tả chi tiết các case thường và case đặc biệt để diễn giải logic kế thừa tóm tắt giữa các phiên                                                                                                                                               |
+| 2.2.0     | 2026-07-11 | Phương Nguyễn  | Mục 3.3, 4.1                         | Cập nhật cơ chế kế thừa hội thoại: Lưu memory mỗi phiên vào DB và thay đổi thiết kế đọc 5 memory của 5 phiên gần nhất làm ngữ cảnh thay vì chỉ đọc phiên liền trước để AI hiểu khách hàng                                                              |
+| 2.3.0     | 2026-07-11 | Phương Nguyễn  | Mục 3.3.1, 3.3.2                     | Gộp case E3 (Reopen) vào T2 (Khách quay lại) do hệ thống luôn tạo phiên mới (Trạng thái New) khi khách nhắn tin lại sau khi phiên cũ đã đóng (bao gồm cả đóng tự động do timeout).                                                                     |
+| 2.4.0     | 2026-07-11 | Phương Nguyễn  | Mục 3.1, 4.2                         | Bổ sung thiết kế bảng `session_summaries` và làm rõ cấu trúc JSON của nội dung tóm tắt.                                                                                                                                                                 |
+| 2.5.0     | 2026-07-11 | Phương Nguyễn  | Mục 3.1                              | Định dạng lại thiết kế các bảng CSDL (`sessions`, `session_summaries`) sang dạng bảng biểu mô tả chi tiết.                                                                                                                                              |
+| 3.0.0     | 2026-07-15 | Phương Nguyễn  | Mục 3.2, 4.2 (mới), 5.2, Mục 7 (mới) | Cải tiến lớn theo US-01 & US-02: (1) Làm rõ trigger độc lập với tác nhân gửi tin cho US-01; (2) Bổ sung luồng chi tiết và đường dẫn UI cho US-02 (Archiver Agent); (3) Tách schema JSON bắt buộc 4 trường riêng cho Archiver vs 6 trường cho Rolling; (4) Bổ sung mục 7 — Acceptance Criteria đầy đủ cho cả hai User Story. |
+| 3.1.0     | 2026-07-15 | Phương Nguyễn  | Mục 3.1, 3.2, 4.2                     | Bổ sung đầy đủ bảng mô tả data schema còn thiếu: (1) Mở rộng bảng `sessions` với toàn bộ trường liên quan tính năng; (2) Bổ sung trường tracking LLM (`model_used`, `input_tokens`, `output_tokens`, `cost_estimation`, `summary_status`) vào `session_summaries`; (3) Thêm bảng payload I/O của `SummaryService`; (4) Thêm bảng mô tả Tool `fetch_remaining_data`; (5) Bổ sung bảng schema con cho object sản phẩm trong Rolling Summary. |
 
 ---
 
@@ -56,65 +58,114 @@ Hệ thống áp dụng kiến trúc **Hướng sự kiện (Event-Driven)** k�
 ### 3.1. Thiết Kế Cơ Sở Dữ Liệu (Database Schema)
 
 #### 3.1.1. Bảng Quản lý Phiên (`sessions`)
-Cần bổ sung/cập nhật các trường dữ liệu sau vào bảng `sessions` hiện tại để hỗ trợ tiến trình chạy ngầm:
+Các trường liên quan đến tính năng tóm tắt AI trong bảng `sessions` (bao gồm cả trường hiện có và trường **mới cần bổ sung**):
 
-| Tên trường | Kiểu dữ liệu | Mô tả |
-| :--- | :--- | :--- |
-| `last_summary` | `TEXT` / `JSON` | Lưu đoạn văn hoặc cấu trúc JSON tóm tắt cuốn chiếu gần nhất của phiên đang diễn ra. |
-| `last_summarized_message_id` | `VARCHAR` | Lưu ID của tin nhắn cuối cùng được đưa vào bản tóm tắt cuốn chiếu trước đó. Các tin nhắn có ID lớn hơn giá trị này được coi là *"tin nhắn mới/tin nhắn dư lẻ"* chưa qua xử lý. |
+| Tên trường | Kiểu dữ liệu | Ràng buộc | Trạng thái | Mô tả |
+| :--- | :--- | :--- | :---: | :--- |
+| `id` | `VARCHAR` / `BIGINT` | `PK` | Hiện có | ID duy nhất của phiên hội thoại. |
+| `customer_id` | `VARCHAR` | `FK`, Index | Hiện có | Liên kết với ID khách hàng — dùng để truy vấn lịch sử 5 phiên gần nhất. |
+| `status` | `ENUM` | Not Null | Hiện có | Trạng thái phiên: `New` / `Open` / `Processing` / `Closed` / `Abandoned`. |
+| `created_at` | `TIMESTAMP` | Default `NOW()` | Hiện có | Thời điểm phiên được tạo. |
+| `closed_at` | `TIMESTAMP` | Nullable | Hiện có | Thời điểm phiên được đóng (thủ công hoặc auto-timeout). |
+| `last_summary` | `TEXT` / `JSON` | Nullable | **🆕 Mới** | Lưu cấu trúc JSON tóm tắt cuốn chiếu gần nhất (Rolling Summary) của phiên đang diễn ra. Được cập nhật mỗi khi `SummaryService` chạy thành công. |
+| `last_summarized_message_id` | `VARCHAR` | Nullable | **🆕 Mới** | ID tin nhắn cuối cùng đã được đưa vào bản tóm tắt cuốn chiếu. Tin nhắn có ID lớn hơn giá trị này được coi là **tin nhắn dư lẻ** chưa qua xử lý. |
+| `summary_status` | `ENUM` | Default `Pending` | **🆕 Mới** | Trạng thái xử lý tóm tắt cuối của Archiver Agent: `Pending` / `Success` / `Failed`. |
 
 #### 3.1.2. Bảng Lưu Trữ Memory (`session_summaries`)
-Bảng mới được tạo để lưu trữ độc lập memory (tóm tắt cuối cùng) của từng phiên hội thoại sau khi đóng. Bảng này đóng vai trò quan trọng trong việc cung cấp lịch sử 5 phiên gần nhất.
+Bảng **mới** được tạo để lưu trữ độc lập memory (tóm tắt cuối cùng) của từng phiên hội thoại sau khi đóng. Bảng này đóng vai trò quan trọng trong việc cung cấp lịch sử 5 phiên gần nhất cho Chat Agent kế thừa.
 
 | Tên trường | Kiểu dữ liệu | Ràng buộc | Mô tả |
 | :--- | :--- | :--- | :--- |
 | `id` | `BIGINT` | `PK`, Auto-increment | ID tự tăng của bản ghi memory. |
-| `session_id` | `VARCHAR` | `FK` | Liên kết với ID của phiên hội thoại tương ứng trong bảng `sessions`. |
-| `customer_id` | `VARCHAR` | `FK`, Index | Liên kết với ID khách hàng (dùng để truy vấn 5 phiên gần nhất). |
-| `intent` | `VARCHAR(150)` | Nullable | Ý định chính của khách hàng trong phiên này. |
-| `resolution_status` | `VARCHAR(50)` | Nullable | Trạng thái giải quyết của phiên (VD: `Order_Created`, `Abandoned`,...). |
-| `summary` | `TEXT` | Nullable | Đoạn văn tóm tắt nội dung chính của phiên hội thoại (định dạng Markdown). |
+| `session_id` | `VARCHAR` | `FK`, Unique | Liên kết 1-1 với ID phiên hội thoại trong bảng `sessions`. |
+| `customer_id` | `VARCHAR` | `FK`, Index | Liên kết với ID khách hàng — dùng để truy vấn 5 phiên `Closed` gần nhất. |
+| `intent` | `VARCHAR(150)` | Nullable | Ý định chính của khách hàng trong phiên (trường `intent` từ JSON Archiver). |
+| `resolution_status` | `ENUM` | Nullable | Trạng thái giải quyết: `Order_Created` / `Escalated_to_Human` / `FAQ_Resolved` / `Abandoned` / `Other`. |
+| `summary` | `TEXT` | Nullable | Đoạn văn tóm tắt nội dung chính (định dạng Markdown, ≤ 800 ký tự). |
 | `next_steps` | `VARCHAR(255)` | Nullable | Các hành động đề xuất tiếp theo sau phiên chat. |
-| `raw_json` | `JSON` | Nullable | Lưu trữ toàn bộ cấu trúc JSON thô được sinh ra từ LLM để phục vụ đối soát, debug. |
-| `created_at` | `TIMESTAMP` | Default `NOW()` | Thời gian bản ghi memory được tạo (khi đóng phiên). |
+| `raw_json` | `JSON` | Nullable | Toàn bộ JSON thô sinh ra từ LLM để phục vụ đối soát, debug. |
+| `summary_status` | `ENUM` | Default `Pending` | Trạng thái xử lý Archiver: `Pending` / `Success` / `Failed`. |
+| `model_used` | `VARCHAR(100)` | Nullable | Tên model LLM đã dùng để tạo tóm tắt (VD: `gpt-4o-mini`, `gemini-1.5-flash`). |
+| `input_tokens` | `INT` | Nullable | Số token đầu vào đã gửi cho LLM khi tạo tóm tắt — dùng để tính chi phí. |
+| `output_tokens` | `INT` | Nullable | Số token đầu ra LLM trả về — dùng để tính chi phí. |
+| `cost_estimation` | `DECIMAL(10,6)` | Nullable | Ước tính chi phí API cho lần gọi LLM này (đơn vị: USD). |
+| `created_at` | `TIMESTAMP` | Default `NOW()` | Thời điểm bản ghi memory được tạo (khi Archiver Agent hoàn thành). |
+
+> [!NOTE]
+> Các trường `model_used`, `input_tokens`, `output_tokens`, `cost_estimation` được điền bởi Archiver Agent sau mỗi lần gọi LLM thành công. Nếu `summary_status = Failed`, các trường này có thể là `NULL`.
 
 ### 3.2. Quy Trình Xử Lý Gồm 2 Giai Đoạn (Dual-Phase Workflow)
 
 ```mermaid
 flowchart TD
-    subgraph Phase1 [Giai đoạn 1: Tóm tắt cuốn chiếu ngầm - Background Rolling Summary]
-        A[Sự kiện: Thêm tin nhắn mới vào DB] --> B{Số tin nhắn mới kể từ last_summarized_message_id đạt đúng 10 tin?}
-        B -- Không --> C[Giữ tin nhắn ở dạng thô - Chờ tin nhắn tiếp theo]
-        B -- Có --> D[Kích hoạt SummaryService chạy ngầm]
-        D --> E[Gọi LLM: Summary_new = LLM Summary_old + 10 tin nhắn mới]
-        E --> F[Cập nhật last_summary & last_summarized_message_id vào bảng sessions]
+    subgraph Phase1 ["US-01 · Giai đoạn 1: Tóm tắt cuốn chiếu ngầm (Background Rolling Summary)"]
+        A["Sự kiện: message.created\n(KH / AI / Nhân viên gửi)"] --> B{"Số tin nhắn mới kể từ\nlast_summarized_message_id\n≥ 10 tin?"}
+        B -- "Chưa đủ" --> C["Giữ ở dạng thô\nChờ tin nhắn tiếp theo"]
+        B -- "Đúng 10 tin" --> D["Kích hoạt SummaryService\nchạy ngầm (async)"]
+        D --> E["Gọi LLM:\nSummary_new = LLM(Summary_old + 10 tin mới)"]
+        E --> F["Cập nhật last_summary &\nlast_summarized_message_id\nvào bảng sessions"]
     end
 
-    subgraph Phase2 [Giai đoạn 2: Tóm tắt tổng kết khi đóng phiên - Final Archive Summary]
-        G[Sự kiện: Chuyển trạng thái phiên sang Closed] --> H[Kích hoạt Archiver Agent chuyên trách]
-        H --> I[Gọi Tool fetch_remaining_data session_id]
-        I --> J[Lấy last_summary gần nhất + Toàn bộ tin nhắn dư lẻ từ sau last_summarized_message_id]
-        J --> K[LLM tổng hợp thành Bản tóm tắt cuối cùng toàn diện]
-        K --> L[Lưu vào bảng session_summaries & Hiển thị Timeline]
+    subgraph Phase2 ["US-02 · Giai đoạn 2: Tóm tắt tổng kết khi đóng phiên (Final Archive Summary)"]
+        G["Sự kiện: Phiên → Closed\n(Thủ công hoặc Auto-timeout)"] --> H["Kích hoạt Archiver Agent\nchuyên trách"]
+        H --> I["Gọi Tool fetch_remaining_data(session_id)"]
+        I --> J["Lấy last_summary gần nhất\n+ Tin nhắn dư lẻ sau last_summarized_message_id"]
+        J --> K["LLM tổng hợp → JSON 4 trường:\nintent / resolution_status / summary / next_steps"]
+        K --> L["Lưu vào session_summaries\n→ emit event summary_created"]
+        L --> M["Hiển thị 'Tóm tắt phiên bởi AI'\ntrên Timeline hội thoại"]
+        L --> N["Hiển thị tại Panel thông tin:\nCollapse 'Tóm tắt phiên hội thoại bởi AI'"]
     end
 ```
 
-#### Giai đoạn 1: Tóm tắt cuốn chiếu ngầm (Background Rolling Summary)
+#### Giai đoạn 1 (US-01) — Tóm tắt cuốn chiếu ngầm (Background Rolling Summary)
 
-* **Trigger**: Hệ thống lắng nghe sự kiện thêm tin nhắn mới vào Database (bất kể là từ Khách hàng, AI hay Nhân viên gõ). Khi số lượng tin nhắn mới tính từ `last_summarized_message_id` đạt đúng **10 tin**, hệ thống tự động kích hoạt `SummaryService` chạy ngầm.
-* **Thuật toán**:
+* **Kênh áp dụng**: Zalo OA, Facebook Messenger, Telegram, Website Livechat.
+* **Trigger độc lập với tác nhân**: Hệ thống lắng nghe sự kiện `message.created` — **không phân biệt** Khách hàng, AI hay Nhân viên gửi. Đây là cải tiến cốt lõi khắc phục lỗi cũ: trigger bị gán vào sự kiện AI phản hồi khiến mất tóm tắt khi Human Handover.
+* **Ngưỡng kích hoạt cố định**: Chỉ kích hoạt khi đủ **đúng 10 tin nhắn mới** tính từ `last_summarized_message_id`. Không tóm tắt sớm hơn để tối ưu chi phí token.
+* **Thuật toán tích lũy (Incremental)**:
   $$
-  Summary_{new} = \text{LLM}(Summary_{old} + \text{10 tin nhắn mới từ ID đã lưu})
+  Summary_{new} = \text{LLM}(Summary_{old} + \text{10 tin nhắn mới từ last\_summarized\_message\_id})
   $$
-* **Cải tiến quan trọng**: Không gom các tin nhắn dư lẻ ($< 10$ tin) vào giai đoạn này. Giữ chúng ở dạng tin nhắn thô cho đến khi đủ số lượng để tối ưu hóa chi phí token.
+* **Không xử lý tin dư lẻ**: Tin nhắn chưa đủ batch 10 tin được **giữ nguyên ở dạng thô**, ủy quyền cho Archiver Agent xử lý khi đóng phiên.
 
-#### Giai đoạn 2: Tóm tắt tổng kết khi đóng phiên (Final Archive Summary)
+**Bảng mô tả Payload gọi LLM — SummaryService (US-01):**
 
-* **Trigger**: Khi nhân viên hoặc hệ thống chuyển trạng thái phiên sang **Đóng (Closed)**.
-* **Hành động (Tool Calling)**: Hệ thống kích hoạt một **Archiver Agent** chuyên trách và gọi Tool `fetch_remaining_data(session_id)` để lấy ra:
+| Chiều | Tên trường | Kiểu | Mô tả |
+| :---: | :--- | :--- | :--- |
+| **Đầu vào** | `session_id` | `VARCHAR` | ID phiên hội thoại hiện tại. |
+| **Đầu vào** | `last_summary` | `TEXT` / `JSON` / `NULL` | Bản tóm tắt cuốn chiếu gần nhất — `NULL` nếu chưa có lần tóm tắt nào. |
+| **Đầu vào** | `last_summarized_message_id` | `VARCHAR` / `NULL` | ID tin nhắn mốc cuối cùng đã được tóm tắt — `NULL` nếu chưa có. |
+| **Đầu vào** | `new_messages` | `ARRAY[Object]` | Mảng đúng 10 tin nhắn mới kể từ `last_summarized_message_id`, bao gồm: `message_id`, `sender_type` (`customer`/`ai`/`agent`), `content`, `sent_at`. |
+| **Đầu ra** | `last_summary` | `TEXT` / `JSON` | Bản tóm tắt cuốn chiếu mới (JSON 6 trường — xem Mục 4.2.1) — ghi đè vào bảng `sessions`. |
+| **Đầu ra** | `last_summarized_message_id` | `VARCHAR` | ID của tin nhắn cuối cùng trong batch 10 tin vừa xử lý — ghi đè vào bảng `sessions`. |
+
+> [!NOTE]
+> `SummaryService` chạy **bất đồng bộ (async)** — không chặn luồng chat chính. Nếu gặp lỗi API LLM, hệ thống ghi log lỗi và giữ nguyên `last_summary` cũ; phiên chat tiếp tục bình thường.
+
+#### Giai đoạn 2 (US-02) — Tóm tắt tổng kết khi đóng phiên (Final Archive Summary)
+
+* **Kênh áp dụng**: Zalo OA, Facebook Messenger, Telegram, Website Livechat.
+* **Đường dẫn xem kết quả (Agent)**: `Hội thoại` → `Timeline` và `Panel thông tin cuộc hội thoại` → Collapse **"Tóm tắt phiên hội thoại bởi AI"**.
+* **Trigger**: Khi nhân viên đóng thủ công **hoặc** hệ thống auto-close (timeout) → Session chuyển sang trạng thái `Closed`.
+* **Hành động (Tool Calling)**: Hệ thống kích hoạt **Archiver Agent** chuyên trách và gọi Tool `fetch_remaining_data(session_id)` để lấy ra:
   1. Bản tóm tắt gần nhất `last_summary` trong DB.
-  2. Toàn bộ các tin nhắn dư lẻ còn sót lại từ sau `last_summarized_message_id` đến cuối phiên.
-* **Kết quả**: Archiver Agent tổng hợp hai nguồn thông tin trên thành bản tóm tắt cuối cùng toàn diện và lưu vào bảng lưu trữ cố định (`session_summaries`).
+  2. Toàn bộ các tin nhắn **dư lẻ** còn sót lại từ sau `last_summarized_message_id` đến cuối phiên.
+* **Đầu ra**: Archiver Agent tổng hợp hai nguồn thông tin thành bản tóm tắt cuối cùng toàn diện (JSON 4 trường bắt buộc — xem Mục 4.2.2), lưu vào bảng `session_summaries`, emit event `summary_created`.
+* **Hiển thị kết quả**:
+  1. Thẻ **"Tóm tắt phiên bởi AI lúc hh:mm"** xuất hiện trực tiếp trên Timeline hội thoại (trong vòng tối đa **5 giây** sau khi phiên đóng).
+  2. Nội dung tóm tắt đầy đủ 4 mục có cấu trúc tại Panel thông tin → Collapse/Expand **"Tóm tắt phiên hội thoại bởi AI"**.
+
+**Bảng mô tả Tool `fetch_remaining_data` — Archiver Agent (US-02):**
+
+| Chiều | Tên trường | Kiểu | Mô tả |
+| :---: | :--- | :--- | :--- |
+| **Input** | `session_id` | `VARCHAR` | ID phiên hội thoại vừa được đóng. |
+| **Output** | `last_summary` | `TEXT` / `JSON` / `NULL` | Bản tóm tắt cuốn chiếu cuối cùng từ `sessions.last_summary` — `NULL` nếu Rolling chưa chạy lần nào. |
+| **Output** | `last_summarized_message_id` | `VARCHAR` / `NULL` | ID mốc tin nhắn cuối đã tóm tắt — dùng để xác định điểm bắt đầu lấy tin nhắn dư lẻ. |
+| **Output** | `remaining_messages` | `ARRAY[Object]` | Mảng toàn bộ tin nhắn dư lẻ từ sau `last_summarized_message_id` đến cuối phiên. Mỗi phần tử gồm: `message_id`, `sender_type`, `content`, `sent_at`. Trả về mảng rỗng `[]` nếu không có tin dư lẻ. |
+
+> [!IMPORTANT]
+> Nội dung tóm tắt **tuyệt đối không** được gửi sang kênh của khách hàng (Zalo OA / FB Messenger / Telegram / Website). Chỉ hiển thị trong CRM nội bộ.
 
 ### 3.3. Diễn Giải Logic Kế Thừa Tóm Tắt Giữa Các Phiên (Cross-Session Inheritance Logic)
 
@@ -308,16 +359,33 @@ sequenceDiagram
 
 Để giải quyết triệt để lỗi *"mất trí nhớ"* hoặc *"tam sao thất bản"*, cấu trúc đầu ra của hàm tóm tắt bắt buộc phải được định dạng theo schema có cấu trúc (JSON / Structured Context) nhằm duy trì các thông tin cốt lõi xuyên suốt phiên.
 
-#### Cấu trúc JSON Schema bắt buộc:
+> [!NOTE]
+> Hai giai đoạn sử dụng hai schema JSON khác nhau phù hợp với mục tiêu của từng giai đoạn:
+> - **Giai đoạn 1 (Rolling Summary)**: Schema mở rộng 6 trường — tập trung vào ngữ cảnh phong phú để Chat Agent phản hồi chính xác.
+> - **Giai đoạn 2 (Archiver Agent)**: Schema bắt buộc 4 trường — tập trung vào bản tóm tắt cuối ngắn gọn, súc tích để Agent/Admin bàn giao nhanh.
 
-1. **Ý định (`intent`)**: Chuỗi ký tự (dưới 150 ký tự) mô tả mục đích chính (Ví dụ: "Hỏi giá quần Jean", "Khiếu nại giao chậm").
-2. **Trạng thái giải quyết (`resolution_status`)**: Phân loại thuộc nhóm: `Order_Created`, `Escalated_to_Human`, `FAQ_Resolved`, `Abandoned`, `Other`.
-3. **Tóm tắt nội dung chính (`summary`)**: Đoạn văn ngắn (không quá 800 ký tự, định dạng Markdown) tóm tắt diễn biến chính (sản phẩm quan tâm, vấn đề của khách, thỏa thuận xử lý, thỏa thuận giao hàng).
-4. **Sản phẩm quan tâm (`interested_products`)**: Danh sách các sản phẩm khách hàng quan tâm (mỗi sản phẩm có: Tên sản phẩm, mã sản phẩm, Size, Màu sắc, Link sản phẩm(nếu có)).
-5. **Sản phẩm không thích(`unliked_products`)**: Danh sách các sản phẩm khách hàng không thích (mỗi sản phẩm có: Tên sản phẩm, mã sản phẩm, Size, Màu sắc, Link sản phẩm(nếu có)).
-6. **Hành động tiếp theo (`next_steps`)**: Gợi ý các hành động cần làm (Ví dụ: "Gửi hàng bảo hành", "Không có").
+#### 4.2.1. Schema Rolling Summary — Giai đoạn 1 (6 trường)
 
-**Ví dụ JSON Output từ LLM:**
+| Trường | Kiểu | Ràng buộc | Mô tả |
+| :--- | :--- | :--- | :--- |
+| `intent` | `VARCHAR(150)` | Bắt buộc | Ý định chính của khách hàng (VD: "Hỏi giá quần Jean", "Khiếu nại giao chậm") |
+| `resolution_status` | `ENUM` | Bắt buộc | Phân loại: `Order_Created` / `Escalated_to_Human` / `FAQ_Resolved` / `Abandoned` / `Other` |
+| `summary` | `TEXT` | ≤ 800 ký tự, Markdown | Diễn biến chính: sản phẩm quan tâm, vấn đề KH, thỏa thuận xử lý & giao hàng |
+| `interested_products` | `ARRAY[Object]` | Nullable | Danh sách sản phẩm KH quan tâm. Mỗi phần tử là một object — xem schema con bên dưới. |
+| `unliked_products` | `ARRAY[Object]` | Nullable | Danh sách sản phẩm KH không thích. Mỗi phần tử là một object — xem schema con bên dưới. |
+| `next_steps` | `VARCHAR(255)` | Bắt buộc | Hành động gợi ý tiếp theo (VD: "Gửi hàng bảo hành", "Không có") |
+
+**Schema con cho mỗi Object trong `interested_products` và `unliked_products`:**
+
+| Tên trường | Kiểu | Bắt buộc | Mô tả |
+| :--- | :--- | :---: | :--- |
+| `product_name` | `STRING` | ✅ | Tên sản phẩm. VD: `"Quần Jean Slim"`. |
+| `product_id` | `STRING` | ❌ | Mã sản phẩm trong hệ thống (nếu có). VD: `"SPX001"`. |
+| `size` | `STRING` | ❌ | Size khách hàng quan tâm. VD: `"M"`, `"L"`, `"XL"`. |
+| `color` | `STRING` | ❌ | Màu sắc khách hàng quan tâm. VD: `"Đen"`, `"Xanh Navy"`. |
+| `link_product` | `STRING` (URL) | ❌ | Đường dẫn đến trang sản phẩm (nếu có). VD: `"https://example.com/spx001"`. |
+
+**Ví dụ JSON Output — Rolling Summary:**
 ```json
 {
   "intent": "Hỏi thông tin và mua sản phẩm X",
@@ -345,23 +413,55 @@ sequenceDiagram
 }
 ```
 
+#### 4.2.2. Schema Archiver Agent — Giai đoạn 2 (4 trường bắt buộc)
+
+Đây là **schema chuẩn bắt buộc** dành riêng cho bản tóm tắt cuối cùng do Archiver Agent tạo ra khi đóng phiên. Schema được giữ gọn ở 4 trường cốt lõi để Agent/Admin nắm bắt nhanh mà không cần đọc lại toàn bộ hội thoại.
+
+| Trường | Kiểu | Ràng buộc | Mô tả |
+| :--- | :--- | :--- | :--- |
+| `intent` | `VARCHAR(150)` | **Bắt buộc** | Ý định chính của khách hàng trong toàn bộ phiên (VD: "Hỏi giá quần Jean") |
+| `resolution_status` | `ENUM` | **Bắt buộc** | `Order_Created` / `Escalated_to_Human` / `FAQ_Resolved` / `Abandoned` / `Other` |
+| `summary` | `TEXT` | **Bắt buộc**, ≤ 800 ký tự, Markdown | Tóm tắt diễn biến chính: sản phẩm quan tâm, thỏa thuận, vấn đề của khách |
+| `next_steps` | `VARCHAR(255)` | **Bắt buộc** | Hành động tiếp theo gợi ý (VD: "Gửi hàng bảo hành" hoặc "Không có") |
+
+> [!WARNING]
+> **Giới hạn `summary` ≤ 800 ký tự** (khác với Rolling Summary ≤ 800 ký tự). Archiver Agent phải đảm bảo bản tóm tắt ngắn gọn, súc tích và không vượt quá giới hạn này.
+
+**Ví dụ JSON Output — Archiver Agent:**
+```json
+{
+  "intent": "Hỏi thông tin và mua sản phẩm X",
+  "resolution_status": "Order_Created",
+  "summary": "Khách hàng quan tâm sản phẩm X size M màu đen. Đã tư vấn chính sách đổi trả. Khách chốt đơn và cung cấp địa chỉ nhận hàng.",
+  "next_steps": "Gửi thông tin đơn hàng cho bộ phận kho để đóng gói và giao hàng."
+}
+```
+
+**Cơ chế fallback khi LLM trả về JSON sai schema:**
+
+Nếu LLM trả về JSON không đúng cấu trúc 4 trường → Worker tự động fallback parse text thô, bản tóm tắt vẫn được hiển thị dưới dạng text thường thay vì để trống.
+```
+
 ---
 
 ## 5. Thiết Kế Giao Diện & Cấu Hình (UI/UX Mockups & Settings)
 
 ### 5.1. Màn hình Cấu hình AI Tóm Tắt (Admin Dashboard)
 
-* Không có giao diện cấu hình AI Tóm Tắt. AI Tóm Tắt sẽ được tích hợp sẵn vào hệ thống, không hiển thị với Admin hay user.
+* Không có giao diện cấu hình AI Tóm Tắt (V1). AI Tóm Tắt sẽ được tích hợp sẵn vào hệ thống, không hiển thị cấu hình với Admin hay User.
 
 ### 5.2. Giao diện hiển thị Timeline Chat của Agent (Agent Interface)
 
-* Hiển thị thẻ thông báo **"Tóm tắt phiên bởi AI"** trực tiếp trên Timeline hội thoại tại thời điểm phiên được đóng.
-* Tại phần panel thông tin cuộc hội thoại, bổ sung thêm một collap expand có title: Tóm tắt phiên hội thoại bởi AI và hiển thị nội dung tóm tắt. Nội dung tóm tắt hiển thị đầy đủ các thông tin có cấu trúc:
-    * Ý định (Intent),
-    * Trạng thái (Resolution Status),
-    * Nội dung tóm tắt (Summary) và
-    * Hành động tiếp theo (Next Steps).
-* Chỉ hiển thị trong CRM nội bộ phục vụ bàn giao và quản trị, tuyệt đối không gửi sang kênh của khách hàng (Zalo OA, Messenger, Telegram).
+**Đường dẫn xem kết quả:** `Hội thoại` → `Timeline` và `Panel thông tin cuộc hội thoại`.
+
+* **Timeline hội thoại**: Hiển thị thẻ thông báo **"Tóm tắt phiên bởi AI lúc hh:mm"** trực tiếp trên Timeline hội thoại ngay tại thời điểm phiên được đóng (trong vòng tối đa **5 giây**).
+* **Panel thông tin cuộc hội thoại**: Bổ sung thêm một Collapse/Expand có tiêu đề **"Tóm tắt phiên hội thoại bởi AI"**. Click mở rộng → Hiển thị đầy đủ nội dung tóm tắt AI với 4 mục có cấu trúc:
+    * **Ý định** (Intent)
+    * **Trạng thái giải quyết** (Resolution Status)
+    * **Nội dung tóm tắt** (Summary — định dạng Markdown, ≤ 800 ký tự)
+    * **Hành động tiếp theo** (Next Steps)
+* **Giới hạn phạm vi hiển thị**: Chỉ hiển thị trong CRM nội bộ phục vụ bàn giao và quản trị. **Tuyệt đối không** gửi sang kênh của khách hàng (Zalo OA, Facebook Messenger, Telegram, Website Livechat).
+* **Quyền chỉnh sửa**: V1 chỉ hỗ trợ read-only. Agent không thể chỉnh sửa nội dung tóm tắt AI.
 
 ---
 
@@ -378,3 +478,59 @@ sequenceDiagram
 
 > [!IMPORTANT]
 > Tài liệu PRD này là cơ sở để phát triển các tính năng chi tiết trong tài liệu SRS liên quan (tham chiếu tại [srs-conversation-summary.md](<file:///F:/Gapone%20Conversation/Docs/AI_Chatbot/srs-conversation-summary.md>)). Mọi thay đổi về mặt nghiệp vụ cần được PO phê duyệt trước khi cập nhật vào hệ thống.
+
+---
+
+## 7. Acceptance Criteria (User Story Map)
+
+### US-01 · Tóm Tắt Cuốn Chiếu Ngầm Trong Phiên (Background Rolling Summary)
+
+#### Happy Path
+
+| Mã AC | Mô tả | Kết quả kỳ vọng |
+| :--- | :--- | :--- |
+| **AC-01** | Phiên có đúng 10 tin nhắn mới kể từ `last_summarized_message_id` | `SummaryService` tự động kích hoạt (async), gọi LLM thành công, cập nhật `last_summary` và `last_summarized_message_id` vào bảng `sessions` |
+| **AC-02** | Phiên có 25 tin nhắn | `SummaryService` được kích hoạt **2 lần** (tại tin thứ 10 và tin thứ 20); `last_summarized_message_id` sau mỗi lần phản ánh đúng ID tin nhắn thứ 10 và thứ 20 |
+| **AC-03** | Nhân viên tiếp nhận Human Handover và tiếp tục chat | Các tin nhắn từ Nhân viên vẫn được đếm tích lũy; khi đủ 10 tin, `SummaryService` vẫn kích hoạt bình thường |
+| **AC-04** | Kiểm tra DB sau mỗi lần `SummaryService` chạy | Bảng `sessions`: trường `last_summary` và `last_summarized_message_id` được cập nhật đúng |
+
+#### Edge Cases
+
+| Mã AC | Mô tả | Kết quả kỳ vọng |
+| :--- | :--- | :--- |
+| **AC-05** | Phiên chỉ có 7 tin nhắn (chưa đủ 10) từ lúc mở đến khi đóng | `SummaryService` **không** được kích hoạt lần nào; `last_summary` và `last_summarized_message_id` giữ nguyên giá trị kế thừa từ phiên trước (hoặc `NULL` nếu là phiên đầu tiên) |
+| **AC-06** | `SummaryService` gặp lỗi API LLM | Ghi log lỗi; **không crash** hệ thống; `last_summary` giữ nguyên bản cũ (không cập nhật); phiên chat tiếp tục hoạt động bình thường |
+
+#### Out of Scope
+
+* Tóm tắt cuốn chiếu cho các phiên đang ở trạng thái `Open` nhưng không có hoạt động — xử lý bởi US-02 (Archiver Agent khi đóng phiên).
+* Hiển thị kết quả Rolling Summary lên Timeline — chỉ lưu ngầm vào DB; Timeline chỉ hiển thị kết quả của Archiver Agent.
+
+---
+
+### US-02 · Tóm Tắt Tổng Kết Khi Đóng Phiên (Final Archive Summary)
+
+#### Happy Path
+
+| Mã AC | Mô tả | Kết quả kỳ vọng |
+| :--- | :--- | :--- |
+| **AC-01** | Nhân viên hoặc hệ thống tự động đóng phiên có ≥ 1 tin nhắn thực tế | Sau tối đa **5 giây**: Timeline chat hiển thị **"Tóm tắt phiên bởi AI lúc hh:mm"** |
+| **AC-02** | Mở Panel thông tin cuộc hội thoại | Hiển thị Collapse **"Tóm tắt phiên hội thoại bởi AI"**; click mở rộng → hiển thị đúng 4 mục có cấu trúc: `intent`, `resolution_status`, `summary`, `next_steps` |
+| **AC-03** | Hệ thống auto-close phiên sau timeout | Archiver Agent vẫn được kích hoạt và lưu thành công vào `session_summaries` |
+| **AC-04** | Phiên dài > 30 tin nhắn (Rolling đã chạy nhiều lần) | Archiver chỉ xử lý phần **dư lẻ** kết hợp với bản `last_summary` cuối của Rolling, **không đọc lại** toàn bộ lịch sử tin nhắn thô; bản tóm tắt cuối vẫn phản ánh đầy đủ nội dung phiên |
+| **AC-05** | Kiểm tra DB sau khi Archiver chạy | Bảng `session_summaries`: các trường `summary_content`, `intent_detected`, `resolution_status`, `model_used`, `input_tokens`, `output_tokens`, `cost_estimation` đều có giá trị hợp lệ |
+| **AC-06** | Tóm tắt được tạo thành công | Nội dung tóm tắt **không** được gửi sang kênh của khách hàng (Zalo OA / FB Messenger / Telegram / Website) |
+
+#### Edge Cases
+
+| Mã AC | Mô tả | Kết quả kỳ vọng |
+| :--- | :--- | :--- |
+| **AC-07** | Lỗi API LLM khi Archiver xử lý | Hệ thống **thử lại 3 lần** (5s → 15s → 45s); vẫn thất bại → `summary_status = Failed`; sự kiện lỗi hiển thị trên Timeline; gửi cảnh báo đến đội vận hành; **hệ thống không bị treo hay crash** |
+| **AC-08** | LLM trả về JSON sai schema 4 trường | Worker fallback parse text thô; bản tóm tắt vẫn hiển thị dưới dạng text thường thay vì để trống |
+
+#### Out of Scope
+
+* Giao diện cấu hình AI Tóm Tắt cho Admin — tính năng được tích hợp sẵn vào hệ thống, không hiển thị cấu hình với Admin hay User (V1).
+* Agent chỉnh sửa nội dung tóm tắt AI → V1 chỉ hỗ trợ read-only.
+* Tóm tắt đa ngôn ngữ (đầu ra linh hoạt) → xem xét ở Phase 2.
+* Phân tích Sentiment (Angry/Happy/Neutral) → Phase 2.

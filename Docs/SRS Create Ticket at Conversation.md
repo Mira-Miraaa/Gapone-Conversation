@@ -1,6 +1,6 @@
 ---
 title: SRS Create Ticket at Conversation
-version: 1.1.0
+version: 1.2.0
 status: active
 related_code: ["f:/Gapone Conversation/Mockup/index.html"]
 last_updated: 2026-07-02
@@ -12,6 +12,7 @@ last_updated: 2026-07-02
 | :--- | :--- | :--- | :--- | :--- |
 | 1.0.0 | 2026-07-01 | Mira-Miraaa | Toàn bộ tài liệu | Tạo mới tài liệu đặc tả tính năng Tạo Ticket tại màn hình Hội thoại |
 | 1.1.0 | 2026-07-02 | Mira-Miraaa | Toàn bộ tài liệu | Cập nhật chi tiết các trường dữ liệu, thuộc tính ID HTML, quy tắc validation, logic hiển thị timeline và sidebar liên quan đến Ticket dựa trên mockup/prototype thực tế. |
+| 1.2.0 | 2026-07-15 | Phương Nguyễn | Mục 2.1, 3.1.1, 3.1.3, 3.3, 3.4 (mới) | Thống nhất tên trạng thái hội thoại → "In process"; sửa logic sinh `ticket_id` (DB AUTO_INCREMENT, quy tắc tạo đồng thời); sửa `creator_id`/`assignee` về `agent_id` (INT); bổ sung phân quyền Admin (không bị BR-CRE-01); cập nhật BR-CRE-01 loại trừ Admin; bổ sung mục 3.4 bảng tổng hợp In-app Notification & Toast. |
 
 ---
 
@@ -52,8 +53,12 @@ Khi nhân viên chăm sóc khách hàng (Agent) đang nhắn tin hỗ trợ khá
 ## II. ĐỊNH NGHĨA ĐỐI TƯỢNG & PHÂN QUYỀN
 
 ### 2.1. Đối tượng người dùng và phân quyền
-*   **Agent (được phân công chăm sóc hội thoại)**: Có quyền nhấn nút tạo Ticket và điền form thông tin.
-*   **Hệ thống (Bot / Automation)**: Có thể tự động kích hoạt tạo ticket theo kịch bản (nếu được cấu hình, tuy nhiên phạm vi tài liệu này chỉ tập trung vào luồng Agent tạo thủ công).
+
+| Vai trò | Quyền tại màn hình Tạo Ticket từ Hội thoại | Ghi chú |
+| :--- | :--- | :--- |
+| **Admin** | Toàn quyền tạo Ticket tại bất kỳ hội thoại nào, không bị giới hạn bởi trạng thái hội thoại hay người phụ trách. **BR-CRE-01 không áp dụng với Admin.** | Vai trò cao nhất, không bị giới hạn phân quyền. |
+| **Agent (được phân công)** | Chỉ được tạo Ticket khi hội thoại đang ở trạng thái **In process** và `assignee_id` của hội thoại trùng với `agent_id` của Agent đang đăng nhập. | Bị kiểm soát bởi BR-CRE-01. |
+| **Hệ thống (Bot / Automation)** | Có thể tự động kích hoạt tạo Ticket theo kịch bản được cấu hình sẵn (ngoài phạm vi tài liệu này). | — |
 
 ### 2.2. Luồng xử lý nghiệp vụ tạo Ticket tại Hội thoại (Technical Workflow)
 
@@ -101,10 +106,15 @@ Nút **"Tạo Ticket"** được thiết kế tại hai vị trí trên giao di�
 2.  **Sidebar thông tin bên phải (Right Profile Sidebar)**: Nút có ID `btn-create-ticket-sidebar` nằm tại phần đầu mục accordion **"Ticket"** bên phải màn hình. Khi di chuột vào hiển thị tooltip: `"Tạo Ticket mới"`.
 
 > [!IMPORTANT]
-> **Quy tắc chặn quyền mở Form (BR-CRE-01):**
-> Khi Agent click vào bất kỳ nút tạo Ticket nào ở trên, hệ thống sẽ thực hiện kiểm tra trạng thái hội thoại. Chỉ cho phép mở Popup tạo ticket nếu cuộc hội thoại đang ở trạng thái **Đang xử lý (In Progress)** và người phụ trách cuộc hội thoại đó trùng với Agent đang đăng nhập (`assignee === 'phuongntt'`). 
-> Nếu không thỏa mãn các điều kiện trên, hệ thống sẽ chặn không hiển thị popup và kích hoạt Toast thông báo lỗi:
-> *"Bạn chỉ được tạo Ticket khi cuộc hội thoại ở trạng thái Đang xử lý và được gán cho chính bạn! (BR-CRE-01)"*
+> **Quy tắc chặn quyền mở Form (BR-CRE-01) — Chỉ áp dụng với Agent, không áp dụng với Admin:**
+> Khi **Agent** click vào bất kỳ nút tạo Ticket nào, hệ thống kiểm tra đồng thời 2 điều kiện:
+> 1. Cuộc hội thoại đang ở trạng thái **In process**.
+> 2. `assignee_id` của hội thoại trùng với `agent_id` của Agent đang đăng nhập (so sánh kiểu `INT`, lấy từ session token).
+>
+> Nếu không thỏa mãn, hệ thống chặn không hiển thị Popup và kích hoạt Toast:
+> *"Bạn chỉ được tạo Ticket khi cuộc hội thoại ở trạng thái In process và được gán cho chính bạn! (BR-CRE-01)"*
+>
+> **Admin** luôn được mở Form tạo Ticket tại bất kỳ hội thoại nào — bỏ qua kiểm tra trên.
 
 #### 3.1.2. Trường dữ liệu và Ràng buộc của Form (Popup Form ID: `create-ticket-modal`)
 Khi thỏa mãn điều kiện ở quy tắc **BR-CRE-01**, hệ thống hiển thị Popup Form tạo ticket hỗ trợ (độ rộng tối đa thẻ modal-card là 500px) với các trường thông tin chi tiết:
@@ -121,12 +131,12 @@ Khi thỏa mãn điều kiện ở quy tắc **BR-CRE-01**, hệ thống hiển 
 
 #### 3.1.3. Logic xử lý khi gửi Form (Submit Form)
 *   **Nút Xác nhận (`btn-submit-ticket`)**: Chỉ hoạt động (enabled) khi trường Tiêu đề hợp lệ (không rỗng và dưới 255 ký tự). Nếu không hợp lệ, nút bị `disabled`, giảm opacity xuống `0.5` và con trỏ chuột chuyển sang `not-allowed`.
-*   Khi Agent click nút "Xác nhận", hệ thống thực thi hàm `submitCreateTicketForm()` để:
-    1.  Sinh mã ticket tự động: `ticket_id` = 100 + số lượng ticket trong danh sách hiện tại + 1.
-    2.  Tạo đối tượng ticket mới có trạng thái mặc định ban đầu là `Open`, `creator_id` là Agent đang đăng nhập (`phuongntt`), `created_date` ghi nhận thời gian hệ thống, `resolved_date = null`.
-    3.  Lưu trữ thông tin vào danh sách `ticketsList` trên RAM và lưu DB. Đánh dấu sidebar bị thay đổi dữ liệu (`markSidebarDirty()`).
-    4.  Nếu có gán người phụ trách xử lý (chọn Agent ở trường số 6), hệ thống sẽ kích hoạt gửi thông báo phân công in-app đến Agent nhận việc (xem chi tiết ở tài liệu [SRS Ticket Management](file:///f:/Gapone%20Conversation/Docs/SRS%20Ticket%20Management.md)).
-    5.  Đóng popup tạo ticket, reset các trường và hiển thị Toast thông báo: `Tạo Ticket #[Mã Ticket] thành công!`.
+*   Khi Agent/Admin click nút "Xác nhận", hệ thống thực thi hàm `submitCreateTicketForm()` để:
+    1.  **Sinh `ticket_id`**: DB tự động sinh theo cơ chế **`AUTO_INCREMENT`** — frontend không tự tính ID. Trong trường hợp nhiều người dùng tạo Ticket đồng thời, DB xử lý tuần tự theo thứ tự tiếp nhận request: Ticket nào được `INSERT` vào bảng `tickets` trước sẽ nhận `ticket_id` nhỏ hơn; Ticket đến sau nhận `ticket_id` lớn hơn. Không có cơ chế đặt trước (reservation) số thứ tự.
+    2.  Tạo bản ghi Ticket mới với trạng thái mặc định `Open`, `creator_id` = `agent_id` của người dùng đang đăng nhập (lấy từ session token, kiểu dữ liệu `INT`), `created_date` = thời điểm hệ thống ghi nhận `INSERT`, `resolved_date = null`.
+    3.  Lưu bản ghi vào DB và cập nhật danh sách `ticketsList` trên client. Đánh dấu sidebar bị thay đổi dữ liệu (`markSidebarDirty()`).
+    4.  Nếu có gán người phụ trách (chọn Agent ở trường số 6), hệ thống kích hoạt gửi thông báo in-app `ASSIGNMENT` đến Agent nhận việc (xem bảng thông báo tại Mục 3.4).
+    5.  Đóng popup, reset các trường và hiển thị Toast: *"Tạo Ticket #[Mã Ticket] thành công!"*.
 
 ---
 
@@ -159,10 +169,41 @@ Tại cột thông tin khách hàng bên phải (Customer Profile Sidebar), bổ
 
 ---
 
-### 3.3. Quy tắc nghiệp vụ (Business Rules) & Chỉ số đo lường
+### 3.3. Quy tắc nghiệp vụ (Business Rules)
 
-*   **BR-CRE-01 (Yêu cầu nhận hội thoại)**: Agent chỉ được phép tạo Ticket khi cuộc hội thoại đang ở trạng thái **Đang xử lý (In Progress)** và đã được phân công cho chính Agent đó. Nếu hội thoại đang ở trạng thái **Mới (Open - Chưa phân công)** hoặc được gán cho Agent khác, hệ thống sẽ chặn không cho mở form tạo Ticket.
+*   **BR-CRE-01 (Yêu cầu nhận hội thoại — Chỉ áp dụng với Agent)**: Agent chỉ được phép tạo Ticket khi cuộc hội thoại đang ở trạng thái **In process** và `assignee_id` của hội thoại trùng với `agent_id` của Agent đang đăng nhập. Nếu hội thoại ở trạng thái **Open (Chưa phân công)** hoặc được gán cho Agent khác, hệ thống chặn không cho mở Form tạo Ticket. **Admin không bị giới hạn bởi BR-CRE-01.**
 *   **BR-CRE-02 (Liên kết dữ liệu)**: Một Ticket được tạo từ hội thoại bắt buộc phải lưu trữ đồng thời cả `contact_id` và `conversation_id` để phục vụ đối soát nguồn gốc phát sinh lỗi từ cuộc chat nào.
+
+---
+
+### 3.4. Bảng tổng hợp Thông báo — In-app Notification & Toast
+
+#### 3.4.1. In-app Notification (Bell — lưu vào `ticket_notifications`, gửi đến người nhận)
+
+| Sự kiện kích hoạt | Người nhận | `event_type` | Nội dung thông báo |
+| :--- | :--- | :--- | :--- |
+| Ticket được phân công cho Agent | Agent nhận việc | `ASSIGNMENT` | *"Bạn được phân công xử lý Ticket #[ID] - [Tiêu đề]"* |
+| Phân công bị hủy (`assignee_id` → `null`) | Agent bị hủy phân công | `UNASSIGNMENT` | *"Phân công xử lý Ticket #[ID] - [Tiêu đề] của bạn bị hủy"* |
+| Ticket `Urgent` tồn tại > 4 giờ chưa `Resolved`/`Closed` | Manager | `SLA_ALERT` | *"Ticket Urgent #[ID] - [Tiêu đề] quá hạn giải quyết (Thời gian: [X]h > 4h)"* |
+
+#### 3.4.2. Toast Notification (hiển thị trên giao diện người thực thi hành động)
+
+| Hành động | Điều kiện / Vai trò | Nội dung Toast |
+| :--- | :--- | :--- |
+| Tạo Ticket thành công | Agent / Admin | *"Tạo Ticket #[ID] thành công!"* |
+| Bị chặn tạo Ticket | Agent không thỏa BR-CRE-01 | *"Bạn chỉ được tạo Ticket khi cuộc hội thoại ở trạng thái In process và được gán cho chính bạn! (BR-CRE-01)"* |
+| Thay đổi độ ưu tiên | Bất kỳ | *"Ticket #[ID] được đổi độ ưu tiên thành [Mức] lúc hh:mm"* |
+| Chuyển trạng thái → `Open` | Bất kỳ | *"Ticket #[ID] được tạo mới lúc hh:mm"* |
+| Chuyển trạng thái → `In_Progress` | Bất kỳ | *"Ticket #[ID] đang xử lý lúc hh:mm"* |
+| Chuyển trạng thái → `Resolved` | Bất kỳ | *"Ticket #[ID] đã xử lý. Thời gian xử lý: [X] giờ lúc hh:mm"* |
+| Chuyển trạng thái → `Closed` | Chỉ Admin / Manager | *"Ticket #[ID] được đóng lúc hh:mm"* |
+| Agent cố chuyển sang `Closed` | Agent (bị chặn) | *"Bạn không có quyền đóng Ticket. Chỉ Admin/Manager mới được thực hiện thao tác này."* |
+| Gán người phụ trách cho Agent khác | Admin / Manager | *"Đã phân công xử lý Ticket #[ID] cho [Tên Agent]"* |
+| Tự gán Ticket cho chính mình | Agent / Admin | Toast in-app cá nhân: *"Bạn được phân công xử lý Ticket #[ID] - [Tiêu đề]"* |
+| Gỡ phân công (`-- Chưa gán --`) | Admin / Manager | *"Gỡ phân công Ticket #[ID] lúc hh:mm"* |
+| Agent cố gỡ / thay đổi phân công | Agent (bị chặn) | *"Bạn không có quyền thay đổi hoặc hủy phân công Ticket."* |
+| Xóa Ticket thành công | Admin | *"Đã xóa Ticket #[ID] thành công."* |
+| SLA vi phạm — cảnh báo khẩn cấp | Người dùng trên màn hình | Toast khẩn cấp: *"Cảnh báo SLA quá hạn! Ticket #[ID] - [Tiêu đề]"* |
 
 #### Chỉ số Đo lường (Conversation Ticket Conversion Rate)
 Hệ thống tính toán tỷ lệ cuộc hội thoại phát sinh Ticket hỗ trợ ($CR_{\text{ticket}}$) để phân tích mức độ phức tạp của các kênh:

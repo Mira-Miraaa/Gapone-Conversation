@@ -1,6 +1,6 @@
 ---
 title: SRS Ticket Management
-version: 1.2.1
+version: 1.3.0
 status: active
 related_code: ["f:/Gapone Conversation/Mockup/index.html"]
 last_updated: 2026-07-15
@@ -14,6 +14,7 @@ last_updated: 2026-07-15
 | 1.1.0 | 2026-07-02 | Mira-Miraaa | Toàn bộ tài liệu | Cập nhật chi tiết giao diện Dashboard, các bộ lọc, Data Table, cơ chế chỉnh sửa nhanh (Inline Edit), chi tiết popup SLA, kiểm tra SLA định kỳ (SLA Violation) và phân công việc (Assignment notification) dựa trên mockup thực tế. |
 | 1.2.0 | 2026-07-15 | Phương Nguyễn | Mục III — US-01, US-02, US-04 | Bổ sung Acceptance Criteria chi tiết cho US-01 (xem/lọc/tìm kiếm Ticket), US-02 (Inline Edit), US-04 (Xem chi tiết & Xóa Ticket); cập nhật nội dung Toast thông báo theo từng hành động; bổ sung quy tắc phân quyền Agent chỉ tạo Ticket tại hội thoại được phân công đang "In processing"; bổ sung thông báo gỡ phân công đến Agent bị hủy; bổ sung AC-03 SLA Violation khi Urgent quá 4 giờ. |
 | 1.2.1 | 2026-07-15 | Phương Nguyễn | Mục II — 2.2, 2.3, 2.4, 2.5 | Bổ sung trường `update_date` vào Ticket Entity Schema; bổ sung bảng định nghĩa đối tượng còn thiếu: `agents`, `customer_profiles`, `ticket_notifications`; bổ sung ERD quan hệ giữa các bảng. |
+| 1.3.0 | 2026-07-15 | Phương Nguyễn | Mục 2.1, 2.2, AC-06 US-01, Mục IV, Mục 3.5 (mới) | Tách bảng phân quyền thành 3 vai trò rõ ràng (Admin/Manager/Agent); bổ sung ràng buộc: Agent không được đóng Ticket, không được hủy/chuyển phân công; Admin không bị BR-CRE-01; thêm quy tắc sinh `ticket_id` đồng thời vào schema; thống nhất "In process" xuyên suốt; bổ sung mục 3.5 bảng tổng hợp In-app Notification & Toast đầy đủ. |
 
 ---
 
@@ -56,8 +57,9 @@ Xây dựng tính năng **Quản lý danh sách Ticket** nhằm:
 
 | Vai trò | Quyền hạn trên phân hệ Ticket | Ghi chú |
 | :--- | :--- | :--- |
-| **Admin / Manager** | - Toàn quyền Xem, Tạo mới, Chỉnh sửa, Phân công, Xóa Ticket.<br>- Xem toàn bộ Ticket của hệ thống (không bị giới hạn theo phân công).<br>- Cấu hình các thiết lập chung của Ticket (mức độ ưu tiên, danh mục loại ticket). | Phục vụ giám sát hệ thống và phân phối công việc. |
-| **Agent** | - Chỉ xem danh sách Ticket được phân công cho mình hoặc cho Team của mình; không thấy Ticket của Agent khác.<br>- Cập nhật trạng thái, ghi chú xử lý đối với Ticket phụ trách.<br>- Tạo mới Ticket **chỉ** tại phiên hội thoại được phân công cho mình và có trạng thái **"In processing"**.<br>- Không có quyền xóa Ticket (ngoại trừ Ticket đã Closed và được xác nhận) hoặc cấu hình hệ thống. | Không có quyền xóa Ticket hoặc cấu hình hệ thống. |
+| **Admin** | - Toàn quyền: Xem tất cả Ticket, Tạo mới, Chỉnh sửa nội dung, Đóng (`Closed`), Xóa, Thay đổi và Hủy phân công.<br>- Không bị giới hạn bởi BR-CRE-01 khi tạo Ticket từ màn hình Hội thoại.<br>- Cấu hình thiết lập chung của Ticket. | Vai trò cao nhất, không bị giới hạn phân quyền. |
+| **Manager** | - Xem toàn bộ Ticket trên hệ thống (không bị giới hạn theo phân công).<br>- Chỉnh sửa trạng thái (bao gồm `Closed`), độ ưu tiên, Thay đổi và Hủy phân công.<br>- **Không** có quyền Xóa Ticket và cấu hình hệ thống. | Phục vụ giám sát và phân phối công việc. |
+| **Agent** | - Chỉ xem Ticket **được phân công cho mình** hoặc **do chính mình tạo**; không thấy Ticket của Agent khác.<br>- Được chuyển trạng thái: `Open` → `In_Progress` → `Resolved`. **Không được chuyển sang `Closed`**.<br>- **Không được** Hủy phân công hoặc chuyển phân công sang Agent khác.<br>- Chỉ tạo Ticket tại hội thoại được phân công cho mình, đang ở trạng thái **In process** (BR-CRE-01).<br>- Không có quyền Xóa Ticket hoặc cấu hình hệ thống. | Phạm vi truy cập bị giới hạn theo phân công cá nhân. |
 
 ### 2.2. Bảng định nghĩa đối tượng (Ticket Entity Schema)
 
@@ -65,7 +67,7 @@ Bảng dữ liệu `conversation.tickets` lưu trữ thông tin của các Ticke
 
 | STT | Tên trường | Kiểu dữ liệu | Mô tả | Ràng buộc |
 | :--- | :--- | :--- | :--- | :--- |
-| 1 | `ticket_id` | INT | Mã định danh duy nhất của Ticket | PK, AUTO_INCREMENT |
+| 1 | `ticket_id` | INT | Mã định danh duy nhất của Ticket | PK, AUTO_INCREMENT. Trong trường hợp nhiều Ticket được tạo đồng thời, DB xử lý tuần tự theo thứ tự tiếp nhận request — request đến trước nhận `ticket_id` nhỏ hơn; request đến sau nhận `ticket_id` lớn hơn. Frontend không tự sinh giá trị này. |
 | 2 | `title` | VARCHAR(255) | Tiêu đề tóm tắt vấn đề của Ticket | Bắt buộc, không để trống |
 | 3 | `description` | TEXT | Chi tiết nội dung yêu cầu của khách hàng | Không bắt buộc |
 | 4 | `contact_id` | INT | Liên kết tới hồ sơ khách hàng tạo ticket | FK -> `customer_profiles(contact_id)`, Bắt buộc |
@@ -258,7 +260,7 @@ Danh sách Ticket hiển thị dưới dạng bảng dữ liệu có các cột 
 - [ ] **AC-03:** User chọn bộ lọc trạng thái → bảng chỉ hiển thị Ticket có trạng thái tương ứng; tương tự với các bộ lọc độ ưu tiên và người phụ trách.
 - [ ] **AC-04:** Click tên khách hàng trong bảng → hệ thống tự động chuyển sang phân hệ Hội thoại và mở đúng cuộc chat của khách hàng đó, mở panel và hiển thị nội dung của expanded ticket.
 - [ ] **AC-05:** Agent đăng nhập → chỉ thấy Ticket được phân công cho mình/Team; không thấy Ticket của Agent khác. Admin/Manager có thể xem/sửa/xóa tất cả các Ticket.
-- [ ] **AC-06:** Agent chỉ có thể tạo Ticket mới tại phiên hội thoại được phân công cho mình và có trạng thái là **"In processing"**.
+- [ ] **AC-06:** Agent chỉ có thể tạo Ticket mới tại phiên hội thoại được phân công cho mình và có trạng thái là **"In process"**. Admin không bị giới hạn bởi điều kiện này (BR-CRE-01 không áp dụng với Admin).
 
 **Edge Cases / Luồng ngoại lệ:**
 
@@ -406,9 +408,42 @@ Popup hiển thị thông tin chi tiết đầy đủ khi người dùng click v
 
 ---
 
+### 3.5. Bảng tổng hợp Thông báo — In-app Notification & Toast
+
+#### 3.5.1. In-app Notification (Bell — lưu vào `ticket_notifications`, gửi đến người nhận)
+
+| Sự kiện kích hoạt | Người nhận | `event_type` | Nội dung thông báo |
+| :--- | :--- | :--- | :--- |
+| Ticket được phân công cho Agent | Agent nhận việc | `ASSIGNMENT` | *"Bạn được phân công xử lý Ticket #[ID] - [Tiêu đề]"* |
+| Phân công bị hủy (`assignee_id` → `null`) | Agent bị hủy phân công | `UNASSIGNMENT` | *"Phân công xử lý Ticket #[ID] - [Tiêu đề] của bạn bị hủy"* |
+| Ticket `Urgent` tồn tại > 4 giờ chưa `Resolved`/`Closed` | Manager | `SLA_ALERT` | *"Ticket Urgent #[ID] - [Tiêu đề] quá hạn giải quyết (Thời gian: [X]h > 4h)"* |
+
+#### 3.5.2. Toast Notification (hiển thị trên giao diện người thực thi hành động)
+
+| Hành động | Điều kiện / Vai trò | Nội dung Toast |
+| :--- | :--- | :--- |
+| Tạo Ticket thành công | Agent / Admin | *"Tạo Ticket #[ID] thành công!"* |
+| Bị chặn tạo Ticket | Agent không thỏa BR-CRE-01 | *"Bạn chỉ được tạo Ticket khi cuộc hội thoại ở trạng thái In process và được gán cho chính bạn! (BR-CRE-01)"* |
+| Thay đổi độ ưu tiên | Bất kỳ | *"Ticket #[ID] được đổi độ ưu tiên thành [Mức] lúc hh:mm"* |
+| Chuyển trạng thái → `Open` | Bất kỳ | *"Ticket #[ID] được tạo mới lúc hh:mm"* |
+| Chuyển trạng thái → `In_Progress` | Bất kỳ | *"Ticket #[ID] đang xử lý lúc hh:mm"* |
+| Chuyển trạng thái → `Resolved` | Bất kỳ | *"Ticket #[ID] đã xử lý. Thời gian xử lý: [X] giờ lúc hh:mm"* |
+| Chuyển trạng thái → `Closed` | Chỉ Admin / Manager | *"Ticket #[ID] được đóng lúc hh:mm"* |
+| Agent cố chuyển sang `Closed` | Agent (bị chặn) | *"Bạn không có quyền đóng Ticket. Chỉ Admin/Manager mới được thực hiện thao tác này."* |
+| Gán người phụ trách cho Agent khác | Admin / Manager | *"Đã phân công xử lý Ticket #[ID] cho [Tên Agent]"* |
+| Tự gán Ticket cho chính mình | Agent / Admin | Toast in-app cá nhân: *"Bạn được phân công xử lý Ticket #[ID] - [Tiêu đề]"* |
+| Gỡ phân công (`-- Chưa gán --`) | Admin / Manager | *"Gỡ phân công Ticket #[ID] lúc hh:mm"* |
+| Agent cố gỡ / thay đổi phân công | Agent (bị chặn) | *"Bạn không có quyền thay đổi hoặc hủy phân công Ticket."* |
+| Xóa Ticket thành công | Admin | *"Đã xóa Ticket #[ID] thành công."* |
+| SLA vi phạm — cảnh báo khẩn cấp | Người dùng trên màn hình | Toast khẩn cấp: *"Cảnh báo SLA quá hạn! Ticket #[ID] - [Tiêu đề]"* |
+
+---
+
 ## IV. RÀNG BUỘC HỆ THỐNG & CÁC LỖI NGOẠI LỆ
 
 *   **Ràng buộc gán việc (Assignment notification)**: Mỗi khi trường `assignee_id` thay đổi (Ticket được gán cho Agent mới), hệ thống phải tự động tạo một thông báo in-app gửi tới Agent nhận việc với nội dung: *"Bạn được phân công xử lý Ticket #[ID] - [Tiêu đề]"*.
 *   **Ràng buộc gỡ phân công**: Khi `assignee_id` bị đặt về `null`, hệ thống gửi thông báo in-app đến Agent bị hủy phân công: *"Phân công xử lý Ticket #[ID] - [Tiêu đề] của bạn bị hủy"*.
-*   **Ràng buộc tạo Ticket**: Agent chỉ được tạo Ticket mới trong phiên hội thoại được phân công cho mình và có trạng thái **"In processing"**. Không thể tạo Ticket từ hội thoại chưa được phân công hoặc đã đóng.
-*   **Ràng buộc xóa Ticket**: Chỉ cho phép xóa Ticket khi trạng thái đã chuyển sang `Closed` để tránh mất mát dữ liệu lịch sử phản hồi khách hàng khi đang xử lý.
+*   **Ràng buộc tạo Ticket (BR-CRE-01)**: Agent chỉ được tạo Ticket mới tại hội thoại được phân công cho mình và có trạng thái **"In process"**. Admin không bị giới hạn bởi quy tắc này. Không thể tạo Ticket từ hội thoại chưa được phân công hoặc đã đóng (đối với Agent).
+*   **Ràng buộc chuyển sang Closed**: Chỉ Admin và Manager mới được phép chuyển trạng thái Ticket sang `Closed`. Agent không có quyền thực hiện thao tác này; hệ thống chặn và hiển thị Toast lỗi.
+*   **Ràng buộc thay đổi phân công**: Chỉ Admin và Manager mới được phép Hủy phân công hoặc chuyển phân công Ticket sang Agent khác. Agent không được thực hiện các thao tác này; hệ thống chặn và hiển thị Toast lỗi.
+*   **Ràng buộc xóa Ticket**: Chỉ cho phép Admin xóa Ticket khi trạng thái đã chuyển sang `Closed` để tránh mất mát dữ liệu lịch sử phản hồi khách hàng khi đang xử lý.
